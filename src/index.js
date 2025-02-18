@@ -1,0 +1,38 @@
+const express = require('express');
+const app = express();        
+const cookieParser = require('cookie-parser');       
+const cors = require('cors');    
+const Login = require('./Routes/POST/Login.js');     
+const Register = require('./Routes/POST/Register.js');   
+const getName = require('./Routes/GET/getName.js');
+const connectDB = require('./Config/MongoDB/DB.js');            
+const port = 4000;
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors({
+    origin: 'http://localhost:3000',						//Access-Control-Allow-Origin
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization'],			//Access-Control-Allow-Headers
+    credentials: true,
+    maxAge: 3600,
+    optionsSuccessStatus: 200
+}))
+
+connectDB();
+
+app.use(Login);
+app.use(Register);
+app.use(getName);
+
+app.get('/', (req, res) => {
+    res.send('Hello World')
+})
+
+app.listen(port, (error) => {
+    if(error){
+        console.log(error, 'error occured');
+        return;
+    }
+    console.log(`Server is running on port ${port}`);
+});  
