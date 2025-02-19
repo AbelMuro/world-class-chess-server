@@ -4,6 +4,9 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');    
 const Login = require('./Routes/POST/Login.js');     
 const Register = require('./Routes/POST/Register.js');   
+const ForgotPassword = require('./Routes/POST/ForgotPassword.js');
+const ResetPassword = require('./Routes/POST/ResetPassword.js');
+const LogOut = require('.//Routes/POST/LogOut.js');
 const getName = require('./Routes/GET/getName.js');
 const connectDB = require('./Config/MongoDB/DB.js');            
 const port = 4000;
@@ -23,6 +26,9 @@ connectDB();
 
 app.use(Login);
 app.use(Register);
+app.use(ForgotPassword);
+app.use(ResetPassword);
+app.use(LogOut);
 app.use(getName);
 
 app.get('/', (req, res) => {

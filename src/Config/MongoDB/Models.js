@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const {Schema} = require('mongoose');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 const userSchema = new Schema({
     email: {type: String, required: true, unique: true},    			//remember to set the unique property here to true
