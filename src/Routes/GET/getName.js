@@ -12,6 +12,11 @@ router.get('/getname', async (req, res) => {
         res.status(403).send('third-party-cookies are not enabled in the browser');
         return;
     }
+    else if(token === 'guest'){
+        res.status(200).send('Guest');
+        return;
+    }
+
     try{
         const decoded = jwt.verify(token, JWT_SECRET);
         const username = decoded.username;
