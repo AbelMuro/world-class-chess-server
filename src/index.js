@@ -9,6 +9,7 @@ const ResetPassword = require('./Routes/POST/ResetPassword.js');
 const LogOut = require('./Routes/POST/LogOut.js');
 const getName = require('./Routes/GET/getName.js');
 const GuestLogin = require('./Routes/POST/GuestLogin.js');
+const AIMove = require('./Routes/POST/AI_Move.js')
 const connectDB = require('./Config/MongoDB/DB.js');            
 const port = 4000;
 
@@ -32,6 +33,7 @@ app.use(ResetPassword);
 app.use(LogOut);
 app.use(GuestLogin);
 app.use(getName);
+app.use(AIMove);
 
 app.get('/', (req, res) => {
     res.send('Hello World')
