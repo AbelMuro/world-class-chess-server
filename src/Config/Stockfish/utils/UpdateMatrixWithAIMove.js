@@ -1,4 +1,4 @@
-export function UpdateMatrixWithAIMove(matrix, move) {
+function UpdateMatrixWithAIMove(matrix, move) {
     // Convert the move from algebraic notation to matrix coordinates
     const fromRow = 8 - parseInt(move[1]);
     const fromCol = move.charCodeAt(0) - 'a'.charCodeAt(0);
@@ -11,3 +11,5 @@ export function UpdateMatrixWithAIMove(matrix, move) {
 
     return matrix;
 }
+
+module.exports = UpdateMatrixWithAIMove;

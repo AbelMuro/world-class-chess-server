@@ -1,4 +1,4 @@
-export const ConvertMatrixToFen = (matrix) => {
+const ConvertMatrixToFen = (matrix) => {
     const pieceMap = {
         'white king': 'K', 'white queen': 'Q', 'white rook': 'R',
         'white bishop': 'B', 'white knight': 'N', 'white pawn': 'P',
@@ -31,3 +31,5 @@ export const ConvertMatrixToFen = (matrix) => {
     fen += ' w - - 0 1'; // Add default FEN suffix (to be modified as needed)
     return
 }
+
+module.exports = ConvertMatrixToFen;
