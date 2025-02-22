@@ -29,7 +29,7 @@ const ConvertMatrixToFen = (matrix) => {
 
     fen = fen.slice(0, -1); // Remove trailing '/'
     fen += ' w - - 0 1'; // Add default FEN suffix (to be modified as needed)
-    return
+    return fen;
 }
 
 module.exports = ConvertMatrixToFen;

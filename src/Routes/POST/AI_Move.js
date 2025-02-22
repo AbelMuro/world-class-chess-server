@@ -3,25 +3,25 @@ const path = require('path');
 const router = express.Router();
 const {spawn} = require('child_process');
 const ConvertMatrixToFen = require('../../Config/Stockfish/utils/ConvertMatrixToFen.js')
-const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/windows/stockfish.exe');
+const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/macOS/stockfish');
 
 /*
 
     https://stockfishchess.org/download/
 
     for windows machine:
-        download the stockfish folder for windows
+        download the stockfish folder for windows   (make sure you select the file appropriate for your CPU)
         in the folder, look for the .exe file
         put that file in you node.js and use it with the child_process
 
     for macOS machines:
-        download the binaries for macOS
-        look for the file that ends with avx2 or something of the sort
+        download the binaries for macOS     (make sure you select the file appropriate for your CPU)
+        look for the file that ends with avx2 or something of the sort 
         put that file in your node.js and use it with the child_process
 
-    this is where i left off, i finished the front end implementation of this route
-    now i need to figure out how stockfish works
-    
+        this is where i left off, i will need to figure out how to find the best move for black and white
+        the hint is in the FEN format
+  
 */
 
 router.post('/ai_move', (req, res) => {
@@ -30,45 +30,41 @@ router.post('/ai_move', (req, res) => {
 
     try{
         const stockfish = spawn(stockfishpath);
-
-        if(!stockfish){
-            res.status(500).send('stockfish object is undefined');
-            return;
-        }
+        console.log('Stockfish process started with PID:', stockfish.pid);
 
         stockfish.stdin.write('uci\n');
         stockfish.stdin.write(`position fen ${fen}\n`);
         stockfish.stdin.write('go depth 15\n');
-        stockfish.stdin.end();
-
-        let bestMove = '';
 
         stockfish.stdout.on('data', (data) => {
             const output = data.toString();
 
             if(output.includes('bestmove')){
-                bestMove = output.match(/bestmove\s(\w+)/)[1];
+                console.log(output);
+                let bestMove = output.match(/bestmove\s(\w+)/)[1];  
                 stockfish.stdin.write('quit\n');
+                res.status(200).json({bestMove});
             }
         })
 
+        stockfish.stderr.on('data', (data) => {
+            console.error('Stockfish stderr:', data.toString());
+        });
+
         stockfish.on('close', () => {
-            res.status(200).json({bestMove});
+            console.log('stockfish process closed');
         });
 
-        /* stockfish.on('error', (err) => {
-            console.log('error')
+        stockfish.on('error', (err) => {
             console.error('Stockfish error:', err);
-            res.status(400).send('failed to analyze position');
+            res.status(400).send('Failed to analyze position');
         });
-
-        */        
     }
     catch(error){
         const message = error.message;
         res.status(500).send(message);
     }
+});
 
-})
 
 module.exports = router;
