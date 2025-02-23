@@ -1,4 +1,5 @@
-const ConvertMatrixToFen = (matrix) => {
+const ConvertMatrixToFen = (matrix, color) => {
+    const bestMoveForAI = color === 'white' ? 'w' : 'b';
     const pieceMap = {
         'white king': 'K', 'white queen': 'Q', 'white rook': 'R',
         'white bishop': 'B', 'white knight': 'N', 'white pawn': 'P',
@@ -28,7 +29,7 @@ const ConvertMatrixToFen = (matrix) => {
     }
 
     fen = fen.slice(0, -1); // Remove trailing '/'
-    fen += ' w - - 0 1'; // Add default FEN suffix (to be modified as needed)
+    fen += ` ${bestMoveForAI} - - 0 1`; // Add default FEN suffix (to be modified as needed)
     return fen;
 }
 

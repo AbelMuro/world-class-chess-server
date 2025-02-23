@@ -3,7 +3,7 @@ const path = require('path');
 const router = express.Router();
 const {spawn} = require('child_process');
 const ConvertMatrixToFen = require('../../Config/Stockfish/utils/ConvertMatrixToFen.js')
-const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/macOS/stockfish');
+const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/windows/stockfish.exe');
 
 /*
 
@@ -25,8 +25,8 @@ const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/macOS/stoc
 */
 
 router.post('/ai_move', (req, res) => {
-    const board = req.body;
-    const fen = ConvertMatrixToFen(board);
+    const {board, AI_Color} = req.body;
+    const fen = ConvertMatrixToFen(board.reverse(), AI_Color);
 
     try{
         const stockfish = spawn(stockfishpath);
