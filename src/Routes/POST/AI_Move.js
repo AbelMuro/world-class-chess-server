@@ -24,22 +24,22 @@ const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/macOS/stoc
 router.post('/ai_move', (req, res) => {
     const {board, AI_Color, difficulty} = req.body;
     const fen = ConvertMatrixToFen(board, AI_Color);
-    let stockfishSkillLevel
+    let stockfishStrengthLevel
     if(difficulty === 'easy')
-        stockfishSkillLevel = 5;
+        stockfishStrengthLevel = 500;
     else if(difficulty === 'medium')
-        stockfishSkillLevel = 12;
+        stockfishStrengthLevel = 1500;
     else
-        stockfishSkillLevel = 20;
+        stockfishStrengthLevel = 2500;
 
 
     try{
         const stockfish = spawn(stockfishpath);
         console.log('Stockfish process started with PID:', stockfish.pid);
         stockfish.stdin.write('uci\n');
-        stockfish.stdin.write(`setoption name Skill Level value ${stockfishSkillLevel}\n`) //// Skill Level from 0 (easy) to 20 (hard)
-        /*stockfish.stdin.write('setoption name UCI_LimitStrength value true\n'); // Enable Elo-based play */
-        /*stockfish.stdin.write('setoption name UCI_Elo value 1500\n');       //set desired Elo- rating*/
+        /*stockfish.stdin.write(`setoption name Skill Level value ${stockfishSkillLevel}\n`) */ // Skill Level from 0 (easy) to 20 (hard)
+        stockfish.stdin.write('setoption name UCI_LimitStrength value true\n');                 // Enable Elo-based play 
+        stockfish.stdin.write(`setoption name UCI_Elo value ${stockfishStrengthLevel}\n`);       //set desired Elo- rating
         stockfish.stdin.write(`position fen ${fen}\n`);
         stockfish.stdin.write('go depth 15\n');
 
