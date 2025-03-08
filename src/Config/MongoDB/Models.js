@@ -11,6 +11,18 @@ const userSchema = new Schema({
     resetPasswordExpires: {type: Date}
 });
 
+const matchSchema = new Schema({
+    matchId: {type: String, required: true, unique: true},
+    chessboard: {type: Array, required: true},
+    currentTurn: {type: String},
+    blackPiecesTaken: {type: Array},
+    whitePiecesTaken: {type: Array},
+    white: {type: String},
+    black: {type: String},
+    hasBlackKingBeenMoved: {type: Boolean},
+    hasWhiteKingBeenMoved: {type: Boolean},
+});
+
 userSchema.pre('save', async function (next) {              			//pre() is a middleware that will execute a function that will hash a password BEFORE the save method is called
     if(!this.isModified('password'))                        		        //if the password has NOT been modified
         return next();                                      			//will execute the next middleware, if there are no more middlewares, then save() will be called
@@ -32,7 +44,8 @@ userSchema.methods.createPasswordResetToken = function() {
 }  
 
 const User = mongoose.model('user', userSchema, 'accounts')        		//create a model that will be used to create documents
+const Match = mongoose.model('match', matchSchema, 'matches')
 
 module.exports = {
-    User
+    User, Match
 }

@@ -9,6 +9,8 @@ const ResetPassword = require('./Routes/POST/ResetPassword.js');
 const LogOut = require('./Routes/POST/LogOut.js');
 const getName = require('./Routes/GET/getName.js');
 const GuestLogin = require('./Routes/POST/GuestLogin.js');
+const CreateMatch = require('./Routes/POST/CreateMatch.js');
+const UpdateMatch = require('./Routes/PUT/UpdateMatch.js');
 const AIMove = require('./Routes/POST/AI_Move.js')
 const connectDB = require('./Config/MongoDB/DB.js');            
 const port = 4000;
@@ -17,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:3000',						//Access-Control-Allow-Origin
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'],			//Access-Control-Allow-Headers
     credentials: true,
     maxAge: 3600,
@@ -34,6 +36,8 @@ app.use(LogOut);
 app.use(GuestLogin);
 app.use(getName);
 app.use(AIMove);
+app.use(CreateMatch);
+app.use(UpdateMatch);
 
 app.get('/', (req, res) => {
     res.send('Hello World')
