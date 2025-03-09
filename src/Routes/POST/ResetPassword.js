@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
-const {User} = require('../../Config/MongoDB/Models.js');
+const User = require('../../Config/MongoDB/Models/User.js');
 
 router.post('/resetpassword', async (req, res) => {
     const {token, password} = req.body;

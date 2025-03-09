@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User } = require('../../Config/MongoDB/Models');
+const User = require('../../Config/MongoDB/Models/User.js');
 const nodemailer = require('nodemailer');
 const {config} = require('dotenv');
 config();

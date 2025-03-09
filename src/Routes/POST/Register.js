@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const { User } = require('../../Config/MongoDB/Models.js');
+const User = require('../../Config/MongoDB/Models/User.js');
 const { config } = require('dotenv');
 config();	
 

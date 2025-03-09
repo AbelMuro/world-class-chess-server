@@ -6,6 +6,8 @@ config();
 
 router.post('/guestlogin', async (req, res) => {
     let username = 'Guest'
+    const guestId = Array.from({length: 10}, () => null).reduce((acc) => {acc += Math.floor(Math.random() * 9); return acc}, '');
+    username += guestId;
 
     for(let i = 0; i < 10; i++)
         username += Math.floor(Math.random() * 9);

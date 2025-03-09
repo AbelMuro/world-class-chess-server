@@ -11,7 +11,9 @@ const getName = require('./Routes/GET/getName.js');
 const GuestLogin = require('./Routes/POST/GuestLogin.js');
 const CreateMatch = require('./Routes/POST/CreateMatch.js');
 const UpdateMatch = require('./Routes/PUT/UpdateMatch.js');
+const GetMatch = require('./Routes/GET/GetMatch.js');
 const AIMove = require('./Routes/POST/AI_Move.js')
+const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const connectDB = require('./Config/MongoDB/DB.js');            
 const port = 4000;
 
@@ -38,6 +40,8 @@ app.use(getName);
 app.use(AIMove);
 app.use(CreateMatch);
 app.use(UpdateMatch);
+app.use(GetMatch);
+app.use(putPlayerInQueue);
 
 app.get('/', (req, res) => {
     res.send('Hello World')

@@ -1,9 +1,10 @@
 const express = require('express');
-const {Match} = require('../../Config/MongoDB/Models.js');
+const Match = require('../../Config/MongoDB/Models/Match.js');
 const router = express.Router();
 
 router.post('/create_match', async (req, res) => {
     const {board, matchId} = req.body;
+
 
     try{
         const match = new Match({board, matchId});
