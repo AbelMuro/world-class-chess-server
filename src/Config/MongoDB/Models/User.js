@@ -2,9 +2,11 @@ const mongoose = require('mongoose');
 const {Schema} = require('mongoose');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const { ObjectId } = Schema.Types;
 
 const userSchema = new Schema({
     email: {type: String, required: true, unique: true},    			//remember to set the unique property here to true
+    profileImage: {type: ObjectId},
     password: {type: String, required: true},
     username: {type: String, required: true, unique: true},
     resetPasswordToken: {type: String},			   			            //you will need this property for reseting passwords

@@ -14,6 +14,7 @@ const UpdateMatch = require('./Routes/PUT/UpdateMatch.js');
 const GetMatch = require('./Routes/GET/GetMatch.js');
 const AIMove = require('./Routes/POST/AI_Move.js')
 const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
+const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const connectDB = require('./Config/MongoDB/DB.js');            
 const port = 4000;
 
@@ -21,7 +22,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:3000',						//Access-Control-Allow-Origin
-    methods: ['GET', 'POST', 'PUT'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],			//Access-Control-Allow-Headers
     credentials: true,
     maxAge: 3600,
@@ -42,6 +43,7 @@ app.use(CreateMatch);
 app.use(UpdateMatch);
 app.use(GetMatch);
 app.use(putPlayerInQueue);
+app.use(leaveQueue);
 
 app.get('/', (req, res) => {
     res.send('Hello World')

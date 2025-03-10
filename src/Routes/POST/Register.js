@@ -1,27 +1,75 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const multer = require('multer')
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../../Config/MongoDB/Models/User.js');
+const { GridFSBucket} = require('mongodb');
 const { config } = require('dotenv');
 config();	
 
-router.post('/register', async (req, res) => {
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage});
+
+const initializeGridFs = (req, res, next) => {
+    const conn = mongoose.connection;
+    const gfs = new GridFSBucket(conn.db, {bucketName: 'images'});
+    req.gfs = gfs;
+    next();
+}
+
+router.post('/register', upload.single('image'), initializeGridFs, async (req, res) => {
     const {email, password, username} = req.body;
+    const image = req.file;
+    const gfs = req.gfs;
     const JWT_SECRET = process.env.JWT_SECRET;
 
     try{
         const user = new User({email, password, username});
-        const userData = await user.save();
+        if(image){
+            const writestream = gfs.openUploadStream(image.originalname, {
+                contentType: image.mimetype
+            });
 
-        const token = jwt.sign({id: userData._id, email, username}, JWT_SECRET);
+            writestream.end(image.buffer);
 
-        res.cookie('accessToken', token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'None',   
-        })
+            writestream.on('finish', async () => {
+                try{
+                    user.profileImage = writestream.id;       // Update the user document with the image reference
+                    const userData = await user.save();
+                    console.log('Image uploaded to MongoDB');
 
-        res.status(200).send('Account registered successfully');
+                    const token = jwt.sign({id: userData._id, email, username}, JWT_SECRET);
+                    res.cookie('accessToken', token, {
+                        httpOnly: true,
+                        secure: true,
+                        sameSite: 'None',   
+                    })
+                    res.status(200).send('Account registered successfully');                    
+                }
+                catch(error){
+                    const message = error.message;
+                    console.log(message);
+                    res.status(500).send(message);
+                }
+
+              });
+        
+            writestream.on('error', (err) => {
+                console.log('Error uploading image:', err);
+            });
+        }
+        else{
+            const userData = await user.save();
+            const token = jwt.sign({id: userData._id, email, username}, JWT_SECRET);
+            res.cookie('accessToken', token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'None',   
+            })
+            res.status(200).send('Account registered successfully');
+        }
+            
     }
     catch(error){
         const message = error.message;
