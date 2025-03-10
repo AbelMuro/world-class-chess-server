@@ -18,6 +18,11 @@ const initializeGridFs = (req, res, next) => {
     next();
 }
 
+
+//this is where i left off, i need to create another route in node.js that 
+// uses the GridFs to get the image chunks from the document in mongoDB and
+// converts them somehow into an object that i can use to send to the front-end
+
 router.post('/register', upload.single('image'), initializeGridFs, async (req, res) => {
     const {email, password, username} = req.body;
     const image = req.file;
