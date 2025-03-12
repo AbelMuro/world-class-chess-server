@@ -3,12 +3,15 @@ const {Schema} = require('mongoose');
 const WebSocket = require('ws');
 
 const queueSchema = new Schema({
-    player: {type: String, required: true},
+    player: {type: String, required: true, unique: true},
+    profileImage: {type: String},
+    contentType: {type: String}
 })
 
-const Queue = mongoose.model('queue', queueSchema, 'queue')
+const Queue = mongoose.model('player', queueSchema, 'queue')
 
 const wss = new WebSocket.Server({port: 8000});
+
 wss.on('connection', ws => {
     console.log('Queue collection connected');
 

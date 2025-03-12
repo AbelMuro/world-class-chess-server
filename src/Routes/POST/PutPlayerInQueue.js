@@ -1,5 +1,6 @@
 const express = require('express');
 const Queue = require('../../Config/MongoDB/Models/Queue.js');
+const User = require('../../Config/MongoDB/Models/User.js');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const {config} = require('dotenv');
@@ -17,13 +18,21 @@ router.post('/put_player_in_queue', async (req, res) => {
     try{
         const decoded = jwt.verify(token, JWT_SECRET);
         const username = decoded.username;
-        const newPlayerInQueue = new Queue({player: username});
+        const user = await User.findOne({username});
+        const _id = user._id;
+        const profileImage = user.profileImage;
+        const contentType = user.contentType;
+        const newPlayerInQueue = new Queue({_id, player: username, profileImage, contentType});
         await newPlayerInQueue.save();
-        res.status(200).send('Player has successfully entered the queue');
+        res.status(200).json({message: 'Player has successfully entered the queue', username});
     }
     catch(error){
         const message = error.message;
-        res.status(500).send(message);
+
+        if(message.includes('E11000 duplicate key error collection:'))
+            res.status(401).send('Player is already in the queue');
+        else
+            res.status(500).send(message);
     }
 })
 

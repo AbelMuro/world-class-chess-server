@@ -11,7 +11,6 @@ config();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage});
 
-//this is where i left off, i need to understand line per line and the logic behind this router
 
 const initializeGridFs = (req, res, next) => {
     const conn = mongoose.connection;
