@@ -13,8 +13,8 @@ const queueSchema = new Schema({
 const Queue = mongoose.model('player', queueSchema, 'queue')
 
 const server = https.createServer({
-    cert: fs.readFileSync('./PemFiles/cert.pem'),
-    key: fs.readFileSync('/PemFiles/key.pem'),
+    cert: fs.readFileSync('./src/Config/MongoDB/Models/PemFiles/cert.pem'),
+    key: fs.readFileSync('./src/Config/MongoDB/Models/PemFiles/key.pem'),
 });
 
 const wss = new WebSocket.Server({server});
