@@ -1,18 +1,11 @@
 const express = require('express');
+const initializeGridFs = require('../Middleware/initializeGridFs.js');
 const mongoose = require('mongoose');
-const {GridFSBucket} = require('mongodb');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../../Config/MongoDB/Models/User.js');
 const {config} = require('dotenv');
 config();
-
-const initializeGridFs = (req, res, next) => {
-    const conn = mongoose.connection;
-    const gfs = new GridFSBucket(conn.db, { bucketName: 'images' });
-    req.gfs = gfs;
-    next();
-}
 
 router.get('/get_account', initializeGridFs, async (req, res) => {
     const token = req.cookies.accessToken;
@@ -32,10 +25,10 @@ router.get('/get_account', initializeGridFs, async (req, res) => {
         const email = decoded.email;
         const user = await User.findOne({email});
         const username = user.username;
-        const image = user.profileImage;
+        const imageId = user.profileImageId;
 
-        if(image){
-            const _id = new mongoose.Types.ObjectId(image);
+        if(imageId){
+            const _id = new mongoose.Types.ObjectId(imageId);
             const cursor = gfs.find({_id});
             const files = await cursor.toArray();
             const file = files?.[0];

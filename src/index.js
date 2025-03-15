@@ -15,6 +15,7 @@ const AIMove = require('./Routes/POST/AI_Move.js')
 const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
+const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
 
 const connectDB = require('./Config/MongoDB/DB.js');            
 const port = 4000;
@@ -45,6 +46,7 @@ app.use(UpdateMatch);
 app.use(GetMatch);
 app.use(putPlayerInQueue);
 app.use(leaveQueue);
+app.use(createNewChallenge);
 
 app.get('/', (req, res) => {
     res.send('Hello World')

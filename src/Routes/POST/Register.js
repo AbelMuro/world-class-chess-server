@@ -1,23 +1,14 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const multer = require('multer')
 const router = express.Router();
+const initializeGridFs = require('../Middleware/initializeGridFs.js');
 const jwt = require('jsonwebtoken');
 const User = require('../../Config/MongoDB/Models/User.js');
-const { GridFSBucket} = require('mongodb');
 const { config } = require('dotenv');
 config();	
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage});
-
-
-const initializeGridFs = (req, res, next) => {
-    const conn = mongoose.connection;
-    const gfs = new GridFSBucket(conn.db, {bucketName: 'images'});
-    req.gfs = gfs;
-    next();
-}
 
 router.post('/register', upload.single('image'), initializeGridFs, async (req, res) => {
     const {email, password, username} = req.body;
@@ -35,7 +26,7 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
             writestream.end(image.buffer);
 
             writestream.on('finish', async () => {
-                user.profileImage = writestream.id;       // Update the user document with the image reference
+                user.profileImageId = writestream.id;       // Update the user document with the image reference
                 console.log('Image uploaded to MongoDB');                 
                 const userData = await user.save();
                 const token = jwt.sign({id: userData._id, email, username}, JWT_SECRET);

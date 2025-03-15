@@ -4,7 +4,7 @@ const WebSocket = require('ws');
 
 const queueSchema = new Schema({
     player: {type: String, required: true, unique: true},
-    profileImage: {type: String},
+    profileImageBase64: {type: String},
     contentType: {type: String}
 })
 
