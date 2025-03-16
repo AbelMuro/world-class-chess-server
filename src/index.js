@@ -61,6 +61,8 @@ app.use(leaveQueue);
 app.use(createNewChallenge);
 
 app.get('/', (req, res) => {
+    res.send(__dirname);
+    return;
     res.sendFile(path.join(__dirname, 'index.html'));
 })
 
