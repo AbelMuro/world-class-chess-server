@@ -16,6 +16,11 @@ const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
 const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
+const {Server} = require('socket.io');
+const http = require('http');
+
+const server = http.createServer(app);
+const io = new Server(server);
 
 const connectDB = require('./Config/MongoDB/DB.js');            
 const port = 4000;
@@ -33,6 +38,11 @@ app.use(cors({
 
 connectDB();
 
+app.use((req, res, next) => {
+    res.io = io;
+    next();
+})
+
 app.use(Login);
 app.use(Register);
 app.use(ForgotPassword);
@@ -49,7 +59,7 @@ app.use(leaveQueue);
 app.use(createNewChallenge);
 
 app.get('/', (req, res) => {
-    res.send('Hello World')
+    res.sendFile(__dirname + '/index.html')
 })
 
 app.listen(port, (error) => {

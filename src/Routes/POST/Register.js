@@ -14,6 +14,7 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
     const {email, password, username} = req.body;
     const image = req.file;
     const gfs = req.gfs;
+    const io = req.io;
     const JWT_SECRET = process.env.JWT_SECRET;
 
     try{
@@ -27,24 +28,28 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
 
             writestream.on('finish', async () => {
                 user.profileImageId = writestream.id;       // Update the user document with the image reference
-                console.log('Image uploaded to MongoDB');                 
+                io.emit('message', `${username} has uploaded an image to mongoDB`)         
                 const userData = await user.save();
+                io.emit('message', `${username} has created an account`)                
                 const token = jwt.sign({id: userData._id, email, username}, JWT_SECRET);
                 res.cookie('accessToken', token, {
                     httpOnly: true,
                     secure: true,
                     sameSite: 'None',   
                 })
+
                 res.status(200).send('Account registered successfully'); 
               });
         
             writestream.on('error', (err) => {
                 console.log('Error uploading image:', err);
+                io.emit('message', `${username} has created an account, but image could not be uploaded`)
                 res.status(401).send('Error uploading image')
             });
         }
         else{
             const userData = await user.save();
+            io.emit('message', `${username} has created an account`)
             const token = jwt.sign({id: userData._id, email, username}, JWT_SECRET);
             res.cookie('accessToken', token, {
                 httpOnly: true,
@@ -57,6 +62,7 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
     }
     catch(error){
         const message = error.message;
+        io.emit('message', `${message}`)
         if(message.includes('E11000 duplicate key error collection:'))
             res.status(401).send(message);
         else
