@@ -20,7 +20,7 @@ const server = https.createServer({
     key: fs.readFileSync(keyPath),
 });
 
-const wss = new WebSocket.Server({server});
+const wss = new WebSocket.Server({server, path: '/ws'});
 
 wss.on('connection', ws => {
     console.log('Queue collection connected');
