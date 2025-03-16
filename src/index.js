@@ -62,7 +62,7 @@ app.use(leaveQueue);
 app.use(createNewChallenge);
 
 app.get('/', (req, res) => {
-    res.sendFile('index.html', {root: __dirname});
+    res.send(filePath);
 })
 
 app.listen(port, (error) => {
