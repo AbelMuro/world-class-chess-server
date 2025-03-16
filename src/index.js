@@ -20,7 +20,6 @@ const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
 const {Server} = require('socket.io');
 const http = require('http');
 const path = require('path');
-const filePath = path.join(__dirname, 'index.html');
 
 const server = http.createServer(app);
 const io = new Server(server);
@@ -62,7 +61,7 @@ app.use(leaveQueue);
 app.use(createNewChallenge);
 
 app.get('/', (req, res) => {
-    res.sendFile(filePath);
+    res.sendFile(path.join(__dirname, 'index.html'));
 })
 
 app.listen(port, (error) => {
