@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
-const https = require('https');
-const fs = require('fs');
 const {Schema} = require('mongoose');
-const WebSocket = require('ws');
-const path = require('path');
-const certPath = path.resolve(__dirname, 'PemFiles/cert.pem');
-const keyPath = path.resolve(__dirname, 'PemFiles/key.pem');
+const Ably = require('ably');
+const ably = new Ably.Realtime(process.env.ABLY_API_KEY); 
+const channel = ably.channels.get('queue-channel');
 
 const queueSchema = new Schema({
     player: {type: String, required: true, unique: true},
@@ -15,28 +12,18 @@ const queueSchema = new Schema({
 
 const Queue = mongoose.model('player', queueSchema, 'queue')
 
+const changeStream = Queue.watch();
 
-//this is where i left off, netlify doenst support websocket servers, so i need to find another method of deploying these things
+changeStream.on('change', (change) => {
+    console.log('new player has joined the queue');
 
-const server = https.createServer({
-    cert: fs.readFileSync(certPath),
-    key: fs.readFileSync(keyPath),
-});
-
-const wss = new WebSocket.Server({server});
-
-wss.on('connection', ws => {
-    console.log('Queue collection connected');
-
-    const changeStream = Queue.watch();
-    changeStream.on('change', (change) => {
-        ws.send(JSON.stringify(change))
-    })
-
-    ws.on('close', () => {
-        console.log('Client disconnected')
+    channel.publish('queue-update', change, (err) => {
+        if(err) {
+            console.error('Failed to publish message', err);
+        }
+        else
+            console.log('Change publish to ably channel');
     })
 })
-
 
 module.exports = Queue
