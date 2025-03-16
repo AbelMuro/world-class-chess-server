@@ -15,6 +15,9 @@ const queueSchema = new Schema({
 
 const Queue = mongoose.model('player', queueSchema, 'queue')
 
+
+//this is where i left off, netlify doenst support websocket servers, so i need to find another method of deploying these things
+
 const server = https.createServer({
     cert: fs.readFileSync(certPath),
     key: fs.readFileSync(keyPath),
