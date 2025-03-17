@@ -9,7 +9,7 @@
     <div id="messages"></div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = window.io();
+        const socket = io();
         const messagesDiv = document.getElementById('messages');
 
         // Listen for messages from the server
