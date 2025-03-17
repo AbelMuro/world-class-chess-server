@@ -10,8 +10,9 @@
         Welcome to the World Class Chess Server
     </div>
     <div id="messages"></div>
+    
     <script type="module">
-        import {io} from 'socket.io-client'
+        import {io} from 'https://cdn.socket.io/4.5.0/socket.io.esm.min.js'
         
         const socket = io();
         const messagesDiv = document.getElementById('messages');
