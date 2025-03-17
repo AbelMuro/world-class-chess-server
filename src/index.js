@@ -29,7 +29,7 @@ const options = {
     cert: fs.readFileSync(certFile),
 }
 const server = https.createServer(options);
-const io = new Server(server);
+//const io = new Server(server);
 
 const connectDB = require('./Config/MongoDB/DB.js');            
 const port = 4000;
