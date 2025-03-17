@@ -53,7 +53,7 @@ app.use((req, res, next) => {
 })
 
 app.use(Login);
-app.use(Register);
+//app.use(Register);
 app.use(ForgotPassword);
 app.use(ResetPassword);
 app.use(LogOut);
