@@ -20,12 +20,13 @@ const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
 const {Server} = require('socket.io');
 const https = require('https');
 const path = require('path');
+const certFile = path.join(__dirname, 'PEM/cert.pem');
+const keyFile = path.join(__dirname, 'PEM/key.pem');
 
 
-//this is where i left off, i need to generate the key.pem and cert.pem
 const options = {
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem'),
+    key: fs.readFileSync(certFile),
+    cert: fs.readFileSync(keyFile),
 }
 const server = https.createServer(options);
 const io = new Server(server);

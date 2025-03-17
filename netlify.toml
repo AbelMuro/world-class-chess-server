@@ -8,4 +8,4 @@
     force = true
 
 [functions]
-    included_files = ["src/index.html"]
+    included_files = ["src/index.html", "src/PEM/cert.pem", "src/PEM/key.pem"]
