@@ -25,8 +25,8 @@ const keyFile = path.join(__dirname, 'PEM/key.pem');
 
 
 const options = {
-    key: fs.readFileSync(certFile),
-    cert: fs.readFileSync(keyFile),
+    key: fs.readFileSync(keyFile),
+    cert: fs.readFileSync(certFile),
 }
 const server = https.createServer(options);
 const io = new Server(server);
