@@ -41,7 +41,7 @@ app.use(cors({
 connectDB();
 
 app.use((req, res, next) => {
-    res.io = io;
+    req.io = io;
     next();
 })
 
