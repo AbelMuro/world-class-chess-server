@@ -6,10 +6,10 @@
     <title>Online Chess Server</title>
 </head>
 <body>
-    <div id="messages"> Messages go here</div>
-    
+    <div id="messages"></div>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
-        /* const socket = io();
+        const socket = window.io();
         const messagesDiv = document.getElementById('messages');
 
         // Listen for messages from the server
@@ -17,7 +17,7 @@
             const message = document.createElement('p');
             message.textContent = msg;
             messagesDiv.appendChild(message);
-        }); */
+        });
     </script>
 </body>
 </html>
