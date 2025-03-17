@@ -1,5 +1,5 @@
 const express = require('express');
-
+const fs = require('fs');
 const app = express();        
 const cookieParser = require('cookie-parser');       
 const cors = require('cors');    
@@ -18,10 +18,16 @@ const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
 const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
 const {Server} = require('socket.io');
-const http = require('http');
+const https = require('https');
 const path = require('path');
 
-const server = http.createServer(app);
+
+//this is where i left off, i need to generate the key.pem and cert.pem
+const options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem'),
+}
+const server = https.createServer(options);
 const io = new Server(server);
 
 const connectDB = require('./Config/MongoDB/DB.js');            
@@ -32,7 +38,7 @@ app.use(cookieParser());
 app.use(cors({
     origin: 'https://world-class-chess.netlify.app',						//Access-Control-Allow-Origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],			//Access-Control-Allow-Headers
+    allowedHeaders: ['Content-Type', 'Authorization'],			            //Access-Control-Allow-Headers
     credentials: true,
     maxAge: 3600,
     optionsSuccessStatus: 200
