@@ -18,18 +18,23 @@ const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
 const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
 const {Server} = require('socket.io');
+const Serverless = require('serverless-http');
 const https = require('https');
 const path = require('path');
 const certFile = path.join(__dirname, 'PEM/cert.pem');
 const keyFile = path.join(__dirname, 'PEM/key.pem');
-
 
 const options = {
     key: fs.readFileSync(keyFile),
     cert: fs.readFileSync(certFile),
 }
 const server = https.createServer(options);
-//const io = new Server(server);
+const io = new Server(server);
+
+
+io.on('connection', (socket) => {
+    socket.emit('message', 'Welcome to the World Class Chess server')
+})
 
 const connectDB = require('./Config/MongoDB/DB.js');            
 const port = 4000;
@@ -48,7 +53,7 @@ app.use(cors({
 connectDB();
 
 app.use((req, res, next) => {
-    //req.io = io;
+    req.io = io;
     next();
 })
 
@@ -80,4 +85,4 @@ app.listen(port, (error) => {
     console.log(`Server is running on port ${port}`);
 });  
 
-module.exports = app;
+module.exports = Serverless(app);
