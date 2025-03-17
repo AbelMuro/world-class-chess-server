@@ -18,7 +18,6 @@ const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
 const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
 const {Server} = require('socket.io');
-const Serverless = require('serverless-http');
 const https = require('https');
 const path = require('path');
 const certFile = path.join(__dirname, 'PEM/cert.pem');
@@ -85,4 +84,4 @@ app.listen(port, (error) => {
     console.log(`Server is running on port ${port}`);
 });  
 
-module.exports = Serverless(app);
+module.exports = app;
