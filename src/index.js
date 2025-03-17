@@ -30,7 +30,6 @@ const options = {
 const server = https.createServer(options);
 const io = new Server(server);
 
-
 io.on('connection', (socket) => {
     socket.emit('message', 'Welcome to the World Class Chess server')
 })
