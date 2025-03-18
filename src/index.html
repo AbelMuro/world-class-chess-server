@@ -6,9 +6,9 @@
     <title>Online Chess Server</title>
 </head>
 <body>
-    <div> 
+    <h1> 
         Welcome to the World Class Chess Server
-    </div>
+    </h1>
 
     <div id="messages">
 
@@ -19,7 +19,8 @@
         const eventSource = new EventSource('/get_messages');
 
         eventSource.onmessage = (e) => {
-            const data = JSON.parse(e.data);
+            const data = e.data;
+            console.log(data);
             const newElement = document.createElement('p');
             newElement.textContent = data.message;
             messageDiv.appendChild(messageEl);

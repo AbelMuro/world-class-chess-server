@@ -36,7 +36,6 @@ app.use(cors({
 
 connectDB();
 
-
 app.use(Login);
 app.use(Register);
 app.use(ForgotPassword);

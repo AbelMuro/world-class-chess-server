@@ -3,6 +3,7 @@ const router = express.Router();
 const EventEmitter = require('events');
 const messageQueue = require('../../utils/messageQueue.js');
 
+//this is where i left off, i need to get this working
 const messageEmitter = new EventEmitter()
 
 // Route for SSE
@@ -19,6 +20,8 @@ router.get('/get_messages', (req, res) => {
     }
 
     messageEmitter.on('new message', sendMessages);
+
+    messageEmitter.removeListener('new message', sendMessages)
 });
 
 module.exports = router;
