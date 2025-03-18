@@ -9,12 +9,13 @@
     <div> 
         Welcome to the World Class Chess Server
     </div>
+
     <div id="messages">
-        
+
     </div>
 
     <script>
-        const messageDiv = document.getElementbyId('messages');
+        const messageDiv = document.getElementById('messages');
         const eventSource = new EventSource('/get_messages');
 
         eventSource.onmessage = (e) => {
