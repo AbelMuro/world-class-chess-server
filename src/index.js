@@ -1,5 +1,4 @@
 const express = require('express');
-const fs = require('fs');
 const app = express();        
 const cookieParser = require('cookie-parser');       
 const cors = require('cors');    
@@ -16,23 +15,10 @@ const AIMove = require('./Routes/POST/AI_Move.js')
 const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
+const getMessages  = require('./Routes/GET/GetMessages.js');
 const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
-const {Server} = require('socket.io');
-const https = require('https');
 const path = require('path');
-const certFile = path.join(__dirname, 'PEM/cert.pem');
-const keyFile = path.join(__dirname, 'PEM/key.pem');
 
-const options = {
-    key: fs.readFileSync(keyFile),
-    cert: fs.readFileSync(certFile),
-}
-const server = https.createServer(options);
-const io = new Server(server);
-
-io.on('connection', (socket) => {
-    socket.emit('message', 'Welcome to the World Class Chess server')
-})
 
 const connectDB = require('./Config/MongoDB/DB.js');            
 const port = 4000;
@@ -50,10 +36,6 @@ app.use(cors({
 
 connectDB();
 
-app.use((req, res, next) => {
-    req.io = io;
-    next();
-})
 
 app.use(Login);
 app.use(Register);
@@ -69,6 +51,7 @@ app.use(GetMatch);
 app.use(putPlayerInQueue);
 app.use(leaveQueue);
 app.use(createNewChallenge);
+app.use(getMessages);
 
 app.get('/', (req, res) => {
     const filePath = path.join(__dirname, 'index.html');

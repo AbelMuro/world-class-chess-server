@@ -9,20 +9,20 @@
     <div> 
         Welcome to the World Class Chess Server
     </div>
-    <div id="messages"></div>
-    
-    <script type="module">
-        import {io} from 'https://cdn.socket.io/4.5.0/socket.io.esm.min.js'
+    <div id="messages">
         
-        const socket = io();
-        const messagesDiv = document.getElementById('messages');
+    </div>
 
-        // Listen for messages from the server
-        socket.on('message', (msg) => {
-            const message = document.createElement('p');
-            message.textContent = msg;
-            messagesDiv.appendChild(message);
-        });
+    <script>
+        const messageDiv = document.getElementbyId('messages');
+        const eventSource = new EventSource('/get_messages');
+
+        eventSource.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            const newElement = document.createElement('p');
+            newElement.textContent = data.message;
+            messageDiv.appendChild(messageEl);
+        }
     </script>
 </body>
 </html>
