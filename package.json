@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "build": "netlify deploy --prod"
+    "build": "vercel"
   },
   "keywords": [],
   "author": "",
