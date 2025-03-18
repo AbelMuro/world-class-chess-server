@@ -15,7 +15,7 @@ router.get('/get_messages', (req, res) => {
     const sendMessages = () => {
         while(messageQueue.length > 0){
             const message = messageQueue.shift();
-            res.write(message);
+            res.write(`data: ${message}\n\n`);
         }
     }
 
