@@ -21,7 +21,10 @@ router.get('/get_messages', (req, res) => {
 
     messageEmitter.on('new message', sendMessages);
 
-    messageEmitter.removeListener('new message', sendMessages)
+    req.on('close', () => {
+        messageEmitter.removeListener('new message', sendMessages)
+    })
+    
 });
 
 module.exports = router;
