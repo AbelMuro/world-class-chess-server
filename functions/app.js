@@ -13,8 +13,7 @@ module.exports.handler = async (e, context) => {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-      },
-      body: "data: SSE connection established\n\n"
+      }
     }
   }
   else{
