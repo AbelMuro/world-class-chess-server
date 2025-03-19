@@ -1,13 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const messageQueue = require('../../utils/messageQueue.js');
-const EventEmitter = require('events');
+const {messageQueue, messageEmitter} = require('../../utils/messageQueue.js');
 const jwt = require('jsonwebtoken');
 const User = require('../../Config/MongoDB/Models/User.js');
 const {config} = require('dotenv');
 config();
-
-const messageEmitter = new EventEmitter();
 
 router.post('/login', async (req, res) => {
     const {email, password} = req.body;
