@@ -15,7 +15,6 @@ const AIMove = require('./Routes/POST/AI_Move.js')
 const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
-const getMessages  = require('./Routes/GET/GetMessages.js');
 const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
 const path = require('path');
 
@@ -50,7 +49,6 @@ app.use(GetMatch);
 app.use(putPlayerInQueue);
 app.use(leaveQueue);
 app.use(createNewChallenge);
-app.use(getMessages);
 
 app.get('/', (req, res) => {
     const filePath = path.join(__dirname, 'index.html');

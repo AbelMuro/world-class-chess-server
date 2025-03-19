@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const sendMessageToServer = require('../../utils/sendMessageToServer.js');
 const {config} = require('dotenv');
 config();
 
@@ -19,7 +20,7 @@ router.post('/guestlogin', async (req, res) => {
         secure: true,
         sameSite: 'None',
     });
-
+    await sendMessageToServer(`${username} has logged in`);
     res.status(200).send('User has successfully logged in as guest');
 })
 

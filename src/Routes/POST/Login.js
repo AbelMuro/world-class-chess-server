@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../../Config/MongoDB/Models/User.js');
-const ServerMessage = require('../../Config/MongoDB/Models/ServerMessage.js');
+const sendMessageToServer = require('../../utils/sendMessageToServer.js');
 const {config} = require('dotenv');
 config();
 
@@ -26,13 +26,12 @@ router.post('/login', async (req, res) => {
             sameSite: 'None'
         });
 
-        const newMessage = new ServerMessage({message: 'User has successfully logged in'});
-        await newMessage.save();
+        await sendMessageToServer(`${user.username} has logged in`);
         res.status(200).send('User has successfully logged in');
-
     }
     catch(error){
         const message = error.message;
+        await sendMessageToServer(`Internal Server Error: ${message}`);
         res.status(500).send(message);
     }
 

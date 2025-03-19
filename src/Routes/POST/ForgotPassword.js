@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../../Config/MongoDB/Models/User.js');
+const sendMessageToServer = require('../../utils/sendMessageToServer.js');
 const nodemailer = require('nodemailer');
 const {config} = require('dotenv');
 config();
@@ -35,19 +36,20 @@ router.post('/forgotpassword', async (req, res) => {
             text: `Please click on the following link to reset your password ${resetPasswordLink}`
         }
 
-        transporter.sendMail(mailOption, (error, info) => {
+        transporter.sendMail(mailOption, async (error, info) => {
             if(error){
                 res.status(401).send(error.message);
                 return;
             }
-            else
+            else{
+                await sendMessageToServer(`Account with email: ${email}, has forgotten their password, reset link has been sent to their email address`)
                 res.status(200).send('Email sent successfully');
-            
+            }
         })
-
     }
     catch(error){
         const message = error.message;
+        await sendMessageToServer(`Internal Server Error: ${message}`);
         res.status(500).send(message);
     }
 })
