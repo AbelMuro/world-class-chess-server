@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const {messageQueue, messageEmitter} = require('../../utils/messageQueue.js');
 const jwt = require('jsonwebtoken');
 const User = require('../../Config/MongoDB/Models/User.js');
+const ServerMessage = require('../../Config/MongoDB/Models/ServerMessage.js');
 const {config} = require('dotenv');
 config();
 
@@ -25,6 +25,9 @@ router.post('/login', async (req, res) => {
             secure: true,
             sameSite: 'None'
         });
+
+        const newMessage = new ServerMessage({message: 'User has successfully logged in'});
+        await newMessage.save();
         res.status(200).send('User has successfully logged in');
 
     }
