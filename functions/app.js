@@ -14,7 +14,7 @@ module.exports.handler = async (e, context) => {
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
       },
-      body: "data: SSE connection established"
+      body: "data: SSE connection established\n\n"
     }
   }
   else{
