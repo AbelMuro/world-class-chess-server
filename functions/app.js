@@ -14,9 +14,7 @@ module.exports.handler = async (e, context) => {
   if(e.path === '/get_messages'){
     const allMessages = await ServerMessage.find();
     await ServerMessage.deleteMany({});
-    const formatedMessages = allMessages.map((message) => {
-      return `data: ${message}\n\n`
-    }).join('');
+    const formatedMessages = allMessages.map(message => `data: ${JSON.stringify(message)}\n\n`).join('');
 
     return {
       statusCode: 200,
