@@ -25,8 +25,6 @@ router.post('/login', async (req, res) => {
             secure: true,
             sameSite: 'None'
         });
-        messageQueue.push(`${user.username} has logged in`);
-        messageEmitter.emit('new message');
         res.status(200).send('User has successfully logged in');
 
     }

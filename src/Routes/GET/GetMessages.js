@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const {messageQueue, messageEmitter} = require('../../utils/messageQueue.js');
 
-
 // Route for SSE
 router.get('/get_messages', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://world-class-chess.netlify.app');
