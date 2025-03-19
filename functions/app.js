@@ -12,9 +12,9 @@ module.exports.handler = async (e, context) => {
   await connectDB();		
 
   if(e.path === '/get_messages'){
-    const allMessages = await ServerMessage.find();
+    const allDocuments = await ServerMessage.find();
     await ServerMessage.deleteMany({});
-    const formatedMessages = allMessages.map(message => `data: ${JSON.stringify(message)}\n\n`).join('');
+    const formatedMessages = allDocuments.map(document => `data: ${JSON.stringify(document.message)}\n\n`).join('');
 
     return {
       statusCode: 200,
