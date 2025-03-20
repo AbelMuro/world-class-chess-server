@@ -10,20 +10,8 @@
         Welcome to the World Class Chess Server
     </h1>
 
-    <div id="messages">
-
-    </div>
-
-    <script>
-        const messageDiv = document.getElementById('messages');
-        const eventSource = new EventSource('/get_messages');
-
-        eventSource.onmessage = (e) => {
-            const data = e.data;
-            const newElement = document.createElement('p');
-            newElement.textContent = data;
-            messageDiv.appendChild(newElement);
-        }
-    </script>
+    <p id="messages">
+        Server messages will be displayed below:
+    </p>
 </body>
 </html>
