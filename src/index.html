@@ -20,7 +20,6 @@
 
         eventSource.onmessage = (e) => {
             const data = e.data;
-            console.log(data);
             const newElement = document.createElement('p');
             newElement.textContent = data;
             messageDiv.appendChild(newElement);

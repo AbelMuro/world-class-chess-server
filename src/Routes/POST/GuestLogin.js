@@ -20,7 +20,7 @@ router.post('/guestlogin', async (req, res) => {
         secure: true,
         sameSite: 'None',
     });
-    await sendMessageToServer(`${username} has logged in`);
+    sendMessageToServer(`${username} has logged in`);
     res.status(200).send('User has successfully logged in as guest');
 })
 

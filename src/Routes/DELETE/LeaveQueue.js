@@ -22,14 +22,14 @@ router.delete('/leave_queue', async (req, res) => {
         if(result.deletedCount === 0)
             res.status(404).send('Player was not in the queue')
         else{
-            await sendMessageToServer(`${username} has been removed from the queue`);
+            sendMessageToServer(`${username} has been removed from the queue`);
             res.status(200).send('Player has successfully been removed from the queue');
         }
             
     }
     catch(error){
         const message = error.message;
-        await sendMessageToServer(`Internal Server Error: ${message}`)
+        sendMessageToServer(`Internal Server Error: ${message}`)
         res.status(500).send(message);
     }
 })

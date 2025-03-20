@@ -35,7 +35,7 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
                     secure: true,
                     sameSite: 'None',   
                 })
-                await sendMessageToServer(`${username} has created an account`);
+                sendMessageToServer(`${username} has created an account`);
                 res.status(200).send('Account registered successfully'); 
               });
         
@@ -51,13 +51,13 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
                 secure: true,
                 sameSite: 'None',   
             })
-            await sendMessageToServer(`${username} has created an account`);
+            sendMessageToServer(`${username} has created an account`);
             res.status(200).send('Account registered successfully');
         }       
     }
     catch(error){
         const message = error.message;
-        await sendMessageToServer(`Internal Server Error: ${message}`);
+        sendMessageToServer(`Internal Server Error: ${message}`);
         if(message.includes('E11000 duplicate key error collection:'))
             res.status(401).send(message);
         else

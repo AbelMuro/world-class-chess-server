@@ -13,7 +13,7 @@ router.post('/logout', async (req, res) => {
     const username = decoded.email;
     
     res.cookie('accessToken', null);
-    await sendMessageToServer(`${username} has logged out`);
+    sendMessageToServer(`${username} has logged out`);
     res.status(200).send('User has been logged out');
 })
 
