@@ -30,7 +30,7 @@ router.post('/login', async (req, res) => {
     }
     catch(error){
         const message = error.message;
-        
+        sendMessageToServer(`Internal Server Error: ${message}`)
         res.status(500).send(message);
     }
 
