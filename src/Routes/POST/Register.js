@@ -1,6 +1,5 @@
 const express = require('express');
 const multer = require('multer')
-const EventEmitter = require('events');
 const router = express.Router();
 const initializeGridFs = require('../Middleware/initializeGridFs.js');
 const jwt = require('jsonwebtoken');

@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const initializeGridFs = require('../Middleware/initializeGridFs.js');
-const sendMessageToServer = require('../../utils/sendMessageToServer.js');
 const Queue = require('../../Config/MongoDB/Models/Queue.js');
 const User = require('../../Config/MongoDB/Models/User.js');
 const jwt = require('jsonwebtoken');
