@@ -42,14 +42,12 @@ router.post('/forgotpassword', async (req, res) => {
                 return;
             }
             else{
-                sendMessageToServer(`Account with email: ${email}, has forgotten their password, reset link has been sent to their email address`)
                 res.status(200).send('Email sent successfully');
             }
         })
     }
     catch(error){
         const message = error.message;
-        sendMessageToServer(`Internal Server Error: ${message}`);
         res.status(500).send(message);
     }
 })

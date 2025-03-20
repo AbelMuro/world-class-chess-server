@@ -54,7 +54,6 @@ app.use(createNewChallenge);
 app.get('/', (req, res) => {
     const filePath = path.join(__dirname, 'index.html');
     res.sendFile(filePath);
-    sendMessageToServer('Hello world')
 })
 
 app.listen(port, (error) => {

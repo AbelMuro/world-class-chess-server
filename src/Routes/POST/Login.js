@@ -25,12 +25,10 @@ router.post('/login', async (req, res) => {
             secure: true,
             sameSite: 'None'
         });
-        sendMessageToServer(`${user.username} has logged in`)
         res.status(200).send('User has successfully logged in');
     }
     catch(error){
         const message = error.message;
-        sendMessageToServer(`Internal Server Error: ${message}`)
         res.status(500).send(message);
     }
 

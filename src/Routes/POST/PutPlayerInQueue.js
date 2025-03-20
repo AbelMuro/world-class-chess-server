@@ -45,7 +45,6 @@ router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
                 const base64 = fileBuffer.toString('base64');
                 const newPlayerInQueue = new Queue({_id, player: username, profileImageBase64: base64, contentType});
                 await newPlayerInQueue.save();
-                sendMessageToServer(`${username} has entered the queue`);
                 res.status(200).json({message: 'Player has successfully entered the queue'});
             })
 
@@ -53,21 +52,18 @@ router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
                 console.log('Error reading file from MongoDB', err);
                 const newPlayerInQueue = new Queue({_id, player: username});
                 await newPlayerInQueue.save();
-                sendMessageToServer(`${username} has entered the queue, but their image could not be loaded`);
                 res.status(200).json({message: 'Player has successfully entered the queue but image could not be loaded'})
             })
         }
         else{
             const newPlayerInQueue = new Queue({_id, player: username});
             await newPlayerInQueue.save();
-            sendMessageToServer(`${username} has entered the queue`);
             res.status(200).json({message: 'Player has successfully entered the queue', username});
         }
 
     }
     catch(error){
         const message = error.message;
-        sendMessageToServer(`Internal Server Error: ${message}`);
         if(message.includes('E11000 duplicate key error collection:'))
             res.status(401).send('Player is already in the queue');
         else
