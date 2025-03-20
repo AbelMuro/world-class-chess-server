@@ -4,7 +4,7 @@ const app = require('../src/index.js');
 const connectDB = require('../src/Config/MongoDB/DB.js');
 
 
-//this is where i left off, i need to find a way to get a message from a fetch request and display it here in the return statement of my serveless function
+//this is where i left off, i need to find a way to implement SSE and another way of deploying node.js app without using serverless functions
 
 const handler = serverless(app);  	
 
