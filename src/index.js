@@ -25,7 +25,7 @@ const port = 4000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'https://world-class-chess.netlify.app',						//Access-Control-Allow-Origin
+    origin: ['https://world-class-chess.netlify.app', 'http://localhost:3000'],						//Access-Control-Allow-Origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],			            //Access-Control-Allow-Headers
     credentials: true,
