@@ -5,7 +5,7 @@ const connectDB = require('../src/Config/MongoDB/DB.js');
 const handler = serverless(app);  	
 
 module.exports.handler = async (e, context) => {	
-  await connectDB();		
-  const result = await handler(e, context);
-  return result;    
+    await connectDB();		
+    const result = await handler(e, context);
+    return result;    
 };
