@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const {Schema} = require('mongoose');
-const Ably = require('ably');
-//const ably = new Ably.Realtime(process.env.ABLY_API_KEY);
-//const channel = ably.channels.get('queue-channel');
+const WebSocket = require('ws');
+const https = require('https');
 
 const queueSchema = new Schema({
     player: {type: String, required: true, unique: true},
@@ -12,22 +11,29 @@ const queueSchema = new Schema({
 
 const Queue = mongoose.model('player', queueSchema, 'queue')
 
-//const changeStream = Queue.watch();
+const changeStream = Queue.watch();
 
-/* 
-changeStream.on('change', (change) => {
-    console.log('new player has joined the queue');
+const server = https.createServer({                               
+    cert: fs.readFileSync('/path/to/ssl/cert.pem'),                
+    key: fs.readFileSync('/path/to/ssl/key.pem'),                  
+});  
 
-    channel.publish('queue-update', change, (err) => {
-        if(err) {
-            console.error('Failed to publish message', err);
-        }
-        else
-            console.log('Change publish to ably channel');
+
+const wss = new WebSocket.Server({server});
+
+wss.on('connection', ws => {                                        //Third, you establish the connection between the back end and the front end
+    console.log('Front-end and back-end are connected');
+
+    changeStream.on('change', (change) => {
+        ws.send('data goes here')  
+    })
+                                
+    ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
+        console.log('Client disconnected')
     })
 })
 
 
-*/
+
 
 module.exports = Queue

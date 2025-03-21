@@ -18,7 +18,6 @@ const getAccount = require('./Routes/GET/GetAccount.js');
 const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
 const path = require('path');
 
-
 const connectDB = require('./Config/MongoDB/DB.js');            
 const port = 4000;
 
