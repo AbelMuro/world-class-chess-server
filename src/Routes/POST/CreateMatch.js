@@ -14,6 +14,7 @@ router.post('/create_match', async (req, res) => {
     }
     catch(error){
         const message = error.message;
+        console.log(message);
         res.status(500).send(message);
     }
 })
