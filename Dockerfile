@@ -8,6 +8,14 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+ENV JWT_SECRET=wbiu83pugbw2iougvbawi7udg
+ENV accountname=abelmuro93
+ENV password=Pz1l94Z5DTsnQLYv
+ENV database=world-class-chess-database
+ENV cluster=Cluster0
+ENV email=abelmuro93@gmail.com
+ENV app_password=mfcl uiwx tueo leid
+
 # Copy the rest of the app’s files
 COPY . .
 
