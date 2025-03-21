@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const { GridFSBucket} = require('mongodb');
 
+
+//this is where i left off, mongoose is returning undefined for some reason
 const initializeGridFs = (req, res, next) => {
     try{
         const conn = mongoose.connection;

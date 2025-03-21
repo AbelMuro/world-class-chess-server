@@ -17,7 +17,6 @@ const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
 const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
 const path = require('path');
-const sendMessageToServer = require('./utils/sendMessageToServer.js');
 
 
 const connectDB = require('./Config/MongoDB/DB.js');            
