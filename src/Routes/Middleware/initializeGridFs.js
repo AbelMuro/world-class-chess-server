@@ -10,7 +10,7 @@ const initializeGridFs = (req, res, next) => {
     }
     catch(error){
         const message = error.message;
-        res.status(500).send(message);
+        res.status(500).send(`initializeGridFS(): ${message}`);
     }
 }
 
