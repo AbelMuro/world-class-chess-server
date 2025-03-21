@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const {Schema} = require('mongoose');
 const WebSocket = require('ws');
+const fs = require('fs');
 const https = require('https');
 const path = require('path');
 const keyFile = path.join(__dirname, '../../../../PEM/key.pem');
