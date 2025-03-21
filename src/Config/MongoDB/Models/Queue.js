@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const {Schema} = require('mongoose');
 const WebSocket = require('ws');
 const https = require('https');
+const path = require('path');
+const keyFile = path.join(__dirname, '../../../../PEM/key.pem');
+const certFile = path.join(__dirname, '../../../../PEM/cert.pem');
 
 const queueSchema = new Schema({
     player: {type: String, required: true, unique: true},
@@ -14,8 +17,8 @@ const Queue = mongoose.model('player', queueSchema, 'queue')
 const changeStream = Queue.watch();
 
 const server = https.createServer({                               
-    cert: fs.readFileSync('/path/to/ssl/cert.pem'),                
-    key: fs.readFileSync('/path/to/ssl/key.pem'),                  
+    cert: fs.readFileSync(certFile),                
+    key: fs.readFileSync(keyFile),                  
 });  
 
 
