@@ -2,11 +2,10 @@
 FROM node:16-alpine
 
 # Set the working directory
-WORKDIR /usr/src/app/src
+WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package*.json ./
-COPY src ./src
 RUN npm install --production
 
 # Copy the rest of the app’s files
@@ -16,4 +15,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the app
-CMD ["node", "index.js"]
+CMD ["node", "src/index.js"]
