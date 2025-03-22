@@ -5,5 +5,15 @@ steps:
   args: ['run', 'build']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/world-class-chess-server/world-class-chess-server', '.']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy']
+  env:
+   - 'JWT_SECRET=wbiu83pugbw2iougvbawi7udg'
+   - 'accountname=abelmuro93'
+   - 'password=Pz1l94Z5DTsnQLYv'
+   - 'database=world-class-chess-database'
+   - 'cluster=Cluster0'
+   - 'email=abelmuro93@gmail.com'
+   - 'app_password=mfcl uiwx tueo leid'
 images:
 - 'gcr.io/world-class-chess-server/world-class-chess-server'
