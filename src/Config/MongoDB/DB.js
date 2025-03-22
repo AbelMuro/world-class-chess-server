@@ -10,7 +10,7 @@ async function connectDB() {
       console.log('You have connected to the database')
     }
     catch(error){
-      console.log('error', error.message);
+      console.log('MongoDB Error: ', error.message);
     }
 }
 
