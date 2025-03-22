@@ -1,3 +1,6 @@
+#This is where i left off, i need to deploy a docker container with https
+
+
 # Use the Node.js base image
 FROM node:16-alpine
 
@@ -7,14 +10,6 @@ WORKDIR /app
 # Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install
-
-ENV JWT_SECRET=wbiu83pugbw2iougvbawi7udg
-ENV accountname=abelmuro93
-ENV password=Pz1l94Z5DTsnQLYv
-ENV database=world-class-chess-database
-ENV cluster=Cluster0
-ENV email=abelmuro93@gmail.com
-ENV app_password=mfcl uiwx tueo leid
 
 # Copy the rest of the app’s files
 COPY . .
