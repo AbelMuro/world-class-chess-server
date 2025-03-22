@@ -32,7 +32,7 @@ app.use(cors({
     optionsSuccessStatus: 200
 }))
 
-connectDB();
+connectDB()
 
 app.use(Login);
 app.use(Register);
