@@ -16,9 +16,14 @@ const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
 const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
+const fs = require('fs');
 const path = require('path');
+const https = require('https');
+const connectDB = require('./Config/MongoDB/DB.js');     
 
-const connectDB = require('./Config/MongoDB/DB.js');            
+const indexFilePath = path.join(__dirname, 'index.html');   
+const privateKeyFilePath = path.join(__dirname, '../SSL/private.key');
+const certificateFilePath = path.join(__dirname, '../SSL/certificate.crt'); 
 const port = process.env.PORT || 8080;
 
 app.use(express.json());
@@ -49,9 +54,22 @@ app.use(putPlayerInQueue);
 app.use(leaveQueue);
 app.use(createNewChallenge);
 
+const options = {
+    key: fs.readFileSync(privateKeyFilePath),
+    cert: fs.readFileSync(certificateFilePath),
+}
+
 app.get('/', (req, res) => {
-    const filePath = path.join(__dirname, 'index.html');
-    res.sendFile(filePath);
+    res.sendFile(indexFilePath);
+})
+
+
+https.createServer(options, app).listen(443, (error) => {
+    if(error){
+        console.log('HTTPS error occurred: ', error);
+        return;
+    }
+    console.log('HTTPS server is running on port 443')
 })
 
 app.listen(port, (error) => {
@@ -59,7 +77,7 @@ app.listen(port, (error) => {
         console.log(error, 'error occured');
         return;
     }
-    console.log(`Server is running on port ${port}`);
+    console.log(`HTTP Server is running on port ${port}`);
 });  
 
 module.exports = app;
