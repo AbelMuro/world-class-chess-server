@@ -9,8 +9,15 @@ steps:
   args: ['push', 'gcr.io/world-class-chess-server/world-class-chess-server']
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
-   - 'app'
+   - 'run'
    - 'deploy'
+   - 'world-class-chess-server'
+   - '--image'
+   - 'gcr.io/world-class-chess-server/world-class-chess-server'
+   - '--region'
+   - 'us-central1'
+   - '--platform'
+   - 'managed'
   images:
   - 'gcr.io/world-class-chess-server/world-class-chess-server'
   env:
@@ -21,5 +28,3 @@ steps:
    - 'cluster=Cluster0'
    - 'email=abelmuro93@gmail.com'
    - 'app_password=mfcl uiwx tueo leid'
-images:
-- 'gcr.io/world-class-chess-server/world-class-chess-server'

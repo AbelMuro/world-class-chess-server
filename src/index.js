@@ -19,7 +19,7 @@ const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
 const path = require('path');
 
 const connectDB = require('./Config/MongoDB/DB.js');            
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(cookieParser());
