@@ -1,5 +1,4 @@
-const express = require('express');
-const app = express();        
+const express = require('express');     
 const cookieParser = require('cookie-parser');       
 const cors = require('cors');    
 const Login = require('./Routes/POST/Login.js');     
@@ -21,6 +20,7 @@ const path = require('path');
 const https = require('https');
 const connectDB = require('./Config/MongoDB/DB.js');     
 
+const app = express();   
 const indexFilePath = path.join(__dirname, 'index.html');   
 const privateKeyFilePath = path.join(__dirname, '../SSL/private.key');
 const certificateFilePath = path.join(__dirname, '../SSL/certificate.crt'); 
