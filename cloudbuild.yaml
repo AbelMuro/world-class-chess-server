@@ -5,8 +5,14 @@ steps:
   args: ['run', 'build']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/world-class-chess-server/world-class-chess-server', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/world-class-chess-server/world-class-chess-server']
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy']
+  args:
+   - 'app'
+   - 'deploy'
+  images:
+  - 'gcr.io/world-class-chess-server/world-class-chess-server'
   env:
    - 'JWT_SECRET=wbiu83pugbw2iougvbawi7udg'
    - 'accountname=abelmuro93'
