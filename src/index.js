@@ -20,6 +20,14 @@ const path = require('path');
 const https = require('https');
 const connectDB = require('./Config/MongoDB/DB.js');     
 
+
+// this is where i left off, i need to continue deploying this node.js app with https in google compute engine's VM
+// i may have authorization issues with a certain command that i need to run in the VM terminal
+
+//      gcloud compute scp /local/path/to/app INSTANCE_NAME:/remote/path --zone=ZONE
+
+//      i also need to ask the AI if the files in the HTTPS folder are the files that i need to deploy this app with HTTPS
+
 const app = express();   
 const indexFilePath = path.join(__dirname, 'index.html');   
 const privateKeyFilePath = path.join(__dirname, '../HTTPS/private.key');
