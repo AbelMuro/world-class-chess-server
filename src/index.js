@@ -18,13 +18,8 @@ const createNewChallenge = require('./Routes/POST/CreateNewChallenge.js');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const CreateWebSocketForQueue = require('./Config/Websockets/CreateWebSocketForQueue.js');
 const connectDB = require('./Config/MongoDB/DB.js');     
-
-
-// this is where i left off, i need to continue deploying this node.js app with https in google compute engine's VM
-// i may have authorization issues with a certain command that i need to run in the VM terminal
-
-//      i also need to ask the AI if the files in the HTTPS folder are the files that i need to deploy this app with HTTPS
 
 const app = express();   
 const indexFilePath = path.join(__dirname, 'index.html');   
@@ -43,7 +38,8 @@ app.use(cors({
     optionsSuccessStatus: 200
 }))
 
-connectDB()
+connectDB();
+CreateWebSocketForQueue();
 
 app.use(Login);
 app.use(Register);

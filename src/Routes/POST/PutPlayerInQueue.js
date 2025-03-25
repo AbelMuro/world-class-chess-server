@@ -1,13 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const initializeGridFs = require('../Middleware/initializeGridFs.js');
-const {Queue, createWebSocket} = require('../../Config/MongoDB/Models/Queue.js');
+const Queue = require('../../Config/MongoDB/Models/Queue.js');
 const User = require('../../Config/MongoDB/Models/User.js');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const {config} = require('dotenv');
 config();
-
 
 
 router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
@@ -21,7 +20,6 @@ router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
     }
 
     try{
-        await createWebSocket();
         const decoded = jwt.verify(token, JWT_SECRET);
         const username = decoded.username;
         const user = await User.findOne({username});
