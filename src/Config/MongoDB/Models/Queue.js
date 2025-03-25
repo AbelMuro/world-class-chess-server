@@ -4,8 +4,8 @@ const WebSocket = require('ws');
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
-const keyFile = path.join(__dirname, '../../../../PEM/key.pem');
-const certFile = path.join(__dirname, '../../../../PEM/cert.pem');
+const keyFile = path.join(__dirname, '../../../../SSL/private.key');
+const certFile = path.join(__dirname, '../../../../SSL/certificate.cer');
 
 const queueSchema = new Schema({
     player: {type: String, required: true, unique: true},

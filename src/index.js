@@ -62,15 +62,17 @@ app.use(putPlayerInQueue);
 app.use(leaveQueue);
 app.use(createNewChallenge);
 
-const options = {
-    key: fs.readFileSync(privateKeyFilePath),
-    cert: fs.readFileSync(certificateFilePath),
-}
+
 
 app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
 
+
+const options = {
+    key: fs.readFileSync(privateKeyFilePath),
+    cert: fs.readFileSync(certificateFilePath),
+}
 
 https.createServer(options, app).listen(443, (error) => {
     if(error){
