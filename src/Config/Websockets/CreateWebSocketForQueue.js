@@ -13,21 +13,30 @@ const server = https.createServer({
 });  
 
 const CreateWebSocketForQueue = async () => {
-    const changeStream = Queue.watch();
+    console.log('Initiate WebSocket for queue');
 
-    const wss = new WebSocket.Server({server});
+    try{
+        const changeStream = Queue.watch();
 
-    wss.on('connection', ws => {                                        //Third, you establish the connection between the back end and the front end
-        console.log('Front-end and back-end are connected');
-    
-        changeStream.on('change', (change) => {
-            ws.send('data goes here')  
-        })
-                                    
-        ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
-            console.log('Client disconnected')
-        })
-    })
+        const wss = new WebSocket.Server({server});
+
+        wss.on('connection', ws => {                                        //Third, you establish the connection between the back end and the front end
+            console.log('Front-end and back-end are connected');
+        
+            changeStream.on('change', (change) => {
+                ws.send('data goes here')  
+            })
+                                        
+            ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
+                console.log('Client disconnected')
+            })
+        })        
+    }
+    catch(error){
+        const message = error.message;
+        console.log(message);
+    }
+
 }
 
 module.exports = CreateWebSocketForQueue;
