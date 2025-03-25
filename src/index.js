@@ -31,7 +31,7 @@ const connectDB = require('./Config/MongoDB/DB.js');
 const app = express();   
 const indexFilePath = path.join(__dirname, 'index.html');   
 const privateKeyFilePath = path.join(__dirname, '../HTTPS/private.key');
-const certificateFilePath = path.join(__dirname, '../HTTPS/certificate.crt'); 
+const certificateFilePath = path.join(__dirname, '../HTTPS/certificate.cer'); 
 const port = process.env.PORT || 8080;
 
 app.use(express.json());
