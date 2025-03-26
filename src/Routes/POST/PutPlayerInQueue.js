@@ -41,19 +41,41 @@ router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
             })
 
             readstream.on('end', async () => {
-                console.log('Image has been uploaded from Mongo')
-                const fileBuffer = Buffer.concat(chunks);
-                const base64 = fileBuffer.toString('base64');
-                const newPlayerInQueue = new Queue({_id, player: username, profileImageBase64: base64, contentType});
-                await newPlayerInQueue.save();
-                res.status(200).json({message: 'Player has successfully entered the queue'});
+                try{
+                    console.log('Image has been uploaded from Mongo')
+                    const fileBuffer = Buffer.concat(chunks);
+                    const base64 = fileBuffer.toString('base64');
+                    const newPlayerInQueue = new Queue({_id, player: username, profileImageBase64: base64, contentType});
+                    await newPlayerInQueue.save();
+                    res.status(200).json({message: 'Player has successfully entered the queue'});
+                }
+                catch(error){
+                    const message = error.message;
+                    console.log(message);
+                    if(message.includes('E11000 duplicate key error collection:'))
+                        res.status(401).send('Player is already in queue');
+                    else
+                        res.status(500).send(message);
+                }
+
             })
 
             readstream.on('error', async (err) => {
-                console.log('Error getting Image file from MongoDB', err);
-                const newPlayerInQueue = new Queue({_id, player: username});
-                await newPlayerInQueue.save();
-                res.status(200).json({message: 'Player has successfully entered the queue but image could not be loaded'})
+                try{
+                    console.log('Error getting Image file from MongoDB', err);
+                    const newPlayerInQueue = new Queue({_id, player: username});
+                    await newPlayerInQueue.save();
+                    res.status(200).json({message: 'Player has successfully entered the queue but image could not be loaded'})                    
+                }
+                catch(error){
+                    const message = error.message;
+                    console.log(message);
+                    if(message.includes('E11000 duplicate key error collection:'))
+                        res.status(401).send('Player is already in queue');
+                    else
+                        res.status(500).send(message);
+
+                }
             })
         }
         else{
@@ -62,7 +84,6 @@ router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
             console.log('Player has entered the queue');
             res.status(200).json({message: 'Player has successfully entered the queue', username});
         }
-
     }
     catch(error){
         const message = error.message;
