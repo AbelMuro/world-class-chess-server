@@ -17,7 +17,7 @@ const CreateWebSocketForQueue = async (server) => {
                 })
         })
 
-        wss.on('connection', ws => {                                    //Third, you establish the connection between the back end and the front end
+        wss.on('connection', ws => {                                    //we establish the connection between the back end and the front end
             console.log('Front-end and back-end are connected');
         
             changeStream.on('change', (change) => {
@@ -28,7 +28,11 @@ const CreateWebSocketForQueue = async (server) => {
             ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
                 console.log('Client disconnected')
             })
-        })        
+        })    
+        
+        changeStream.on('error', (error) => {
+            console.log(`mongoDB change stream error: ${error}`);
+        })
     }
     catch(error){
         const message = error.message;
