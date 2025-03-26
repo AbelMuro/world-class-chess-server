@@ -6,7 +6,6 @@ const path = require('path');
 const keyFile = path.join(__dirname, '../../../SSL/private.key');
 const certFile = path.join(__dirname, '../../../SSL/certificate.cer');
 
-
 const server = https.createServer({                               
     cert: fs.readFileSync(certFile),                
     key: fs.readFileSync(keyFile),                  
