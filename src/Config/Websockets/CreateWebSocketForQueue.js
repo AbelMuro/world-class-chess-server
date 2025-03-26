@@ -21,8 +21,8 @@ const CreateWebSocketForQueue = async (server) => {
             console.log('Front-end and back-end are connected');
         
             changeStream.on('change', (change) => {
-                console.log(change);
-                ws.send('data goes here')  
+                const document = JSON.stringify(change);
+                ws.send(document);  
             })
                                         
             ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
