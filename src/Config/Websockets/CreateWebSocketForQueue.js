@@ -1,10 +1,5 @@
 const WebSocket = require('ws');
 const Queue = require('../MongoDB/Models/Queue.js');
-const fs = require('fs');
-const https = require('https');
-const path = require('path');
-const keyFile = path.join(__dirname, '../../../SSL/private.key');
-const certFile = path.join(__dirname, '../../../SSL/certificate.cer');
 
 const CreateWebSocketForQueue = async (server) => {
     console.log('Initiate WebSocket for queue');
@@ -26,6 +21,7 @@ const CreateWebSocketForQueue = async (server) => {
             console.log('Front-end and back-end are connected');
         
             changeStream.on('change', (change) => {
+                console.log(change);
                 ws.send('data goes here')  
             })
                                         
