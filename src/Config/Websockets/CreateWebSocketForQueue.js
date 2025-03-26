@@ -1,6 +1,9 @@
 const WebSocket = require('ws');
 const Queue = require('../MongoDB/Models/Queue.js');
 
+
+//this is where i left off, i will need to configure the cluster in mongoDB and use replica set mode
+
 const CreateWebSocketForQueue = async (server) => {
     console.log('Initiate WebSocket for queue');
 
