@@ -27,15 +27,17 @@ const CreateWebSocketForQueue = async (server) => {
                 const document = JSON.stringify(change);
                 ws.send(document);  
             })
+
+            changeStream.on('error', (error) => {
+                console.log(`mongoDB change stream error: ${error}`);
+            })            
                                         
             ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
                 console.log('Client disconnected')
             })
         })    
         
-        changeStream.on('error', (error) => {
-            console.log(`mongoDB change stream error: ${error}`);
-        })
+
     }
     catch(error){
         const message = error.message;
