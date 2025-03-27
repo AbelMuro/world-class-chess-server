@@ -28,7 +28,7 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
             writestream.on('finish', async () => {
                 user.profileImageId = writestream.id;       // Update the user document with the image reference    
                 const userData = await user.save();             
-                const token = jwt.sign({id: userData._id, email, username}, JWT_SECRET);
+                const token = jwt.sign({id: userData._id, email, username, profileImageId: writestream.id}, JWT_SECRET);
                 console.log('image has been uploaded to mongoDB');
                 res.cookie('accessToken', token, {
                     httpOnly: true,
@@ -39,13 +39,13 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
               });
         
             writestream.on('error', (err) => {
-                console.log('Error uploaded image');
+                console.log(`Error uploaded image ${err}`);
                 res.status(401).send('Error uploading image')
             });
         }
         else{
             const userData = await user.save();
-            const token = jwt.sign({id: userData._id, email, username}, JWT_SECRET);
+            const token = jwt.sign({id: userData._id, email, username, profileImageId: null}, JWT_SECRET);
             console.log('Account has been created successfully');
             res.cookie('accessToken', token, {
                 httpOnly: true,

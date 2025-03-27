@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../../Config/MongoDB/Models/User.js');
-const sendMessageToServer = require('../../utils/sendMessageToServer.js');
 const {config} = require('dotenv');
 config();
 
@@ -18,7 +17,7 @@ router.post('/login', async (req, res) => {
             return;
         }
 
-        const token = jwt.sign({id: user._id, email, username: user.username}, JWT_SECRET);
+        const token = jwt.sign({id: user._id, email, username: user.username, profileImageId: user.profileImageId}, JWT_SECRET);
 
         res.cookie('accessToken', token, {
             httpOnly: true,

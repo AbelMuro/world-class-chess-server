@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const initializeGridFs = require('../Middleware/initializeGridFs.js');
 const Queue = require('../../Config/MongoDB/Models/Queue.js');
-const User = require('../../Config/MongoDB/Models/User.js');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const {config} = require('dotenv');
@@ -22,8 +21,7 @@ router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
     try{
         const decoded = jwt.verify(token, JWT_SECRET);
         const username = decoded.username;
-        const user = await User.findOne({username});
-        const profileImageId = user.profileImageId;
+        const profileImageId = decoded.profileImageId;
         let contentType;
         
         if(profileImageId){
@@ -61,7 +59,7 @@ router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
             readstream.on('error', async (err) => {
                 try{
                     console.log('Error getting Image file from MongoDB', err);
-                    const newPlayerInQueue = new Queue({player: username});
+                    const newPlayerInQueue = new Queue({player: username, profileImageBase64: '', contentType: null});
                     await newPlayerInQueue.save();
                     res.status(200).json({message: 'Player has successfully entered the queue but image could not be loaded'})                    
                 }
@@ -77,7 +75,7 @@ router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
             })
         }
         else{
-            const newPlayerInQueue = new Queue({player: username});
+            const newPlayerInQueue = new Queue({player: username, profileImageBase64: '', contentType: null});
             await newPlayerInQueue.save();
             console.log('Player has entered the queue');
             res.status(200).json({message: 'Player has successfully entered the queue', username});

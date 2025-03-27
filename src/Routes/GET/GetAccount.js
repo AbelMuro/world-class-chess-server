@@ -23,9 +23,8 @@ router.get('/get_account', initializeGridFs, async (req, res) => {
     try{
         const decoded = jwt.verify(token, JWT_SECRET);
         const email = decoded.email;
-        const user = await User.findOne({email});
-        const username = user.username;
-        const imageId = user.profileImageId;
+        const username = decoded.username;
+        const imageId = decoded.profileImageId;
 
         if(imageId){
             const _id = new mongoose.Types.ObjectId(imageId);
