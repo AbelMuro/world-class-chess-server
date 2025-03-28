@@ -21,7 +21,7 @@ const CreateWebSocketForQueue = async (server) => {
         })
 
         wss.on('connection', ws => {                                    //we establish the connection between the back end and the front end
-            console.log('Front-end and back-end are connected');
+            console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
         
             changeStream.on('change', async () => {
                 const queue = await Queue.find();

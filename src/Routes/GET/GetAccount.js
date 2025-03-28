@@ -3,7 +3,6 @@ const initializeGridFs = require('../Middleware/initializeGridFs.js');
 const mongoose = require('mongoose');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const User = require('../../Config/MongoDB/Models/User.js');
 const {config} = require('dotenv');
 config();
 
