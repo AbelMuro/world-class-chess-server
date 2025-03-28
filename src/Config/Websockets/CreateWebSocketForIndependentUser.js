@@ -4,7 +4,7 @@ const User = require('../MongoDB/Models/User.js');
 const CreateWebSocketForIndependentUser = (userId, server) => {
     console.log('Initiate WebSocket for independent user');
 
-    const changeStream = User.watch([{$match: {'_id': userId}}]);
+    const changeStream = User.watch([{$match: {'fullDocument._id': userId}}]);
     const wss = new WebSocket.Server({noServer: true});
 
     server.on('upgrade', (request, socket, head) => {               // upgrade event will be triggered when the client sends a request to upgrade from http request to websocket request
@@ -20,6 +20,11 @@ const CreateWebSocketForIndependentUser = (userId, server) => {
         console.log('Front-end and back-end are connected, waiting for updates on independent user collection in database');
     
         changeStream.on('change', async (change) => {
+            if(change.operationType === 'delete'){
+                ws.close();
+                changeStream.close();
+            }
+
             const challengedBy = change?.fullDocument?.hasBeenChallenged;       //value has already been stringified to JSON
             if(challengedBy)
                 ws.send(challengedBy);              
