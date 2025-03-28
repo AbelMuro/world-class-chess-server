@@ -7,13 +7,11 @@ const {config} = require('dotenv');
 config();
 
 //this is where i left off, i need to finish implementing this route
-// i need to make sure that the result._id is indeed a string and can be assigned to the challengeId property of the User model
-// and then i can make a web socket for the User model, specifically for the hasBeenChallenged property
+// i need to make a web socket for the User model, specifically for the hasBeenChallenged property
 
-//oh and dont forget to test out the queue functionality with two pc's
 
 router.post('/create_new_challenge', async (req, res) => {
-    const {playerToBeChallenged, playerId} = req.body;
+    const {playerToBeChallenged} = req.body;
     const token = req.cookies.accessToken;
     const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -25,10 +23,10 @@ router.post('/create_new_challenge', async (req, res) => {
         const username = decoded.username;
 
         const challenge = new Challenge({playerOne: username, playerTwo: playerToBeChallenged, playerOneAccepted: true, playerTwoAccepted: false})
-        const result = challenge.save();
+        const result = await challenge.save();
         const challengeId = result._id;
 
-        const challengedPlayer = User.find({_id: playerId});
+        const challengedPlayer = User.find({username: playerToBeChallenged});
         challengedPlayer.hasBeenChallenged = challengeId;
         await challengedPlayer.save();
         res.status(200).send('Invitation has been sent');
