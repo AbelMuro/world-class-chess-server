@@ -7,8 +7,9 @@ const router = express.Router();
 const {config} = require('dotenv');
 config();
 
-//this is where i left off, i need to finish implementing this route
+//this is where i left off
 // i need to make a web socket for the User model, specifically for the hasBeenChallenged property
+// i need to test out this route
 
 
 router.post('/send_invitation', initializeGridFs, async (req, res) => {
@@ -40,20 +41,23 @@ router.post('/send_invitation', initializeGridFs, async (req, res) => {
             readstream.on('end', async () => {
                 const fileBuffer = Buffer.concat(chunks);
                 const challengedPlayer = await User.findOne({username: playerToBeChallenged});
-                challengedPlayer.hasBeenChallenged = {challengedBy: username, imageBase64: fileBuffer.toString('base64'), imageContentType: file.contentType};
+                const challenger = JSON.stringify({challengedBy: username, imageBase64: fileBuffer.toString('base64'), imageContentType: file.contentType})
+                challengedPlayer.hasBeenChallenged = challenger;
                 res.status(200).send('Invitation has been sent')
             })
 
             readstream.on('error', async(err) => {
                 console.log('Error reading file from MongoDB', err);
                 const challengedPlayer = await User.findOne({username: playerToBeChallenged});
-                challengedPlayer.hasBeenChallenged = {challengedBy: username, imageBase64: '', imageContentType: ''};
+                const challenger = JSON.stringify({challengedBy: username, imageBase64: '', imageContentType: ''})
+                challengedPlayer.hasBeenChallenged = challenger;
                 res.status(200).send('Invitation has been sent, but image could not be loaded')
             })
         }
         else{
             const challengedPlayer = await User.findOne({username: playerToBeChallenged});
-            challengedPlayer.hasBeenChallenged = {challengedBy: username, imageBase64: '', imageContentType: ''};
+            const challenger = JSON.stringify({challengedBy: username, imageBase64: '', imageContentType: ''})
+            challengedPlayer.hasBeenChallenged = challenger;
             await challengedPlayer.save();
             res.status(200).send('Invitation has been sent');            
         }
