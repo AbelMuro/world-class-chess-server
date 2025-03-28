@@ -3,10 +3,6 @@ const {Schema} = require('mongoose');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
-bcrypt.setRandomFallback((size) => {
-    return crypto.randomBytes(size);
-});
-
 const userSchema = new Schema({
     email: {type: String, required: true, unique: true},    			//remember to set the unique property here to true
     hasBeenChallenged: {type: String},
