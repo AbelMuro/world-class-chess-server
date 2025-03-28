@@ -17,7 +17,7 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
     const JWT_SECRET = process.env.JWT_SECRET;
 
     try{
-        const user = new User({email, password, username});
+        const user = new User({email, password, username, hasBeenChallenged: false});
         if(image){
             const writestream = gfs.openUploadStream(image.originalname, {
                 contentType: image.mimetype
