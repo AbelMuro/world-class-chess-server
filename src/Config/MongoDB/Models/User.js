@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const {Schema} = require('mongoose');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const CreateWebSocketForUser = require('../../Websockets/CreateWebSocketForUser.js');
 
 bcrypt.setRandomFallback((size) => {
     return crypto.randomBytes(size);
@@ -36,6 +37,8 @@ userSchema.methods.createPasswordResetToken = function() {
     this.resetPasswordExpires = Date.now() + 10 * 60 * 1000;                	// Token expires in 10 minutes
     return resetToken;
 }  
+
+userSchema.methods.CreateWebSocketForUser = CreateWebSocketForUser;
 
 const User = mongoose.model('user', userSchema, 'accounts')        		//create a model that will be used to create documents
 

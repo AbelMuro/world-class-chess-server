@@ -27,7 +27,7 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
 
             writestream.on('finish', async () => {
                 user.profileImageId = writestream.id;       // Update the user document with the image reference    
-                const userData = await user.save();             
+                const userData = await user.save();           
                 const token = jwt.sign({id: userData._id, email, username, profileImageId: writestream.id}, JWT_SECRET);
                 console.log('image has been uploaded to mongoDB');
                 res.cookie('accessToken', token, {

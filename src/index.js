@@ -19,6 +19,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const CreateWebSocketForQueue = require('./Config/Websockets/CreateWebSocketForQueue.js');
+const CreateWebSocketForUser = require('./Config/Websockets/CreateWebSocketForUser.js');
 const connectDB = require('./Config/MongoDB/DB.js');     
 
 connectDB();
@@ -74,6 +75,7 @@ const options = {
 });
 
 CreateWebSocketForQueue(httpsServer);
+CreateWebSocketForUser(httpsServer);
 
 app.listen(HTTP_port , (error) => {
     if(error){
