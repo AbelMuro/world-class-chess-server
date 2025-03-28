@@ -61,8 +61,6 @@ router.post('/send_invitation', initializeGridFs, async (req, res) => {
             await challengedPlayer.save();
             res.status(200).send('Invitation has been sent');            
         }
-
-
     }
     catch(error){
         const message = error.message;
