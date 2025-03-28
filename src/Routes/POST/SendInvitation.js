@@ -11,7 +11,7 @@ config();
 // i need to make a web socket for the User model, specifically for the hasBeenChallenged property
 
 
-router.post('/send_invitation', initializeGridFs ,async (req, res) => {
+router.post('/send_invitation', initializeGridFs, async (req, res) => {
     const {playerToBeChallenged} = req.body;
     const token = req.cookies.accessToken;
     const JWT_SECRET = process.env.JWT_SECRET;
