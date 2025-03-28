@@ -43,6 +43,7 @@ router.post('/send_invitation', initializeGridFs, async (req, res) => {
                 const challengedPlayer = await User.findOne({username: playerToBeChallenged});
                 const challenger = JSON.stringify({challengedBy: username, imageBase64: fileBuffer.toString('base64'), imageContentType: file.contentType})
                 challengedPlayer.hasBeenChallenged = challenger;
+                await challengedPlayer.save();
                 res.status(200).send('Invitation has been sent')
             })
 
@@ -51,6 +52,7 @@ router.post('/send_invitation', initializeGridFs, async (req, res) => {
                 const challengedPlayer = await User.findOne({username: playerToBeChallenged});
                 const challenger = JSON.stringify({challengedBy: username, imageBase64: '', imageContentType: ''})
                 challengedPlayer.hasBeenChallenged = challenger;
+                await challengedPlayer.save();
                 res.status(200).send('Invitation has been sent, but image could not be loaded')
             })
         }
