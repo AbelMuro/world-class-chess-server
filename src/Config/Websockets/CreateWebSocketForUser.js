@@ -1,11 +1,10 @@
 const WebSocket = require('ws');
 const User = require('../MongoDB/Models/User.js');
-const CreateWebSocketForIndependentUser = require('./CreateWebSocketForIndependentUser.js');
 
-const CreateWebSocketForUser = (server) => {
-    console.log('Initiate WebSocket for user collection');
+const CreateWebSocketForUser = (userId, server) => {
+    console.log('Initiate WebSocket for independent user');
 
-    const changeStream = User.watch();
+    const changeStream = User.watch([{$match: {'fullDocument._id': userId}}]);
     const wss = new WebSocket.Server({noServer: true});
 
     server.on('upgrade', (request, socket, head) => {               // upgrade event will be triggered when the client sends a request to upgrade from http request to websocket request
@@ -18,12 +17,17 @@ const CreateWebSocketForUser = (server) => {
     })
 
     wss.on('connection', ws => {                                    //we establish the connection between the back end and the front end
-        console.log('Front-end and back-end are connected, waiting for updates on user collection in database');
+        console.log('Front-end and back-end are connected, waiting for updates on independent user collection in database');
     
         changeStream.on('change', async (change) => {
-            const userId = change?.fullDocument?._id;      
-            if(userId)
-                CreateWebSocketForIndependentUser(userId, server);
+            if(change.operationType === 'delete'){
+                ws.close();
+                changeStream.close();
+            }
+
+            const challengedBy = change?.fullDocument?.hasBeenChallenged;       //value has already been stringified to JSON
+            if(challengedBy)
+                ws.send(challengedBy);              
         })
 
         changeStream.on('error', (error) => {
@@ -33,8 +37,7 @@ const CreateWebSocketForUser = (server) => {
         ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
             console.log('Client disconnected')
         })
-    })   
-
+    }) 
 }
 
 module.exports = CreateWebSocketForUser;

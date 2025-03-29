@@ -18,8 +18,8 @@ const sendInvitation = require('./Routes/POST/SendInvitation.js');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const CreateWebSocketForQueue = require('./Config/Websockets/CreateWebSocketForQueue.js');
-const CreateWebSocketForUser = require('./Config/Websockets/CreateWebSocketForUser.js');
+const CreateWebSocket = require('./Config/Websockets/CreateWebSocket.js');
+const Queue = require('./Config/MongoDB/Models/Queue.js');
 const connectDB = require('./Config/MongoDB/DB.js');     
 
 connectDB();
@@ -74,8 +74,24 @@ const options = {
     console.log('HTTPS server is running on port 443')
 });
 
-CreateWebSocketForQueue(httpsServer);
-CreateWebSocketForUser(httpsServer);
+CreateWebSocket(httpsServer, 'queue', ws => {                                    //we establish the connection between the back end and the front end
+        console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
+        const changeStream = Queue.watch();
+
+        changeStream.on('change', async () => {
+            const queue = await Queue.find();
+            const documents = JSON.stringify(queue);
+            ws.send(documents);  
+        })
+
+        changeStream.on('error', (error) => {
+            console.log(`mongoDB change stream error: ${error}`);
+        })            
+                                    
+        ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
+            console.log('Client disconnected')
+        })
+});
 
 app.listen(HTTP_port , (error) => {
     if(error){
@@ -85,4 +101,4 @@ app.listen(HTTP_port , (error) => {
     console.log(`HTTP Server is running on port ${HTTP_port}`);
 });  
 
-module.exports = app;
+module.exports = {httpsServer};

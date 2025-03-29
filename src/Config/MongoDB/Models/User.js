@@ -38,6 +38,8 @@ userSchema.methods.createPasswordResetToken = function() {
 }  
 
 
+
 const User = mongoose.model('user', userSchema, 'accounts')        		//create a model that will be used to create documents
+
 
 module.exports = User;
