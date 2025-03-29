@@ -63,20 +63,18 @@ const options = {
     cert: fs.readFileSync(certificateFilePath),
 }
 
-const httpsServerPromise = new Promise((resolve, reject) => {
-    const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) => {
-        if(error){
-            console.log('HTTPS error occurred: ', error);
-            return reject(error);
-        }
-        else{
-            console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
-            resolve(httpsServer);
-        }
-    });
-})
+const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) => {
+    if(error){
+        console.log('HTTPS error occurred: ', error);
+        return;
+    }
+    else{
+        console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
+    }
+});
 
-CreateWebSocketForQueue(httpsServerPromise)
+
+CreateWebSocketForQueue(httpsServer)
 
 
 app.listen(HTTP_PORT, (error) => {
