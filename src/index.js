@@ -21,6 +21,7 @@ const https = require('https');
 const CreateWebSocket = require('./Config/Websockets/CreateWebSocket.js');
 const Queue = require('./Config/MongoDB/Models/Queue.js');
 const connectDB = require('./Config/MongoDB/DB.js');     
+const store = require('./Config/Store/Store.js');
 
 connectDB();
 const app = express();   
@@ -58,6 +59,8 @@ app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
 
+
+
 const options = {
     key: fs.readFileSync(privateKeyFilePath),
     cert: fs.readFileSync(certificateFilePath),
@@ -91,6 +94,9 @@ CreateWebSocket('queue', ws => {
             console.log('Client disconnected')
         })
 });
+
+
+
 
 app.listen(HTTP_port , (error) => {
     if(error){
