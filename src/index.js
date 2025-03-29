@@ -26,8 +26,8 @@ const app = express();
 const indexFilePath = path.join(__dirname, 'index.html');   
 const privateKeyFilePath = path.join(__dirname, '../SSL/private.key');
 const certificateFilePath = path.join(__dirname, '../SSL/certificate.cer'); 
-const HTTP_port = process.env.PORT || 8080;
-const HTTPS_port = 443
+const HTTP_PORT = process.env.PORT || 8080;
+const HTTPS_PORT = 443
 
 app.use(express.json());
 app.use(cookieParser());
@@ -63,23 +63,30 @@ const options = {
     cert: fs.readFileSync(certificateFilePath),
 }
 
-const httpsServer = https.createServer(options, app).listen(HTTPS_port, (error) => {
+const httpsServerPromise = new Promise((resolve, reject) => {
+    const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) => {
+        if(error){
+            console.log('HTTPS error occurred: ', error);
+            return reject(error);
+        }
+        else{
+            console.log('HTTPS server is running on port 443');
+            resolve(httpsServer);
+        }
+    });
+})
+.then((result) => {
+    CreateWebSocketForQueue(result);
+})
+
+
+app.listen(HTTP_PORT, (error) => {
     if(error){
-        console.log('HTTPS error occurred: ', error);
+        console.log('HTTP error occurred: ', error);
         return;
     }
-    console.log('HTTPS server is running on port 443')
-});
-
-CreateWebSocketForQueue(httpsServer);
-
-app.listen(HTTP_port , (error) => {
-    if(error){
-        console.log(error, 'error occured');
-        return;
-    }
-    console.log(`HTTP Server is running on port ${HTTP_port}`);
+    console.log(`HTTP Server is running on port ${HTTP_PORT}`);
 });  
 
 
-module.exports = {httpsServer};
+module.exports = {httpsServerPromise};
