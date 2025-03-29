@@ -57,11 +57,20 @@ app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
 
+const httpServer = app.listen(HTTP_PORT, (error) => {
+    if(error){
+        console.log('HTTP error occurred: ', error);
+        return;
+    }
+    console.log(`HTTP Server is running on port ${HTTP_PORT}`);
+});  
+
+
+
 const options = {
     key: fs.readFileSync(privateKeyFilePath),
     cert: fs.readFileSync(certificateFilePath),
 }
-
 
 const httpsServerPromise = new Promise((resolve, reject) => {
     const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) => {
@@ -77,14 +86,5 @@ const httpsServerPromise = new Promise((resolve, reject) => {
 })
 
 CreateWebSocketForQueue(httpsServerPromise);
-
-const httpServer = app.listen(HTTP_PORT, (error) => {
-    if(error){
-        console.log('HTTP error occurred: ', error);
-        return;
-    }
-    console.log(`HTTP Server is running on port ${HTTP_PORT}`);
-});  
-
 
 module.exports = httpsServerPromise;
