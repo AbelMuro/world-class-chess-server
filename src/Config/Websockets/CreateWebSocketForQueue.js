@@ -4,12 +4,12 @@ const Queue = require('../MongoDB/Models/Queue.js');
 //this is where i left off, i need to call this function to dynamically create websockets when the user logs-in or registers, 
 // //and i need to disconnect the websockets when the user logs out
 
-function CreateWebSocketForQueue(server) {
+function CreateWebSocketForQueue(server, path) {
     try{
         const wss = new WebSocket.Server({ noServer: true });
 
         server.on('upgrade', (request, socket, head) => {
-            if (request.url === '/queue') {                                 //you can have different endpoints for your websocket   wss://domain.com/path1  etc..
+            if (request.url === `/${path}`) {                                 //you can have different endpoints for your websocket   wss://domain.com/path1  etc..
                 wss.handleUpgrade(request, socket, head, (ws) => {
                     wss.emit('connection', ws, request);
                 });

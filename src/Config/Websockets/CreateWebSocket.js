@@ -4,20 +4,18 @@ const WebSocket = require('ws');
 // //and i need to disconnect the websockets when the user logs out
 
 
-function CreateWebSocket(path, callback) {
-    return;
-
+function CreateWebSocket(server = global.httpsServer, path, callback) {
     try{
         const wss = new WebSocket.Server({ noServer: true });
 
-        global.httpsServer.on('upgrade', (request, socket, head) => {
+        server.on('upgrade', (request, socket, head) => {
             if (request.url === `/${path}`) {                                 //you can have different endpoints for your websocket   wss://domain.com/path1  etc..
                 wss.handleUpgrade(request, socket, head, (ws) => {
                     wss.emit('connection', ws, request);
                 });
             }
-            else 
-                socket.destroy();                                           // Close invalid requests
+            else
+                socket.destroy();
         });
 
         wss.on('connection', callback);
