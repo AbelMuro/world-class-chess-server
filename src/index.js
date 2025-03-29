@@ -79,7 +79,7 @@ const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) 
         console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
 });
 
-global.httpsServer = httpsServer
+global.httpsServer = httpsServer;
 
 CreateWebSocket(httpsServer, 'queue', ws => {                                 
     console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
