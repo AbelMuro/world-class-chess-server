@@ -87,4 +87,4 @@ const httpServer = app.listen(HTTP_PORT, (error) => {
 });  
 
 
-module.exports = {httpsServerPromise};
+module.exports = httpsServerPromise;
