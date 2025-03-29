@@ -4,7 +4,7 @@ const WebSocket = require('ws');
 // //and i need to disconnect the websockets when the user logs out
 
 
-async function CreateWebSocket(path, callback) {
+function CreateWebSocket(path, callback) {
 
     try{
         const wss = new WebSocket.Server({ noServer: true });

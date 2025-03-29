@@ -55,7 +55,7 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
             res.status(200).send('Account registered successfully');
         }  
         
-        await CreateWebSocket(username, (ws) => {
+        CreateWebSocket(username, (ws) => {
             console.log(`Front-end and back-end are connected, waiting for updates on ${username}'s account`);
             const changeStream = User.watch([{'$match': {'fullDocument.username': username}}]);
 
