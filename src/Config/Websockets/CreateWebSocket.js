@@ -5,6 +5,7 @@ const WebSocket = require('ws');
 
 
 function CreateWebSocket(path, callback) {
+    return;
 
     try{
         const wss = new WebSocket.Server({ noServer: true });
