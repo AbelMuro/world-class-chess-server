@@ -57,7 +57,6 @@ app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
 
-
 const options = {
     key: fs.readFileSync(privateKeyFilePath),
     cert: fs.readFileSync(certificateFilePath),
@@ -73,9 +72,7 @@ const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) 
     }
 });
 
-
-CreateWebSocketForQueue(httpsServer)
-
+CreateWebSocketForQueue(httpsServer);
 
 app.listen(HTTP_PORT, (error) => {
     if(error){
@@ -86,4 +83,4 @@ app.listen(HTTP_PORT, (error) => {
 });  
 
 
-module.exports = {httpsServerPromise};
+module.exports = {httpsServer};
