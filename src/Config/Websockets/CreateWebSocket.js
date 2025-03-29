@@ -24,4 +24,4 @@ function CreateWebSocket(path, callback) {
     }
 }
 
-module.exports = {CreateWebSocket, CreateWebSocketForQueue};
+module.exports = CreateWebSocket;
