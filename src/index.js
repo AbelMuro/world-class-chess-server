@@ -71,14 +71,12 @@ const options = {
     cert: fs.readFileSync(certificateFilePath),
 }
 
-const httpsServer = https.createServer(options, app);
-httpsServer.listen(HTTPS_PORT, (error) => {
+const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) => {
     if(error)
         console.log('HTTPS error occurred: ', error);
     else
         console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
 });
-
 
 global.httpsServer = httpsServer;
 
