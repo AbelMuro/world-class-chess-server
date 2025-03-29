@@ -70,14 +70,13 @@ const httpsServerPromise = new Promise((resolve, reject) => {
             return reject(error);
         }
         else{
-            console.log('HTTPS server is running on port 443');
+            console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
             resolve(httpsServer);
         }
     });
 })
-.then((result) => {
-    CreateWebSocketForQueue(result);
-})
+
+CreateWebSocketForQueue(httpsServerPromise)
 
 
 app.listen(HTTP_PORT, (error) => {
