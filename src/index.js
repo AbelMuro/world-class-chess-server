@@ -40,8 +40,6 @@ app.use(cors({
     maxAge: 3600,
     optionsSuccessStatus: 200
 }))
-
-
 app.use(Login);
 app.use(Register);
 app.use(ForgotPassword);
@@ -56,7 +54,6 @@ app.use(GetMatch);
 app.use(putPlayerInQueue);
 app.use(leaveQueue);
 app.use(sendInvitation);
-
 app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
@@ -74,7 +71,9 @@ const options = {
     console.log('HTTPS server is running on port 443')
 });
 
-CreateWebSocket(httpsServer, 'queue', ws => {                                    //we establish the connection between the back end and the front end
+store.dispatch({type: 'SET_HTTPS_SERVER', payload: {server: httpsServer}})
+
+CreateWebSocket('queue', ws => {                                 
         console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
         const changeStream = Queue.watch();
 
@@ -100,5 +99,3 @@ app.listen(HTTP_port , (error) => {
     }
     console.log(`HTTP Server is running on port ${HTTP_port}`);
 });  
-
-module.exports = {httpsServer};
