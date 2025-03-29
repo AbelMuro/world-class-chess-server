@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
             secure: true,
             sameSite: 'None'
         });
-        CreateWebSocket(user.username, (ws) => {
+        await CreateWebSocket(user.username, (ws) => {
             console.log(`Front-end and back-end are connected, waiting for updates on ${user.username}'s account`);
             const changeStream = User.watch([{'$match': {'fullDocument.username': user.username}}]);
 
