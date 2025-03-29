@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-const {httpsServer} = require('../../index.js');
+const {httpsServerPromise} = require('../../index.js');
 
 //this is where i left off, i need to call this function to dynamically create websockets when the user logs-in or registers, 
 // //and i need to disconnect the websockets when the user logs out
@@ -9,9 +9,9 @@ async function CreateWebSocket(path, callback) {
 
     try{
         const wss = new WebSocket.Server({ noServer: true });
-        console.log('CreateWebSocket()', httpsServer)
+        const server = await httpsServerPromise;
 
-        httpsServer.on('upgrade', (request, socket, head) => {
+        server.on('upgrade', (request, socket, head) => {
             if (request.url === `/${path}`) {                                 //you can have different endpoints for your websocket   wss://domain.com/path1  etc..
                 wss.handleUpgrade(request, socket, head, (ws) => {
                     wss.emit('connection', ws, request);
