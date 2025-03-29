@@ -72,7 +72,7 @@ const options = {
 }
 
 global.httpsServer = https.createServer(options, app);
-httpsServer.listen(HTTPS_PORT, (error) => {
+global.httpsServer.listen(HTTPS_PORT, (error) => {
     if(error)
         console.log('HTTPS error occurred: ', error);
     else

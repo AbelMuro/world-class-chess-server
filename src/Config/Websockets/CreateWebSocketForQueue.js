@@ -14,6 +14,8 @@ function CreateWebSocketForQueue(server) {
                     wss.emit('connection', ws, request);
                 });
             }
+            else
+                socket.destroy();
         });
 
         wss.on('connection', ws => {                                 
