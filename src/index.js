@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
 
-global.httpServer = app.listen(HTTP_PORT, (error) => {
+const httpServer = app.listen(HTTP_PORT, (error) => {
     if(error){
         console.log('HTTP error occurred: ', error);
         return;
@@ -71,8 +71,8 @@ const options = {
     cert: fs.readFileSync(certificateFilePath),
 }
 
-global.httpsServer = https.createServer(options, app);
-global.httpsServer.listen(HTTPS_PORT, (error) => {
+const httpsServer = https.createServer(options, app);
+httpsServer.listen(HTTPS_PORT, (error) => {
     if(error)
         console.log('HTTPS error occurred: ', error);
     else
@@ -80,4 +80,6 @@ global.httpsServer.listen(HTTPS_PORT, (error) => {
 });
 
 
-CreateWebSocketForQueue(global.httpsServer);
+global.httpsServer = httpsServer;
+
+CreateWebSocketForQueue(httpsServer);
