@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../../Config/MongoDB/Models/User.js');
+const CreateWebSocket = require('../../Config/Websockets/CreateWebSocket.js');
 const {config} = require('dotenv');
 config();
 
