@@ -9,7 +9,7 @@ function CreateWebSocket(path, callback) {
         const wss = new WebSocket.Server({ noServer: true });
 
         httpsServer.on('upgrade', (request, socket, head) => {
-            if (request.url === path) {                                 //you can have different endpoints for your websocket   wss://domain.com/path1  etc..
+            if (request.url === `/${path}`) {                                 //you can have different endpoints for your websocket   wss://domain.com/path1  etc..
                 wss.handleUpgrade(request, socket, head, (ws) => {
                     wss.emit('connection', ws, request);
                 });
