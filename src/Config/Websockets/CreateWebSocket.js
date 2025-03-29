@@ -9,6 +9,7 @@ async function CreateWebSocket(path, callback) {
 
     try{
         const wss = new WebSocket.Server({ noServer: true });
+        console.log(httpsServerPromise);
         const server = await httpsServerPromise;
 
         server.on('upgrade', (request, socket, head) => {
