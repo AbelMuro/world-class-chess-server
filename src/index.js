@@ -21,7 +21,6 @@ const https = require('https');
 const CreateWebSocket = require('./Config/Websockets/CreateWebSocket.js');
 const Queue = require('./Config/MongoDB/Models/Queue.js');
 const connectDB = require('./Config/MongoDB/DB.js');     
-const store = require('./Config/Store/Store.js');
 
 connectDB();
 const app = express();   
@@ -60,13 +59,12 @@ app.get('/', (req, res) => {
 })
 
 
-
 const options = {
     key: fs.readFileSync(privateKeyFilePath),
     cert: fs.readFileSync(certificateFilePath),
 }
 
- const httpsServer = https.createServer(options, app).listen(HTTPS_port, (error) => {
+const httpsServer = https.createServer(options, app).listen(HTTPS_port, (error) => {
     if(error){
         console.log('HTTPS error occurred: ', error);
         return;
@@ -74,9 +72,7 @@ const options = {
     console.log('HTTPS server is running on port 443')
 });
 
-store.dispatch({type: 'SET_HTTPS_SERVER', payload: {server: httpsServer}})
-
-CreateWebSocket('queue', ws => {                                 
+CreateWebSocket(httpsServer, 'queue', ws => {                                 
         console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
         const changeStream = Queue.watch();
 
@@ -105,3 +101,6 @@ app.listen(HTTP_port , (error) => {
     }
     console.log(`HTTP Server is running on port ${HTTP_port}`);
 });  
+
+
+module.exports = {httpsServer};
