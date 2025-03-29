@@ -6,7 +6,7 @@ const {httpsServerPromise} = require('../../index.js');
 
 
 async function CreateWebSocket(path, callback) {
-    
+
     try{
         const httpsServer = await httpsServerPromise
         const wss = new WebSocket.Server({ noServer: true });
@@ -17,6 +17,8 @@ async function CreateWebSocket(path, callback) {
                     wss.emit('connection', ws, request);
                 });
             }
+            else 
+                socket.destroy();                                           // Close invalid requests
         });
 
         wss.on('connection', callback);
