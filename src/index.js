@@ -73,9 +73,6 @@ const httpsServer = https.createServer(options, app).listen(HTTPS_port, (error) 
 
 CreateWebSocketForQueue(httpsServer);
 
-
-
-
 app.listen(HTTP_port , (error) => {
     if(error){
         console.log(error, 'error occured');

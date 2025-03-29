@@ -9,7 +9,7 @@ function CreateWebSocketForQueue(server) {
         const wss = new WebSocket.Server({ noServer: true });
 
         server.on('upgrade', (request, socket, head) => {
-            if (request.url === 'queue') {                                 //you can have different endpoints for your websocket   wss://domain.com/path1  etc..
+            if (request.url === '/queue') {                                 //you can have different endpoints for your websocket   wss://domain.com/path1  etc..
                 wss.handleUpgrade(request, socket, head, (ws) => {
                     wss.emit('connection', ws, request);
                 });
