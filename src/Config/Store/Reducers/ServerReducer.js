@@ -6,7 +6,7 @@ const initialState = { https_server: null, http_server: null }
 
 const serverReducer = createReducer(initialState, (builder) => {       //builder, as the name implies, is an object that builds the reducer with .addCase
   builder
-    .addCase(setHttpsServer, (state, action) => {                            //the 'case'
+    .addCase(setHttpsServer, (state, action) => {                      
       state.https_server = action.payload.server;
     })
     .addCase(setHttpServer, (state, action) => {
