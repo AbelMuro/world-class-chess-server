@@ -29,3 +29,5 @@ router.delete('/delete_websockets', (req, res) => {
     }
 
 })
+
+module.exports = router;

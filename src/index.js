@@ -15,10 +15,12 @@ const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
 const sendInvitation = require('./Routes/POST/SendInvitation.js');
+const initializeWebsockets = require('./Routes/POST/InitializeWebsockets.js');
+const deleteWebsockets = require('./Routes/DELETE/DeleteWebsockets.js');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const initializeWebsockets = require('./Routes/POST/InitializeWebsockets.js');
+
 const connectDB = require('./Config/MongoDB/DB.js');     
 
 connectDB();
@@ -54,6 +56,7 @@ app.use(putPlayerInQueue);
 app.use(leaveQueue);
 app.use(sendInvitation);
 app.use(initializeWebsockets);
+app.use(deleteWebsockets);
 app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
