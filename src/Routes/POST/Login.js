@@ -31,12 +31,15 @@ router.post('/login', async (req, res) => {
             const changeStream = User.watch([{'$match': {'fullDocument.username': user.username}}]);
 
             changeStream.on('change', (change) => {
+                console.log('change has been made in user account');
                 const operationType = change.operationType;
 
                 if(operationType === 'delete'){
                     ws.close();
                     changeStream.close();
                 }
+
+
 
                 const fullDocument = change.fullDocument;
                 const hasBeenChallenged = fullDocument.hasBeenChallenged;
