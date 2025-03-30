@@ -74,7 +74,6 @@ const options = {
     cert: fs.readFileSync(certificateFilePath),
 }
 
-//this global variable is being used ONLY in the ./Config/Websockets/CreateWebSocket.js file
 const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) => {
     if(error)
         console.log('HTTPS error occurred: ', error);

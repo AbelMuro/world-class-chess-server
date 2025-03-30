@@ -44,11 +44,13 @@ router.post('/initialize_websockets', (req, res) => {
             const changeStream = User.watch([{$match : {'fullDocument.username': username}}]);
 
             changeStream.on('change', (change) => {
+                console.log('update to user account')
                 const operationType = change.operationType;
 
                 if(operationType === 'delete'){
                     ws.close();
                     changeStream.close();
+                    return;
                 }
 
                 const fullDocument = change.fullDocument;
