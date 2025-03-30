@@ -6,16 +6,8 @@ const WebSocket = require('ws');
 
 function CreateWebSocket(path, callback) {
     try{
-        const server = global.httpsServer;
         const wss = new WebSocket.Server({ noServer: true });
-
-        server.on('upgrade', (request, socket, head) => {
-            if (request.url === `/${path}`) {                                 //you can have different endpoints for your websocket   wss://domain.com/path1  etc..
-                wss.handleUpgrade(request, socket, head, (ws) => {
-                    wss.emit('connection', ws, request);
-                });
-            }
-        });
+        global.webSocketHandlers[`/${path}`] = wss;
 
         wss.on('connection', callback);
     }
