@@ -20,7 +20,6 @@ const deleteWebsockets = require('./Routes/DELETE/DeleteWebsockets.js');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-
 const connectDB = require('./Config/MongoDB/DB.js');     
 
 connectDB();
