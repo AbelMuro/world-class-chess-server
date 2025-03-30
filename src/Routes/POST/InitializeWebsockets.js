@@ -67,6 +67,8 @@ router.post('/initialize_websockets', (req, res) => {
             })
         })  
 
+        res.status(200).send(`Queue websocket and ${username} websocket have been created`)
+
     }
     catch(error){
         const message = error.message;
