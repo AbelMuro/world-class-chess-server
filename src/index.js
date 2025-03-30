@@ -80,9 +80,10 @@ const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) 
         console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
 });    
 
+global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
 
 httpsServer.on('upgrade', (request, socket, head) => {
-    const wss = global.webSocketHandlers[request.url];      // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
+    const wss = global.webSocketHandlers[request.url];    
     
     if (wss) {
         wss.handleUpgrade(request, socket, head, (ws) => {
