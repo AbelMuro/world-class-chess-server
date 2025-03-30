@@ -47,7 +47,9 @@ router.post('/initialize_websockets', (req, res) => {
                         { "fullDocument.username": username },
                         { operationType: { $in: ["update", "replace"] } }
                     ]
-                }}]);
+                }},
+                { fullDocument: "updateLookup" }
+            ]);
 
             changeStream.on('change', (change) => {
                 console.log('update to user account')
