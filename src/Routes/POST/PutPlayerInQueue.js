@@ -44,7 +44,7 @@ router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
                     const base64 = fileBuffer.toString('base64');
                     const newPlayerInQueue = new Queue({player: username, profileImageBase64: base64, contentType});
                     await newPlayerInQueue.save();
-                    res.status(200).json({message: 'Player has successfully entered the queue', username});
+                    res.status(200).json({message: 'Player has successfully entered the queue'});
                 }
                 catch(error){
                     const message = error.message;
@@ -61,7 +61,7 @@ router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
                     console.log('Error getting Image file from MongoDB', err);
                     const newPlayerInQueue = new Queue({player: username, profileImageBase64: '', contentType: null});
                     await newPlayerInQueue.save();
-                    res.status(200).json({message: 'Player has successfully entered the queue but image could not be loaded', username})                    
+                    res.status(200).json({message: 'Player has successfully entered the queue but image could not be loaded'})                    
                 }
                 catch(error){
                     const message = error.message;
@@ -78,7 +78,7 @@ router.post('/put_player_in_queue', initializeGridFs, async (req, res) => {
             const newPlayerInQueue = new Queue({player: username, profileImageBase64: '', contentType: null});
             await newPlayerInQueue.save();
             console.log('Player has entered the queue');
-            res.status(200).json({message: 'Player has successfully entered the queue', username});
+            res.status(200).json({message: 'Player has successfully entered the queue'});
         }
     }
     catch(error){
