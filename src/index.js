@@ -81,7 +81,7 @@ const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) 
 
 global.httpsServer = httpsServer;
 
-CreateWebSocket(httpsServer, 'queue', ws => {                                 
+CreateWebSocket('queue', ws => {                                 
     console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
     const changeStream = Queue.watch();
 
