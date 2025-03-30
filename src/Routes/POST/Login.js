@@ -28,10 +28,9 @@ router.post('/login', async (req, res) => {
 
         CreateWebSocket(user.username, (ws) => {
             console.log(`Front-end and back-end are connected, waiting for updates on ${user.username}'s account`);
-            const changeStream = User.watch([{'$match': {'fullDocument.username': user.username}}]);
+            const changeStream = User.watch([{$match : {'fullDocument.username': user.username}}]);
 
             changeStream.on('change', (change) => {
-                console.log('change has been made in user account');
                 const operationType = change.operationType;
 
                 if(operationType === 'delete'){
