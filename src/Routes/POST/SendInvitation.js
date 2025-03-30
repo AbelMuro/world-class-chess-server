@@ -40,7 +40,7 @@ router.post('/send_invitation', initializeGridFs, async (req, res) => {
             readstream.on('end', async () => {
                 const fileBuffer = Buffer.concat(chunks);
                 const challengedPlayer = await User.findOne({username: playerToBeChallenged});
-                const challenger = JSON.stringify({challengedBy: username, imageBase64: fileBuffer.toString('base64'), imageContentType: file.contentType})
+                const challenger = JSON.stringify({username, imageBase64: fileBuffer.toString('base64'), imageContentType: file.contentType})
                 challengedPlayer.hasBeenChallenged = challenger;
                 await challengedPlayer.save();
                 res.status(200).send('Invitation has been sent')
@@ -49,7 +49,7 @@ router.post('/send_invitation', initializeGridFs, async (req, res) => {
             readstream.on('error', async(err) => {
                 console.log('Error reading file from MongoDB', err);
                 const challengedPlayer = await User.findOne({username: playerToBeChallenged});
-                const challenger = JSON.stringify({challengedBy: username, imageBase64: '', imageContentType: ''})
+                const challenger = JSON.stringify({username, imageBase64: '', imageContentType: ''})
                 challengedPlayer.hasBeenChallenged = challenger;
                 await challengedPlayer.save();
                 res.status(200).send('Invitation has been sent, but image could not be loaded')
@@ -57,7 +57,7 @@ router.post('/send_invitation', initializeGridFs, async (req, res) => {
         }
         else{
             const challengedPlayer = await User.findOne({username: playerToBeChallenged});
-            const challenger = JSON.stringify({challengedBy: username, imageBase64: '', imageContentType: ''})
+            const challenger = JSON.stringify({username, imageBase64: '', imageContentType: ''})
             challengedPlayer.hasBeenChallenged = challenger;
             await challengedPlayer.save();
             res.status(200).send('Invitation has been sent');            
