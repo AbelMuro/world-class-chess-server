@@ -4,7 +4,6 @@ const router = express.Router();
 const initializeGridFs = require('../Middleware/initializeGridFs.js');
 const jwt = require('jsonwebtoken');
 const User = require('../../Config/MongoDB/Models/User.js');
-const CreateWebSocket = require('../../Config/Websockets/CreateWebSocket.js');
 const { config } = require('dotenv');
 config();	
 
@@ -54,27 +53,6 @@ router.post('/register', upload.single('image'), initializeGridFs, async (req, r
             })
             res.status(200).send('Account registered successfully');
         }  
-        
-        CreateWebSocket(username, (ws) => {
-            console.log(`Front-end and back-end are connected, waiting for updates on ${username}'s account`);
-            const changeStream = User.watch([{$match: {'fullDocument.username': username}}]);
-
-            changeStream.on('change', (change) => {
-                const operationType = change.operationType;
-
-                if(operationType === 'delete'){
-                    ws.close();
-                    changeStream.close();
-                }
-
-                const fullDocument = change.fullDocument;
-                const hasBeenChallenged = fullDocument.hasBeenChallenged;
-
-                if(hasBeenChallenged)
-                    ws.send(hasBeenChallenged)
-
-            })
-        })  
     }
     catch(error){
         const message = error.message;

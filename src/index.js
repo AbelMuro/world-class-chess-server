@@ -15,11 +15,10 @@ const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
 const sendInvitation = require('./Routes/POST/SendInvitation.js');
-const Queue = require('./Config/MongoDB/Models/Queue.js');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const CreateWebSocket = require('./Config/Websockets/CreateWebSocket.js');
+const initializeWebsockets = require('./Routes/POST/InitializeWebsockets.js');
 const connectDB = require('./Config/MongoDB/DB.js');     
 
 connectDB();
@@ -54,6 +53,7 @@ app.use(GetMatch);
 app.use(putPlayerInQueue);
 app.use(leaveQueue);
 app.use(sendInvitation);
+app.use(initializeWebsockets);
 app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
@@ -72,29 +72,10 @@ const options = {
     cert: fs.readFileSync(certificateFilePath),
 }
 
-//this global variable is being used ONLY in the CreateWebSocket.js file
+//this global variable is being used ONLY in the ./Config/Websockets/CreateWebSocket.js file
 global.httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) => {
     if(error)
         console.log('HTTPS error occurred: ', error);
     else
         console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
 });           
-
-CreateWebSocket('queue', ws => {                                 
-    console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
-    const changeStream = Queue.watch();
-
-    changeStream.on('change', async () => {
-        const queue = await Queue.find();
-        const documents = JSON.stringify(queue);
-        ws.send(documents);  
-    })
-
-    changeStream.on('error', (error) => {
-        console.log(`mongoDB change stream error: ${error}`);
-    })            
-                                
-    ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
-        console.log('Client disconnected')
-    })
-});
