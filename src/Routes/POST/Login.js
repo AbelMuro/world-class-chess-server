@@ -24,6 +24,8 @@ router.post('/login', async (req, res) => {
             secure: true,
             sameSite: 'None'
         });
+
+        res.status(200).send('User has successfully logged in');
     }
     catch(error){
         const message = error.message;
