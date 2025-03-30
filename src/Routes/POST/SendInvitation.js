@@ -8,8 +8,8 @@ const {config} = require('dotenv');
 config();
 
 //this is where i left off
-// i need to make a web socket for the User model, specifically for the hasBeenChallenged property
 // i need to test out this route
+// i also need to find a way to destroy the websocket when the user logs out, goes back to login screen, or closes the session
 
 router.post('/send_invitation', initializeGridFs, async (req, res) => {
     const {playerToBeChallenged} = req.body;
