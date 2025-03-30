@@ -89,6 +89,6 @@ httpsServer.on('upgrade', (request, socket, head) => {
             wss.emit('connection', ws, request);
         });
     } else {
-        socket.destroy(); // Gracefully close invalid connections
+        socket.destroy();                                   // Gracefully close invalid connections
     }
 });
