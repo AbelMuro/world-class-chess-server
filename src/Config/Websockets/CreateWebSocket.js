@@ -15,6 +15,8 @@ function CreateWebSocket(path, callback) {
                     wss.emit('connection', ws, request);
                 });
             }
+            else 
+			    socket.destroy(); 				            // Close invalid requests
         });
 
         wss.on('connection', callback);
