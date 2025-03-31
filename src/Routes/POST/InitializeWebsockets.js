@@ -46,7 +46,7 @@ router.post('/initialize_websockets', (req, res) => {
             console.log(`Front-end and back-end are connected, waiting for updates on ${username}'s account`);
             const changeStream = User.watch([
                 { $match: { 'fullDocument.username' : username } }
-            ]);
+            ], { fullDocument: 'updateLookup' });
 
             changeStream.on('change', (change) => {
                 console.log('update to user account')
