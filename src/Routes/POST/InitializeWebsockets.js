@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken')
 const {config} = require('dotenv');
 config();
 
+//this is where i left off, i need to find a way to detect changes to the current users document in the accounts collection
+
 router.post('/initialize_websockets', (req, res) => {
     const token = req.cookies.accessToken;
     const JWT_SECRET = process.env.JWT_SECRET;
@@ -42,13 +44,7 @@ router.post('/initialize_websockets', (req, res) => {
         CreateWebSocket(username, (ws) => {
             console.log(`Front-end and back-end are connected, waiting for updates on ${username}'s account`);
             const changeStream = User.watch([
-                {$match :{
-                    $and: [
-                        { "fullDocument.username": username },
-                        { operationType: { $in: ["update", "replace"] } }
-                    ]
-                }},
-                { fullDocument: "updateLookup" }
+                { $match: { 'fullDocument.username' : username } }
             ]);
 
             changeStream.on('change', (change) => {
