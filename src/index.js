@@ -14,9 +14,10 @@ const AIMove = require('./Routes/POST/AI_Move.js')
 const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
-const sendInvitation = require('./Routes/POST/SendInvitation.js');
 const initializeWebsockets = require('./Routes/POST/InitializeWebsockets.js');
 const deleteWebsockets = require('./Routes/DELETE/DeleteWebsockets.js');
+const acceptInvitation = require('./Routes/POST/AcceptInvitation.js');
+const createChallenge = require('./Routes/POST/CreateChallenge.js');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
@@ -53,9 +54,10 @@ app.use(UpdateMatch);
 app.use(GetMatch);
 app.use(putPlayerInQueue);
 app.use(leaveQueue);
-app.use(sendInvitation);
 app.use(initializeWebsockets);
 app.use(deleteWebsockets);
+app.use(acceptInvitation);
+app.use(createChallenge);
 app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })

@@ -7,8 +7,6 @@ const jwt = require('jsonwebtoken')
 const {config} = require('dotenv');
 config();
 
-//this is where i left off, i need to find a way to detect changes to the current users document in the accounts collection
-//also, make sure to test out the DeleteWebsockets.js and update your notes on this as well
 
 router.post('/initialize_websockets', (req, res) => {
     const token = req.cookies.accessToken;
