@@ -69,6 +69,8 @@ router.post('/create_challenge', initializeGridFs, async (req, res) => {
             await challenge.save();
             res.status(200).send('Invitation has been sent');            
         }
+
+        CreateWebSocket();
     }
     catch(error){
         const message = error.message;
