@@ -8,6 +8,6 @@ const challengesSchema = new Schema({
     playerTwoAccepted: {type: Boolean},
 });
 
-const Challenge = mongoose.model('match', challengesSchema, 'challenges');
+const Challenge = mongoose.model('challenge', challengesSchema, 'challenges');
 
 module.exports = Challenge;
