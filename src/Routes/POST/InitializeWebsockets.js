@@ -47,7 +47,6 @@ router.post('/initialize_websockets', (req, res) => {
             ], { fullDocument: 'updateLookup' });
 
             changeStream.on('change', (change) => {
-                console.log('update to user account')
                 const operationType = change.operationType;
 
                 if(operationType === 'delete'){

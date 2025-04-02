@@ -12,6 +12,37 @@ config();
 //this is where i left off, i need to create a websocket that connects the challenger and the challenged player through a document in the Challenges collection
 //i also need to save the _id of the Challenge document in the .hasBeenChallenged property of the User document
 
+
+const callbackForWebSocket = (_challengeId) => {
+    return (ws) => {
+        console.log('Front-end and back-end are connected, waiting for updates on the challenge document')
+
+        const changeStream = Challenge.watch([
+            { $match: { 'fullDocument._id' : _challengeId } }
+        ], { fullDocument: 'updateLookup' });
+
+        changeStream.on('change', (change) => {
+            const operationType = change.operationType;
+
+            if(operationType === 'delete'){
+                ws.close();
+                changeStream.close();
+                return;
+            }
+                
+            const challenge = change.fullDocument;
+
+            if(challenge.playerOneAccepted && challenge.playerTwoAccepted)
+                ws.send('initiate match');
+
+            else if(challenge.playerOneAccepted === 'decline' || challenge.playerTwoAccepted === 'decline'){
+                const playerWhoDeclined = challenge.playerOneAccepted === 'decline' ? challenge.playerOneAccepted : challenge.playerTwoAccepted;
+                ws.send({decline: playerWhoDeclined});
+            }
+        })
+    }
+}
+
 router.post('/create_challenge', initializeGridFs, async (req, res) => {
     const {playerToBeChallenged} = req.body;
     const token = req.cookies.accessToken;
@@ -49,8 +80,9 @@ router.post('/create_challenge', initializeGridFs, async (req, res) => {
                 const challenger = JSON.stringify({username, imageBase64: fileBuffer.toString('base64'), imageContentType: file.contentType})
                 challengedPlayer.hasBeenChallenged = challenger;
                 await challengedPlayer.save();
-                await challenge.save();
-                res.status(200).send('Invitation has been sent');
+                const {_id : _challengeId} = await challenge.save();
+                CreateWebSocket(callbackForWebSocket(_challengeId));
+                res.status(200).send({message: 'Invitation has been sent', challengeId: _challengeId});
             })
 
             readstream.on('error', async(err) => {
@@ -58,16 +90,18 @@ router.post('/create_challenge', initializeGridFs, async (req, res) => {
                 const challenger = JSON.stringify({username, imageBase64: '', imageContentType: ''})
                 challengedPlayer.hasBeenChallenged = challenger;
                 await challengedPlayer.save();
-                await challenge.save();
-                res.status(200).send('Invitation has been sent, but image could not be loaded')
+                const {_id: _challengeId} = await challenge.save();
+                CreateWebSocket(callbackForWebSocket(_challengeId));
+                res.status(200).send({message: 'Invitation has been sent, but image could not be loaded', challengeId: _challengeId});
             })
         }
         else{
             const challenger = JSON.stringify({username, imageBase64: '', imageContentType: ''})
             challengedPlayer.hasBeenChallenged = challenger;
             await challengedPlayer.save();
-            await challenge.save();
-            res.status(200).send('Invitation has been sent');            
+            const {_id: _challengeId} = await challenge.save();
+            CreateWebSocket(callbackForWebSocket(_challengeId));
+            res.status(200).send({message: 'Invitation has been sent', challengeId: _challengeId});         
         }
     }
     catch(error){
