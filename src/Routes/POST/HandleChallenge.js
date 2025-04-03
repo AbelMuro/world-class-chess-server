@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 config();
 
+//look at notes in <DisplayChallenger/> in front-end to see what needs to be done
+
 router.post('/handle_challenge', async (req, res) => {
     const {challenger, challengedPlayer, challengeId, decision, board} = req.body;
     const JWT_SECRET = process.env.JWT_SECRET
@@ -25,13 +27,16 @@ router.post('/handle_challenge', async (req, res) => {
         res.status(200).send('success');
         return;
 
-        const randomNumber = Math.floor(Math.random() * 2) + 1 === 2;
-        const playerPlayingAsWhite = randomNumber === 2 ? challenger : challengedPlayer;
-        const playerPlayingAsBlack =  randomNumber === 2 ? challengedPlayer : challenger;
-        const newMatch = new Match({playerOne: challenger, playerTwo: challengedPlayer, playerPlayingAsWhite, playerPlayingAsBlack, board});
-        const _matchId = await newMatch.save();
+        /* 
+            const randomNumber = Math.floor(Math.random() * 2) + 1 === 2;
+            const playerPlayingAsWhite = randomNumber === 2 ? challenger : challengedPlayer;
+            const playerPlayingAsBlack =  randomNumber === 2 ? challengedPlayer : challenger;
+            const newMatch = new Match({playerOne: challenger, playerTwo: challengedPlayer, playerPlayingAsWhite, playerPlayingAsBlack, board});
+            const _matchId = await newMatch.save();
 
-        res.status(200).json({message : `Match has been created between ${challenger} and ${challengedPlayer}`, _matchId});
+            res.status(200).json({message : `Match has been created between ${challenger} and ${challengedPlayer}`, _matchId});        
+        */
+
     }
     catch(error){
         const message = error.message;
