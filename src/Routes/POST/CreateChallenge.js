@@ -83,7 +83,7 @@ router.post('/create_challenge', initializeGridFs, async (req, res) => {
                 challengedPlayer.hasBeenChallenged = challenger;
                 await challengedPlayer.save();
                 CreateWebSocket(_challengeId, callbackForWebSocket(_challengeId));
-                res.status(200).send({message: 'Invitation has been sent', challengeId: _challengeId});
+                res.status(200).json({message: 'Invitation has been sent', challengeId: _challengeId});
             })
 
             readstream.on('error', async(err) => {
@@ -93,7 +93,7 @@ router.post('/create_challenge', initializeGridFs, async (req, res) => {
                 challengedPlayer.hasBeenChallenged = challenger;
                 await challengedPlayer.save();
                 CreateWebSocket(_challengeId, callbackForWebSocket(_challengeId));
-                res.status(200).send({message: 'Invitation has been sent, but image could not be loaded', challengeId: _challengeId});
+                res.status(200).json({message: 'Invitation has been sent, but image could not be loaded', challengeId: _challengeId});
             })
         }
         else{
@@ -102,7 +102,7 @@ router.post('/create_challenge', initializeGridFs, async (req, res) => {
             challengedPlayer.hasBeenChallenged = challenger;
             await challengedPlayer.save();
             CreateWebSocket(_challengeId, callbackForWebSocket(_challengeId));
-            res.status(200).send({message: 'Invitation has been sent', challengeId: _challengeId});         
+            res.status(200).json({message: 'Invitation has been sent', challengeId: _challengeId});         
         }
     }
     catch(error){
