@@ -57,7 +57,7 @@ router.post('/create_challenge', initializeGridFs, async (req, res) => {
         const decoded = jwt.decode(token, JWT_SECRET);
         const username = decoded.username;
         const profileImageId = decoded.profileImageId;
-        const challenge = new Challenge({playerOne: username, playerTwo: playerToBeChallenged, playerOneAccepted: true, playerTwoAccepted: false});
+        const challenge = new Challenge({playerOne: username, playerTwo: playerToBeChallenged, playerOneAccepted: 'accepted', playerTwoAccepted: ''});
         const challengedPlayer = await User.findOne({username: playerToBeChallenged});
         if(challengedPlayer.hasBeenChallenged){
             res.status(401).send('Player has already been challenged by someone else');
