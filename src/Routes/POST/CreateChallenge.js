@@ -38,7 +38,7 @@ const callbackForWebSocket = (_challengeId) => {
 
             else if(challenge.playerOneAccepted === 'decline' || challenge.playerTwoAccepted === 'decline'){
                 const playerWhoDeclined = challenge.playerOneAccepted === 'decline' ? challenge.playerOneAccepted : challenge.playerTwoAccepted;
-                ws.send({decline: playerWhoDeclined});
+                ws.send(JSON.stringify({decline: playerWhoDeclined}));
             }
         })
     }
