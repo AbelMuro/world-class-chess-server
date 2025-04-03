@@ -9,10 +9,6 @@ const router = express.Router();
 const {config} = require('dotenv');
 config();
 
-//this is where i left off, i created a websocket when a player challenges another player
-// the challenger will connect to the websocket and wait until the challenged player accepts or declines
-
-//now i need to connect the challenged player to the same websocket on the front end
 
 const callbackForWebSocket = (_challengeId) => {
     return (ws) => {

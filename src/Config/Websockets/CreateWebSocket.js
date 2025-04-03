@@ -1,7 +1,5 @@
 const WebSocket = require('ws');
 
-//this is where i left off, i need to call this function to dynamically create websockets when the user logs-in or registers, 
-// //and i need to disconnect the websockets when the user logs out
 
 
 function CreateWebSocket(path, callback) {

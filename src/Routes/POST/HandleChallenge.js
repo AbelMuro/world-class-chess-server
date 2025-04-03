@@ -19,7 +19,7 @@ router.post('/handle_challenge', async (req, res) => {
         user.hasBeenChallenged = '';
         await user.save();
         const challenge = await Challenge.findOne({_id: challengeId})
-        challenge.playerTwoAccepted = decision === 'accepted';
+        challenge.playerTwoAccepted = decision;
         await challenge.save();
 
         res.status(200).send('success');
