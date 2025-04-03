@@ -29,8 +29,8 @@ const callbackForWebSocket = (_challengeId) => {
                 
             const challenge = change.fullDocument;
 
-            if(challenge.playerOneAccepted && challenge.playerTwoAccepted)
-                ws.send('initiate match');
+            if(challenge.playerOneAccepted === 'accepted' && challenge.playerTwoAccepted === 'accepted')
+                ws.send(JSON.stringify('initiate match'));
 
             else if(challenge.playerOneAccepted === 'decline' || challenge.playerTwoAccepted === 'decline'){
                 const playerWhoDeclined = challenge.playerOneAccepted === 'decline' ? challenge.playerOneAccepted : challenge.playerTwoAccepted;
