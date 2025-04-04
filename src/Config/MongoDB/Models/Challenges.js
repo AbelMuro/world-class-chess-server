@@ -6,6 +6,7 @@ const challengesSchema = new Schema({
     playerTwo: {type: String},
     playerOneAccepted: {type: String},
     playerTwoAccepted: {type: String},
+    matchId: {type: String}
 });
 
 const Challenge = mongoose.model('challenge', challengesSchema, 'challenges');

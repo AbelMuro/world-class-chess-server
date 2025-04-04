@@ -7,7 +7,6 @@ const ForgotPassword = require('./Routes/POST/ForgotPassword.js');
 const ResetPassword = require('./Routes/POST/ResetPassword.js');
 const LogOut = require('./Routes/POST/LogOut.js');
 const GuestLogin = require('./Routes/POST/GuestLogin.js');
-const CreateMatch = require('./Routes/POST/CreateMatch.js');
 const UpdateMatch = require('./Routes/PUT/UpdateMatch.js');
 const GetMatch = require('./Routes/GET/GetMatch.js');
 const AIMove = require('./Routes/POST/AI_Move.js')
@@ -18,6 +17,7 @@ const initializeWebsockets = require('./Routes/POST/InitializeWebsockets.js');
 const deleteWebsockets = require('./Routes/DELETE/DeleteWebsockets.js');
 const handleChallenge = require('./Routes/POST/HandleChallenge.js');
 const createChallenge = require('./Routes/POST/CreateChallenge.js');
+const deleteChallenge = require('./Routes/DELETE/DeleteChallenge.js');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
@@ -49,7 +49,6 @@ app.use(LogOut);
 app.use(GuestLogin);
 app.use(getAccount);
 app.use(AIMove);
-app.use(CreateMatch);
 app.use(UpdateMatch);
 app.use(GetMatch);
 app.use(putPlayerInQueue);
@@ -58,6 +57,7 @@ app.use(initializeWebsockets);
 app.use(deleteWebsockets);
 app.use(handleChallenge);
 app.use(createChallenge);
+app.use(deleteChallenge);
 app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })

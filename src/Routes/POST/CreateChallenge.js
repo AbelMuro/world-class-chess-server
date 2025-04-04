@@ -28,13 +28,15 @@ const callbackForWebSocket = (_challengeId) => {
             }
                 
             const challenge = change.fullDocument;
+            const matchId = challenge.matchId;
 
-            if(challenge.playerOneAccepted === 'accepted' && challenge.playerTwoAccepted === 'accepted')
-                ws.send(JSON.stringify('initiate match'));
-
+            if(challenge.playerOneAccepted === 'accepted' && challenge.playerTwoAccepted === 'accepted'){
+                ws.send({message: JSON.stringify('initiate match'), matchId});
+            }
+                
             else if(challenge.playerOneAccepted === 'decline' || challenge.playerTwoAccepted === 'decline'){
                 const playerWhoDeclined = challenge.playerOneAccepted === 'decline' ? challenge.playerOneAccepted : challenge.playerTwoAccepted;
-                ws.send(JSON.stringify({decline: playerWhoDeclined}));
+                ws.send({message: JSON.stringify(`${playerWhoDeclined} has declined`)});
             }
         })
     }
