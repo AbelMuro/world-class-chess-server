@@ -36,12 +36,13 @@ router.post('/initialize_websockets', (req, res) => {
             })            
                                         
             ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
-                console.log('Client disconnected')
+                console.log('queue websocket disconnected from front-end')
             })
         });
 
         CreateWebSocket(username, (ws) => {
             console.log(`Front-end and back-end are connected, waiting for updates on ${username}'s account`);
+            
             const changeStream = User.watch([
                 { $match: { 'fullDocument.username' : username } }
             ], { fullDocument: 'updateLookup' });
@@ -67,7 +68,7 @@ router.post('/initialize_websockets', (req, res) => {
             })    
 
             ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
-                console.log('Client disconnected')
+                console.log(`${username} websocket disconnected from front-end`)
             })
         })  
 
