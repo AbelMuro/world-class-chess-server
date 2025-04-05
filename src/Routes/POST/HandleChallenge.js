@@ -27,17 +27,16 @@ router.post('/handle_challenge', async (req, res) => {
         if(decision === 'accepted'){
             const challenger = challenge.playerOne;
             const challengedPlayer = challenge.playerTwo;
-            const randomNumber = Math.floor(Math.random() * 2) + 1 === 2;
+            const randomNumber = Math.floor(Math.random() * 2) + 1;
             const playerPlayingAsWhite = randomNumber === 2 ? challenger : challengedPlayer;
             const playerPlayingAsBlack =  randomNumber === 2 ? challengedPlayer : challenger;
             const newMatch = new Match({playerOne: challenger, playerTwo: challengedPlayer, playerPlayingAsWhite, playerPlayingAsBlack});
-            const _matchId = await newMatch.save();
+            const {_id: _matchId} = await newMatch.save();
             challenge.matchId = _matchId;
         }
 
         await challenge.save();
         res.status(200).send('success');
-        return;
     }
     catch(error){
         const message = error.message;
