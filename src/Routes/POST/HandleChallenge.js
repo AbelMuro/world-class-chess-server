@@ -30,7 +30,7 @@ router.post('/handle_challenge', async (req, res) => {
             const randomNumber = Math.floor(Math.random() * 2) + 1 === 2;
             const playerPlayingAsWhite = randomNumber === 2 ? challenger : challengedPlayer;
             const playerPlayingAsBlack =  randomNumber === 2 ? challengedPlayer : challenger;
-            const newMatch = new Match({playerOne: challenger, playerTwo: challengedPlayer, playerPlayingAsWhite, playerPlayingAsBlack, board});
+            const newMatch = new Match({playerOne: challenger, playerTwo: challengedPlayer, playerPlayingAsWhite, playerPlayingAsBlack});
             const _matchId = await newMatch.save();
             challenge.matchId = _matchId;
         }
