@@ -1,7 +1,7 @@
 
 const CloseWebSocket = (path) => {
     try{
-        global.webSocketHandlers[`/${path}`].close();
+        global.webSocketHandlers[`/${path}`]?.close();
         delete global.webSocketHandlers[`/${path}`];
     }
     catch(error){
