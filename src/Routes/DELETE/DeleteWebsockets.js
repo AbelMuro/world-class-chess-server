@@ -8,18 +8,14 @@ router.delete('/delete_websockets', (req, res) => {
 
         for(let wss of Object.values(websockets)){
             wss.clients.forEach((client) => {
-                if(client?.ready?.state === WebSocket.OPEN)
+                if(client.readyState === WebSocket.OPEN)
                     client.close();
-            })  
+            });  
 
-            wss.close((error) => {
-                if(error)
-                    console.log('error closing websocket', error);
-                else 
-                    console.log('Websocket server closed successfully')
-            })
+            wss.close();
         }     
-        
+
+        global.webSocketHandlers = {};
         res.status(200).send('All websocket servers have closed successfully');   
     }
     catch(error){
