@@ -31,12 +31,12 @@ const callbackForWebSocket = (_challengeId) => {
             const matchId = challenge.matchId;
 
             if(challenge.playerOneAccepted === 'accepted' && challenge.playerTwoAccepted === 'accepted'){
-                ws.send({message: JSON.stringify('initiate match'), matchId});
+                ws.send(JSON.stringify({message: 'initiate match', matchId}));
             }
                 
             else if(challenge.playerOneAccepted === 'decline' || challenge.playerTwoAccepted === 'decline'){
                 const playerWhoDeclined = challenge.playerOneAccepted === 'decline' ? challenge.playerOneAccepted : challenge.playerTwoAccepted;
-                ws.send({message: JSON.stringify(`${playerWhoDeclined} has declined`)});
+                ws.send(JSON.stringify({message: `${playerWhoDeclined} has declined`}));
             }
         })
     }
@@ -72,7 +72,7 @@ router.post('/create_challenge', initializeGridFs, async (req, res) => {
             
             readstream.on('data', (chunk) => {
                 chunks.push(chunk);
-            })
+            });
 
             readstream.on('end', async () => {
                 const fileBuffer = Buffer.concat(chunks);             
@@ -82,7 +82,7 @@ router.post('/create_challenge', initializeGridFs, async (req, res) => {
                 await challengedPlayer.save();
                 CreateWebSocket(_challengeId, callbackForWebSocket(_challengeId));
                 res.status(200).json({message: 'Invitation has been sent', challengeId: _challengeId});
-            })
+            });
 
             readstream.on('error', async(err) => {
                 console.log('Error reading file from MongoDB', err);
@@ -92,7 +92,7 @@ router.post('/create_challenge', initializeGridFs, async (req, res) => {
                 await challengedPlayer.save();
                 CreateWebSocket(_challengeId, callbackForWebSocket(_challengeId));
                 res.status(200).json({message: 'Invitation has been sent, but image could not be loaded', challengeId: _challengeId});
-            })
+            });
         }
         else{
             const {_id: _challengeId} = await challenge.save();
