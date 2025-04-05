@@ -8,7 +8,7 @@ router.delete('/delete_websockets', (req, res) => {
 
         for(let wss of Object.values(websockets)){
             wss.clients.forEach((client) => {
-                if(client.ready.state === WebSocket.OPEN)
+                if(client?.ready?.state === WebSocket.OPEN)
                     client.close();
             })  
 
