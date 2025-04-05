@@ -3,7 +3,6 @@ const {Schema} = require('mongoose');
 
 
 const matchSchema = new Schema({
-    matchId: {type: String, required: true, unique: true},
     chessboard: {type: Array, default: [
         ['black rook a', 'black knight b', 'black bishop c', 'black queen d', 'black king e', 'black bishop f', 'black knight g', 'black rook h'],
         ['black pawn a', 'black pawn b', 'black pawn c', 'black pawn d', 'black pawn e', 'black pawn f', 'black pawn g', 'black pawn h'],      
