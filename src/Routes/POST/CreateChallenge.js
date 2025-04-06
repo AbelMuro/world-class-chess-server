@@ -35,8 +35,8 @@ const callbackForWebSocket = (_challengeId) => {
             }
                 
             else if(challenge.playerOneAccepted === 'decline' || challenge.playerTwoAccepted === 'decline'){
-                const playerWhoDeclined = challenge.playerOneAccepted === 'decline' ? challenge.playerOneAccepted : challenge.playerTwoAccepted;
-                ws.send(JSON.stringify({message: `${playerWhoDeclined} has declined`}));
+                const playerWhoDeclined = challenge.playerOneAccepted === 'decline' ? challenge.playerOne : challenge.playerTwo;
+                ws.send(JSON.stringify({message: `decline match`, playerWhoDeclined}));
             }
         })
     }

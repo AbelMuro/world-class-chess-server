@@ -10,7 +10,7 @@ config();
 //look at notes in <DisplayChallenger/> in front-end to see what needs to be done
 
 router.post('/handle_challenge', async (req, res) => {
-    const {challengeId, decision} = req.body;
+    const {challengeId, decision, player} = req.body;
     const JWT_SECRET = process.env.JWT_SECRET
     const token = req.cookies.accessToken;
 
@@ -26,8 +26,10 @@ router.post('/handle_challenge', async (req, res) => {
             res.status(404).send('Challenge document could not be found, challenger most likely left the queue');
             return;
         }
-
-        challenge.playerTwoAccepted = decision;
+        if(player === 'playerOne')
+            challenge.playerOneAccepted = decision;
+        else
+            challenge.playerTwoAccepted = decision;
 
         if(decision === 'accepted'){
             const challenger = challenge.playerOne;

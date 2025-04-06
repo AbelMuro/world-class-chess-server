@@ -1,6 +1,5 @@
 const express = require('express');
 const Queue = require('../../Config/MongoDB/Models/Queue.js');
-const sendMessageToServer = require('../../utils/sendMessageToServer.js');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const {config} = require('dotenv');
