@@ -8,7 +8,6 @@ router.delete('/delete_challenge/:id', async (req, res) => {
 
     try{
         const challenge = await Challenge.findOneAndDelete({_id: challengeId});
-        console.log(challenge);
         CloseWebSocket(challengeId);
         res.status(200).json(challenge);  
     }
