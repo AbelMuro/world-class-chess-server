@@ -2,31 +2,28 @@ const express = require('express');
 const User = require('../../Config/MongoDB/Models/User.js');
 const Challenge = require('../../Config/MongoDB/Models/Challenges.js');
 const Match = require('../../Config/MongoDB/Models/Match.js');
-const {config} = require('dotenv');
-const jwt = require('jsonwebtoken');
 const router = express.Router();
-config();
 
 //look at notes in <DisplayChallenger/> in front-end to see what needs to be done
 
 router.post('/handle_challenge', async (req, res) => {
-    const {challengeId, decision, player} = req.body;
-    const JWT_SECRET = process.env.JWT_SECRET
-    const token = req.cookies.accessToken;
+    const {challengeId, decision, playerResponding, playerOne, playerTwo} = req.body;
 
     try{
-        const decoded = jwt.verify(token, JWT_SECRET);
-        const username = decoded.username;
-        const user = await User.findOne({username});
-        user.hasBeenChallenged = '';
-        await user.save();
+        const pOne = await User.findOne({username: playerOne});
+        const pTwo = await User.findOne({username: playerTwo});
+
+        pOne.hasBeenChallenged = '';
+        pTwo.hasBeenChallenged = '';
+        await pOne.save();
+        await pTwo.save();
 
         const challenge = await Challenge.findOne({_id: challengeId})
         if(!challenge){
             res.status(404).send('Challenge document could not be found, challenger most likely left the queue');
             return;
         }
-        if(player === 'playerOne')
+        if(playerResponding === 'playerOne')
             challenge.playerOneAccepted = decision;
         else
             challenge.playerTwoAccepted = decision;
