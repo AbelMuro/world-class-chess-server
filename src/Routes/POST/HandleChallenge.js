@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.post('/handle_challenge', async (req, res) => {
     const {challengeId, decision, playerResponding, playerOne, playerTwo} = req.body;
+    console.log(playerOne, playerTwo);
 
     try{
         const pOne = await User.findOne({username: playerOne});
