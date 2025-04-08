@@ -5,7 +5,7 @@ const User = require('../../Config/MongoDB/Models/User.js');
 const {config} = require('dotenv');
 config();
 
-router.post('/login', async (req, res) => {
+router.post('/login', () => {console.log('login route')}, async (req, res) => {
     const {email, password} = req.body;
     const JWT_SECRET = process.env.JWT_SECRET;
 
