@@ -3,6 +3,7 @@ const router = express.Router();
 const Queue = require('../../Config/MongoDB/Models/Queue.js');
 const User = require('../../Config/MongoDB/Models/User.js'); 
 const CreateWebSocket = require('../../Config/Websockets/CreateWebSocket.js');
+const WebSocket = require('ws')
 const jwt = require('jsonwebtoken')
 const {config} = require('dotenv');
 config();
@@ -40,37 +41,54 @@ router.post('/initialize_websockets', (req, res) => {
             })
         });
 
-        CreateWebSocket(username, (ws) => {
-            console.log(`Front-end and back-end are connected, waiting for updates on ${username}'s account`);
-            
-            const changeStream = User.watch([
-                { $match: { 'fullDocument.username' : username } }
-            ], { fullDocument: 'updateLookup' });
 
-            changeStream.on('change', (change) => {
-                const operationType = change.operationType;
+        CreateWebSocket('signal', function(ws) {
+            console.log('Front-end and back-end are connected, waiting to initiate signal to clients');
 
-                if(operationType === 'delete'){
-                    ws.close();
-                    changeStream.close();
-                    return;
-                }
-
-                const fullDocument = change.fullDocument;
-                const hasBeenChallenged = fullDocument.hasBeenChallenged;
-
-                if(hasBeenChallenged)
-                    ws.send(hasBeenChallenged)
+            ws.on('message', (message) => {
+                this.clients.forEach(client => {
+                    if(client !== ws && client.readyState === WebSocket.OPEN)
+                        client.send(message);
+                })
             })
+        })
 
-            changeStream.on('error', (error) => {
-                console.log(`mongoDB change stream error: ${error}`);
-            })    
 
-            ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
-                console.log(`${username} websocket disconnected from front-end`)
-            })
-        })  
+        /*
+            CreateWebSocket(username, (ws) => {
+                console.log(`Front-end and back-end are connected, waiting for updates on ${username}'s account`);
+                
+                const changeStream = User.watch([
+                    { $match: { 'fullDocument.username' : username } }
+                ], { fullDocument: 'updateLookup' });
+
+                changeStream.on('change', (change) => {
+                    const operationType = change.operationType;
+
+                    if(operationType === 'delete'){
+                        ws.close();
+                        changeStream.close();
+                        return;
+                    }
+
+                    const fullDocument = change.fullDocument;
+                    const hasBeenChallenged = fullDocument.hasBeenChallenged;
+
+                    if(hasBeenChallenged)
+                        ws.send(hasBeenChallenged)
+                })
+
+                changeStream.on('error', (error) => {
+                    console.log(`mongoDB change stream error: ${error}`);
+                })    
+
+                ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
+                    console.log(`${username} websocket disconnected from front-end`)
+                })
+            })          
+        */
+
+
 
         res.status(200).send(`Queue websocket and ${username} websocket have been created`)
 

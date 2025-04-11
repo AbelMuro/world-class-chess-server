@@ -33,7 +33,6 @@ const HTTPS_PORT = 443
 
 app.use(express.json());
 app.use(cookieParser());
-app.options('*', cors());
 app.use(cors({
     origin: ['https://world-class-chess.netlify.app', 'http://localhost:8080'],						//Access-Control-Allow-Origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
