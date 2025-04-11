@@ -28,14 +28,14 @@ const app = express();
 const indexFilePath = path.join(__dirname, 'index.html');   
 const privateKeyFilePath = path.join(__dirname, '../SSL/private.key');
 const certificateFilePath = path.join(__dirname, '../SSL/certificate.cer'); 
-const HTTP_PORT = process.env.PORT || 8080;
+const HTTP_PORT = process.env.PORT || 80;
 const HTTPS_PORT = 443
 
 app.use(express.json());
 app.use(cookieParser());
 app.options('*', cors());
 app.use(cors({
-    origin: ['https://world-class-chess.netlify.app', 'http://localhost:3000'],						//Access-Control-Allow-Origin
+    origin: ['https://world-class-chess.netlify.app', 'http://localhost:8080'],						//Access-Control-Allow-Origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],			                                    //Access-Control-Allow-Headers
     credentials: true,
