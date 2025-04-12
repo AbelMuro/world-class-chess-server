@@ -15,9 +15,6 @@ const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
 const initializeWebsockets = require('./Routes/POST/InitializeWebsockets.js');
 const deleteWebsockets = require('./Routes/DELETE/DeleteWebsockets.js');
-const handleChallenge = require('./Routes/POST/HandleChallenge.js');
-const createChallenge = require('./Routes/POST/CreateChallenge.js');
-const deleteChallenge = require('./Routes/DELETE/DeleteChallenge.js');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
@@ -55,9 +52,6 @@ app.use(putPlayerInQueue);
 app.use(leaveQueue);
 app.use(initializeWebsockets);
 app.use(deleteWebsockets);
-app.use(handleChallenge);
-app.use(createChallenge);
-app.use(deleteChallenge);
 app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
