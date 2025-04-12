@@ -104,11 +104,8 @@ CreateWebSocket('signal', function(ws) {
 
     ws.on('message', (message) => {
         this.clients.forEach(client => {
-            if(client !== ws && client.readyState === WebSocket.OPEN){
-                client.send(message);
-                console.log('remote client has received the message');
-            }
-                
+            if(client !== ws && client.readyState === WebSocket.OPEN)
+                client.send(message);   
         })
     })
 })
