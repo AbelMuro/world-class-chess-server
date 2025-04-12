@@ -46,10 +46,12 @@ router.post('/initialize_websockets', (req, res) => {
             console.log('Front-end and back-end are connected, waiting to initiate signal to clients');
 
             ws.on('message', (message) => {
-                console.log('message from signal websocket')
                 this.clients.forEach(client => {
-                    if(client !== ws && client.readyState === WebSocket.OPEN)
+                    if(client !== ws && client.readyState === WebSocket.OPEN){
                         client.send(message);
+                        console.log('remote client has received the message');
+                    }
+                        
                 })
             })
         })
