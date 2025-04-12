@@ -1,6 +1,7 @@
 const express = require('express');     
 const cookieParser = require('cookie-parser');       
 const cors = require('cors');    
+const WebSocket = require('ws');
 const Queue = require('./Config/MongoDB/Models/Queue.js');
 const Login = require('./Routes/POST/Login.js');     
 const Register = require('./Routes/POST/Register.js');   
@@ -75,6 +76,9 @@ const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) 
         console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
 });    
 
+
+global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
+
 CreateWebSocket('queue', ws => {                                 
     console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
     const changeStream = Queue.watch();
@@ -109,8 +113,6 @@ CreateWebSocket('signal', function(ws) {
     })
 })
 
-
-global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
 
 httpsServer.on('upgrade', (request, socket, head) => {
     const wss = global.webSocketHandlers[request.url];    
