@@ -1,6 +1,7 @@
 const express = require('express');     
 const cookieParser = require('cookie-parser');       
 const cors = require('cors');    
+const Queue = require('./Config/MongoDB/Models/Queue.js');
 const Login = require('./Routes/POST/Login.js');     
 const Register = require('./Routes/POST/Register.js');   
 const ForgotPassword = require('./Routes/POST/ForgotPassword.js');
@@ -13,7 +14,6 @@ const AIMove = require('./Routes/POST/AI_Move.js')
 const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
-const initializeWebsockets = require('./Routes/POST/InitializeWebsockets.js');
 const deleteWebsockets = require('./Routes/DELETE/DeleteWebsockets.js');
 const fs = require('fs');
 const path = require('path');
@@ -50,7 +50,6 @@ app.use(UpdateMatch);
 app.use(GetMatch);
 app.use(putPlayerInQueue);
 app.use(leaveQueue);
-app.use(initializeWebsockets);
 app.use(deleteWebsockets);
 app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
@@ -76,6 +75,41 @@ const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) 
     else
         console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
 });    
+
+CreateWebSocket('queue', ws => {                                 
+    console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
+    const changeStream = Queue.watch();
+
+    changeStream.on('change', async () => {
+        const queue = await Queue.find();
+        const documents = JSON.stringify(queue);
+        ws.send(documents);  
+    })
+
+    changeStream.on('error', (error) => {
+        console.log(`mongoDB change stream error: ${error}`);
+    })            
+                                
+    ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
+        console.log('queue websocket disconnected from front-end')
+    })
+});
+
+
+CreateWebSocket('signal', function(ws) {
+    console.log('Front-end and back-end are connected, waiting to initiate signal to clients');
+
+    ws.on('message', (message) => {
+        this.clients.forEach(client => {
+            if(client !== ws && client.readyState === WebSocket.OPEN){
+                client.send(message);
+                console.log('remote client has received the message');
+            }
+                
+        })
+    })
+})
+
 
 global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
 
