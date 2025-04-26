@@ -26,7 +26,6 @@ router.post('/ai_move', (req, res) => {
 
     try{
         const fen = ConvertMatrixToFen(board, AI_Color);
-        console.log(fen);
         let stockfishStrengthLevel;
         if(difficulty === 'easy')
             stockfishStrengthLevel = 500;
@@ -39,11 +38,16 @@ router.post('/ai_move', (req, res) => {
         const stockfish = spawn(stockfishpath);
         console.log('Stockfish process started with PID:', stockfish.pid);
         stockfish.stdin.write('uci\n');
+        console.log("Sent 'uci' command to Stockfish");
         /*stockfish.stdin.write(`setoption name Skill Level value ${stockfishSkillLevel}\n`) */ // Skill Level from 0 (easy) to 20 (hard)
         stockfish.stdin.write('setoption name UCI_LimitStrength value true\n');                 // Enable Elo-based play 
+        console.log("UCI_limitStrength");
         stockfish.stdin.write(`setoption name UCI_Elo value ${stockfishStrengthLevel}\n`);       //set desired Elo- rating
+        console.log("UCI_elo")
         stockfish.stdin.write(`position fen ${fen}\n`);
+        console.log("fen")
         stockfish.stdin.write('go depth 15\n');
+        console.log("depth 15")
 
         stockfish.stdout.on('data', (data) => {
             const output = data.toString();
