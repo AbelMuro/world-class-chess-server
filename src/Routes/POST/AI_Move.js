@@ -38,19 +38,16 @@ router.post('/ai_move', (req, res) => {
         const stockfish = spawn(stockfishpath);
         console.log('Stockfish process started with PID:', stockfish.pid);
         stockfish.stdin.write('uci\n');
-        console.log("Sent 'uci' command to Stockfish");
         /*stockfish.stdin.write(`setoption name Skill Level value ${stockfishSkillLevel}\n`) */ // Skill Level from 0 (easy) to 20 (hard)
         stockfish.stdin.write('setoption name UCI_LimitStrength value true\n');                 // Enable Elo-based play 
-        console.log("UCI_limitStrength");
         stockfish.stdin.write(`setoption name UCI_Elo value ${stockfishStrengthLevel}\n`);       //set desired Elo- rating
-        console.log("UCI_elo")
         stockfish.stdin.write(`position fen ${fen}\n`);
-        console.log("fen")
         stockfish.stdin.write('go depth 15\n');
-        console.log("depth 15")
 
         stockfish.stdout.on('data', (data) => {
+            console.log('before output')
             const output = data.toString();
+            console.log('after output')
 
             if(output.includes('bestmove')){
                 console.log(output);
