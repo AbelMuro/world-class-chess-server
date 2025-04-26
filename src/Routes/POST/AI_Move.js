@@ -23,6 +23,7 @@ const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/windows/st
 
 router.post('/ai_move', (req, res) => {
     const {board, AI_Color, difficulty} = req.body;
+    console.log(fen);
     const fen = ConvertMatrixToFen(board, AI_Color);
     let stockfishStrengthLevel
     if(difficulty === 'easy')
