@@ -3,7 +3,7 @@ const path = require('path');
 const router = express.Router();
 const {spawn} = require('child_process');
 const ConvertMatrixToFen = require('../../Config/Stockfish/utils/ConvertMatrixToFen.js')
-const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/windows/stockfish.exe');
+const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/linux/stockfish');
 
 /*
 
