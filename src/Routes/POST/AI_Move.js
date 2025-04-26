@@ -23,18 +23,19 @@ const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/windows/st
 
 router.post('/ai_move', (req, res) => {
     const {board, AI_Color, difficulty} = req.body;
-    const fen = ConvertMatrixToFen(board, AI_Color);
-    console.log(fen);
-    let stockfishStrengthLevel
-    if(difficulty === 'easy')
-        stockfishStrengthLevel = 500;
-    else if(difficulty === 'medium')
-        stockfishStrengthLevel = 1500;
-    else
-        stockfishStrengthLevel = 2500;
-
 
     try{
+        const fen = ConvertMatrixToFen(board, AI_Color);
+        console.log(fen);
+        let stockfishStrengthLevel;
+        if(difficulty === 'easy')
+            stockfishStrengthLevel = 500;
+        else if(difficulty === 'medium')
+            stockfishStrengthLevel = 1500;
+        else
+            stockfishStrengthLevel = 2500;
+
+
         const stockfish = spawn(stockfishpath);
         console.log('Stockfish process started with PID:', stockfish.pid);
         stockfish.stdin.write('uci\n');
