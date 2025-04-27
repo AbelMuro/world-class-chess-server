@@ -3,7 +3,7 @@ const path = require('path');
 const router = express.Router();
 const {spawn} = require('child_process');
 const ConvertMatrixToFen = require('../../Config/Stockfish/utils/ConvertMatrixToFen.js')
-const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/linux/stockfish');
+const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/windows/stockfish.exe');
 
 /*
 
@@ -18,6 +18,8 @@ const stockfishpath = path.resolve(__dirname, '../../Config/Stockfish/linux/stoc
         download the binaries for macOS     (make sure you select the file appropriate for your CPU)
         look for the file that ends with avx2 or something of the sort 
         put that file in your node.js and use it with the child_process
+
+    for linux machines
   
 */
 
@@ -45,9 +47,7 @@ router.post('/ai_move', (req, res) => {
         stockfish.stdin.write('go depth 15\n');
 
         stockfish.stdout.on('data', (data) => {
-            console.log('before output')
             const output = data.toString();
-            console.log('after output')
 
             if(output.includes('bestmove')){
                 console.log(output);
