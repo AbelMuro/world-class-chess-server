@@ -15,6 +15,7 @@ const AIMove = require('./Routes/POST/AI_Move.js')
 const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
+const createMatch = require('./Routes/POST/CreateMatch.js');
 const CreateWebSocket = require('./Config/Websockets/CreateWebSocket.js');
 const fs = require('fs');
 const path = require('path');
@@ -51,6 +52,7 @@ app.use(UpdateMatch);
 app.use(GetMatch);
 app.use(putPlayerInQueue);
 app.use(leaveQueue);
+app.use(createMatch);
 app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
@@ -75,6 +77,20 @@ const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) 
     else
         console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
 });    
+
+httpsServer.on('upgrade', (request, socket, head) => {
+    const wss = global.webSocketHandlers[request.url];    
+    
+    if (wss) {
+        wss.handleUpgrade(request, socket, head, (ws) => {
+            wss.emit('connection', ws, request);
+        });
+    } else {
+        socket.destroy();                                   // Gracefully close invalid connections
+    }
+});
+
+
 
 
 global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
@@ -109,16 +125,3 @@ CreateWebSocket('signal', function(ws) {
         })
     })
 })
-
-
-httpsServer.on('upgrade', (request, socket, head) => {
-    const wss = global.webSocketHandlers[request.url];    
-    
-    if (wss) {
-        wss.handleUpgrade(request, socket, head, (ws) => {
-            wss.emit('connection', ws, request);
-        });
-    } else {
-        socket.destroy();                                   // Gracefully close invalid connections
-    }
-});

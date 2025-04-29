@@ -7,7 +7,7 @@ router.get('/get_match/:matchId', async (req, res) => {
     const matchId = req.params.matchId;
 
     try{
-        const match = await Match.findOne({matchId});
+        const match = await Match.findOne({_id: matchId});
         if(!match){
             res.status(404).send('match not found');
             return;
