@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');    
 const WebSocket = require('ws');
 const Queue = require('./Config/MongoDB/Models/Queue.js');
+const Match = require('./Config/MongoDB/Models/Match.js');
 const Login = require('./Routes/POST/Login.js');     
 const Register = require('./Routes/POST/Register.js');   
 const ForgotPassword = require('./Routes/POST/ForgotPassword.js');
@@ -89,9 +90,6 @@ httpsServer.on('upgrade', (request, socket, head) => {
         socket.destroy();                                   // Gracefully close invalid connections
     }
 });
-
-
-
 
 global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
 
