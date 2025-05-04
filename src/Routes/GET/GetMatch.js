@@ -1,13 +1,16 @@
 const express = require('express');
 const Match = require('../../Config/MongoDB/Models/Match.js');
+const mongoose = require('mongoose');
 const router = express.Router();
 
 
 router.get('/get_match/:matchId', async (req, res) => {
-    const matchId = req.params.matchId;
-
     try{
-        const match = await Match.findOne({_id: matchId});
+        const matchId = req.params.matchId;
+        const ObjectId = mongoose.Types.ObjectId;
+
+        const _id = new ObjectId(matchId);
+        const match = await Match.findOne({_id});
         if(!match){
             res.status(404).send('match not found');
             return;

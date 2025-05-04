@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 router.put('/update_match', async (req, res) => {
-    const {board, currentTurn, matchId, blackPiecesTaken, whitePiecesTaken, moves, hasKingBeenMoved, hasRooksBeenMoved} = req.body;
+    const {chess, matchId} = req.body;
 
     try{
         const match = await Match.findOne({matchId});
@@ -12,17 +12,18 @@ router.put('/update_match', async (req, res) => {
             res.status(404).send('match not found');
             return;
         }
-        match.chessboard = board;
-        match.currentTurn = currentTurn;
-        match.blackPiecesTaken = blackPiecesTaken;
-        match.whitePiecesTaken = whitePiecesTaken;
-        match.allMoves = moves;
-        /* 
-            if(userColor === 'white'){
-                match.hasWhiteKingBeenMoved = hasKingBeenMoved;
-                match.hasWhiteRooksBeenMoved = hasRooksBeenMoved
-            }        
-        */
+        match.board = chess.board;
+        match.legal_squares = chess.legal_squares;
+        match.moves = chess.moves;
+        match.stalemate = chess.stalemate;
+        match.checkmate = chess.checkmate;
+        match.time_traveling = chess.time_traveling;
+        match.castleling = chess.castleling;
+        match.players = chess.players;
+        match.en_passant = chess.en_passant;
+        match.pinned_pieces = chess.pinned_pieces;
+        match.difficulty = chess.difficulty;
+        match.pieceToBeMoved = chess.pieceToBeMoved;
 
 
         await match.save();
