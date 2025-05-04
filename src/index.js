@@ -106,7 +106,7 @@ CreateWebSocket('queue', ws => {
         console.log(`mongoDB change stream error: ${error}`);
     })            
                                 
-    ws.on('close', () => {                                        //Event listener that is triggered when the front-end is disconnected from the back-end
+    ws.on('close', () => {                                        
         console.log('queue websocket disconnected from front-end')
     })
 });
