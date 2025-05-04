@@ -38,7 +38,6 @@ router.post('/create_match', async (req, res) => {
             checkmate, 
             time_traveling, 
             castleling, 
-            players,
             en_passant,  
             resigns, 
             game_settings,
