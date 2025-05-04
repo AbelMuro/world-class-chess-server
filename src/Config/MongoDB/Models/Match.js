@@ -47,11 +47,13 @@ const matchSchema = new Schema({
         has_king_been_moved: false,
         has_rooks_been_moved: [false, false]}
     },    
-    players: {type: Object, default: {
-        user_color: 'white',
-        opponent_color: 'black',
-        current_turn: 'white'}
-    },
+    game_settings: {type: Object, default: {
+        user_color: '',
+        opponent_color: '',
+        player_one_username: '',
+        player_two_username: '',
+    }},
+    current_turn: {type: String, default: 'white'},
     en_passant: {type: Object, default: null},
     resigns: {type: Boolean, default: false},
     pinned_pieces: {type: Array, default: []},

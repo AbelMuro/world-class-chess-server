@@ -19,12 +19,11 @@ router.put('/update_match', async (req, res) => {
         match.checkmate = chess.checkmate;
         match.time_traveling = chess.time_traveling;
         match.castleling = chess.castleling;
-        match.players = chess.players;
         match.en_passant = chess.en_passant;
         match.pinned_pieces = chess.pinned_pieces;
         match.difficulty = chess.difficulty;
         match.pieceToBeMoved = chess.pieceToBeMoved;
-
+        match.current_turn = chess.current_turn;
 
         await match.save();
 

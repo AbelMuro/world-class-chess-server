@@ -16,18 +16,18 @@ router.post('/create_match', async (req, res) => {
         resigns,
         pinned_pieces,
         difficulty,
-        pieceToBeMoved
+        pieceToBeMoved,
+        current_turn
     } = chess;
 
 
     try{
         const playerOneIsWhite = Math.round(Math.random() * 1) === 0;
-        let players = {
-            user_color: playerOneIsWhite ? 'white' : 'black',
-            opponent_color: playerOneIsWhite ? 'black' : 'white',
-            current_turn: 'white',
-            player_one_username: playerOne,
-            player_two_username: playerTwo
+        const game_settings = {
+                user_color: playerOneIsWhite ? 'white' : 'black',
+                opponent_color: playerOneIsWhite ? 'black' : 'white',
+                player_one_username: playerOne,
+                player_two_username: playerTwo
         }
 
         const match = new Match({
@@ -41,6 +41,8 @@ router.post('/create_match', async (req, res) => {
             players,
             en_passant,  
             resigns, 
+            game_settings,
+            current_turn,
             pinned_pieces,
             difficulty,
             pieceToBeMoved
