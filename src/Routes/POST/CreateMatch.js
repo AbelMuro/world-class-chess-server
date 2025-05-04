@@ -47,7 +47,7 @@ router.post('/create_match', async (req, res) => {
         });
 
         const newMatch = await match.save();
-        const matchId = newMatch._id;
+        const matchId = newMatch._id.toString();
 
         res.status(200).send(matchId);
     }
