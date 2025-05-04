@@ -50,8 +50,8 @@ const matchSchema = new Schema({
     game_settings: {type: Object, default: {
         user_color: '',
         opponent_color: '',
-        player_one_username: '',
-        player_two_username: '',
+        player_one: {username: '', color: ''},
+        player_two: {username: '', color: ''},
     }},
     current_turn: {type: String, default: 'white'},
     en_passant: {type: Object, default: null},

@@ -24,10 +24,10 @@ router.post('/create_match', async (req, res) => {
     try{
         const playerOneIsWhite = Math.round(Math.random() * 1) === 0;
         const game_settings = {
-                user_color: playerOneIsWhite ? 'white' : 'black',
-                opponent_color: playerOneIsWhite ? 'black' : 'white',
-                player_one_username: playerOne,
-                player_two_username: playerTwo
+                user_color: '',
+                opponent_color: '',
+                player_one_username: {username: playerOne, color: playerOneIsWhite ? 'white' : 'black'},
+                player_two_username: {username: playerTwo, color: playerOneIsWhite ? 'black' : 'white'},
         }
 
         const match = new Match({
