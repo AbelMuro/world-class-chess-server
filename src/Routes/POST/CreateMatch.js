@@ -20,8 +20,8 @@ router.post('/create_match', async (req, res) => {
         current_turn
     } = chess;
 
-
     try{
+
         const playerOneIsWhite = Math.round(Math.random() * 1) === 0;
         const game_settings = {
                 user_color: '',
