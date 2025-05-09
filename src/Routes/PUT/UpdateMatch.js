@@ -5,8 +5,21 @@ const router = express.Router();
 
 
 router.put('/update_match', async (req, res) => {
-    const {chess, matchId} = req.body;
-    console.log('chess: ', chess);
+    const {
+        board, 
+        legal_squares,
+        moves,
+        stalemate,
+        checkmate,
+        time_traveling,
+        castleling,
+        en_passant,
+        pinned_pieces,
+        difficulty,
+        pieceToBeMoved,
+        current_turn,
+        matchId
+    } = req.body;
 
     try{
         const ObjectId = mongoose.Types.ObjectId;
@@ -16,18 +29,18 @@ router.put('/update_match', async (req, res) => {
             res.status(404).send('match not found');
             return;
         }
-        match.board = chess.board;
-        match.legal_squares = chess.legal_squares;
-        match.moves = chess.moves;
-        match.stalemate = chess.stalemate;
-        match.checkmate = chess.checkmate;
-        match.time_traveling = chess.time_traveling;
-        match.castleling = chess.castleling;
-        match.en_passant = chess.en_passant;
-        match.pinned_pieces = chess.pinned_pieces;
-        match.difficulty = chess.difficulty;
-        match.pieceToBeMoved = chess.pieceToBeMoved;
-        match.current_turn = chess.current_turn;
+        match.board = board;
+        match.legal_squares = legal_squares;
+        match.moves = moves;
+        match.stalemate = stalemate;
+        match.checkmate = checkmate;
+        match.time_traveling = time_traveling;
+        match.castleling = castleling;
+        match.en_passant = en_passant;
+        match.pinned_pieces = pinned_pieces;
+        match.difficulty = difficulty;
+        match.pieceToBeMoved = pieceToBeMoved;
+        match.current_turn = current_turn;
 
         await match.save();
 
