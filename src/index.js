@@ -94,8 +94,11 @@ httpsServer.on('upgrade', (request, socket, head) => {
 
 global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
 
-CreateWebSocket('queue', ws => {                                 
+CreateWebSocket('queue', async ws => {                                 
     console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
+    const allDocuments = await Queue.find();
+    ws.send(JSON.stringify(allDocuments));
+    
     const changeStream = Queue.watch();
 
     changeStream.on('change', async () => {
