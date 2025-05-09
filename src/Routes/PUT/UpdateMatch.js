@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.put('/update_match', async (req, res) => {
     const {chess, matchId} = req.body;
+    console.log('match id: ', matchId);
 
     try{
         const ObjectId = mongoose.Types.ObjectId;
