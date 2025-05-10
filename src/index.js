@@ -13,7 +13,6 @@ const UpdateMatch = require('./Routes/PUT/UpdateMatch.js');
 const GetMatch = require('./Routes/GET/GetMatch.js');
 const AIMove = require('./Routes/POST/AI_Move.js')
 const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
-const leaveQueue = require('./Routes/DELETE/LeaveQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
 const createMatch = require('./Routes/POST/CreateMatch.js');
 const deleteMatch = require('./Routes/DELETE/DeleteMatch.js');
@@ -52,7 +51,6 @@ app.use(AIMove);
 app.use(UpdateMatch);
 app.use(GetMatch);
 app.use(putPlayerInQueue);
-app.use(leaveQueue);
 app.use(createMatch);
 app.use(deleteMatch);
 app.get('/', (req, res) => {
@@ -109,10 +107,26 @@ CreateWebSocket('queue', async ws => {
 
     changeStream.on('error', (error) => {
         console.log(`mongoDB change stream error: ${error}`);
-    })            
+    })    
+    
+    ws.on('message', async(e) => {
+        try{
+            const {action, data} = JSON.parse(e.data);
+            if(action === 'remove'){
+                const result = await Queue.deleteOne({player: data});
+                console.log(result.deletedCount === 1 ? 
+                    `${data} has been removed from the queue` : 
+                    `Could not find ${data} in queue`)
+            }            
+        }
+        catch(error){
+            const message = error.message;
+            console.error('Error has occurred in queue websocket: ', message);
+        }
+    })
                                 
     ws.on('close', () => {                                        
-        console.log('queue websocket disconnected from front-end')
+        console.log('Front-end has disconnected from websocket')
     })
 });
 
@@ -126,4 +140,11 @@ CreateWebSocket('signal', function(ws) {
                 client.send(message);   
         })
     })
+})
+
+
+CreateWebSocket('match', function(ws){
+    console.log('Front-end and back-end are connected, two players have connnected to a match');
+
+
 })
