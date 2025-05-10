@@ -111,7 +111,9 @@ CreateWebSocket('queue', async ws => {
     
     ws.on('message', async(e) => {
         try{
-            const {action, data} = JSON.parse(e.data);
+            console.log('e.data', e.data)
+            const data = JSON.parse(e.data);
+            console.log('data', data);
             if(action === 'remove'){
                 const result = await Queue.deleteOne({player: data});
                 console.log(result.deletedCount === 1 ? 
