@@ -109,11 +109,9 @@ CreateWebSocket('queue', async ws => {
         console.log(`mongoDB change stream error: ${error}`);
     })    
     
-    ws.on('message', async(e) => {
+    ws.on('message', async(message) => {
         try{
-            console.log('e.data', e.data)
-            const data = JSON.parse(e.data);
-            console.log('data', data);
+            const {action, data} = JSON.parse(message);
             if(action === 'remove'){
                 const result = await Queue.deleteOne({player: data});
                 console.log(result.deletedCount === 1 ? 
