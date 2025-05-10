@@ -110,7 +110,8 @@ CreateWebSocket('queue', async ws => {
         console.log(`mongoDB change stream error: ${error}`);
     })    
     
-    ws.on('message', async(message) => {
+    ws.on('message', (message) => {
+        console.log('message received: ', message);
         username = JSON.parse(message);
     })
                                 
