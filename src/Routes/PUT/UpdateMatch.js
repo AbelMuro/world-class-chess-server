@@ -21,6 +21,8 @@ router.put('/update_match', async (req, res) => {
         matchId
     } = req.body;
 
+    console.log(board);
+
     try{
         const ObjectId = mongoose.Types.ObjectId;
         const _id = new ObjectId(matchId);
