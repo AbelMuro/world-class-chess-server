@@ -94,9 +94,10 @@ global.webSocketHandlers = {};                              // this global varia
 
 CreateWebSocket('queue', async ws => {                                 
     console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
+    let username = '';
     const allDocuments = await Queue.find();
     ws.send(JSON.stringify(allDocuments));
-    
+
     const changeStream = Queue.watch();
 
     changeStream.on('change', async () => {
@@ -110,23 +111,21 @@ CreateWebSocket('queue', async ws => {
     })    
     
     ws.on('message', async(message) => {
+        username = JSON.parse(message);
+    })
+                                
+    ws.on('close', async () => {                                        
+        console.log('Front-end has disconnected from websocket');
         try{
-            const {action, data} = JSON.parse(message);
-            if(action === 'remove'){
-                const result = await Queue.deleteOne({player: data});
-                console.log(result.deletedCount === 1 ? 
-                    `${data} has been removed from the queue` : 
-                    `Could not find ${data} in queue`)
-            }            
+            const result = await Queue.deleteOne({player: username});
+            console.log(result.deletedCount === 1 ? 
+                `${username} has been removed from the queue`: 
+                `${username} was not in the queue`)
         }
         catch(error){
             const message = error.message;
-            console.error('Error has occurred in queue websocket: ', message);
+            console.error('Error occurred in queue websocket in close event ', message)
         }
-    })
-                                
-    ws.on('close', () => {                                        
-        console.log('Front-end has disconnected from websocket')
     })
 });
 
