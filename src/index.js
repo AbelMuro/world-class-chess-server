@@ -146,7 +146,7 @@ CreateWebSocket('signal', function(ws, req) {
     ws.on('message', (offer) => {
         const currentOffer = JSON.parse(offer);
         const offerTo = currentOffer.to;
-        console.log(offerTo);
+        console.log('offer to', offerTo);
 
         this.clients.forEach(client => {                        //this will traverse through ALL the clients that are connected to the websocket
             if(client !== ws && client.readyState === WebSocket.OPEN && client.username === offerTo)
