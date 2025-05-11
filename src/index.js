@@ -146,6 +146,7 @@ CreateWebSocket('signal', function(ws, req) {
     ws.on('message', (message) => {
         const mess = JSON.parse(message);
         const to = mess.message.to;
+        console.log('inside message event', ws.username, to, mess);
 
         if(ws.username !== to) return;
 
