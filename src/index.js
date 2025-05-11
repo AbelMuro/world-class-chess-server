@@ -152,11 +152,11 @@ CreateWebSocket('signal', function(ws) {
 
 CreateWebSocket('match', async (ws, req) => {
     console.log('Front-end and back-end are connected, two players have connnected to a match');
-    const _id = url.parse(req.url, true).query;
-    ws.matchId = _id;
+    const params = url.parse(req.url, true).query;
+    ws.matchId = params.matchId;
     
     const changeStream = Queue.watch([                                  
-        { $match: { 'fullDocument._id': new ObjectId(_id)} }
+        { $match: { 'fullDocument._id': new ObjectId(ws.matchId)} }
     ], { fullDocument: 'updateLookup' });   
 
     changeStream.on('change', (change) => {
