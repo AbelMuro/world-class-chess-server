@@ -84,7 +84,7 @@ const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) 
 });    
 
 httpsServer.on('upgrade', (request, socket, head) => {
-    const pathname = url.parse(request.url, true).query;
+    const pathname = url.parse(request.url, true).pathname;
     const wss = global.webSocketHandlers[pathname];    
     
     if (wss) {
