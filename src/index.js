@@ -143,16 +143,15 @@ CreateWebSocket('signal', function(ws, req) {
     const params = url.parse(req.url, true).query;
     ws.username = params.username;
 
-    ws.on('message', (message) => {
-        const mess = JSON.parse(message);
-        console.log(mess);
-        const to = mess.message.to;
+    ws.on('message', (offer) => {
+        const offer = JSON.parse(offer);
+        const offerTo = offer.username;
 
-        if(ws.username !== to) return;
+        if(ws.username !== offerTo) return;
 
         this.clients.forEach(client => {
             if(client !== ws && client.readyState === WebSocket.OPEN)
-                client.send(message);   
+                client.send(offer);   
         })
     })
 })
