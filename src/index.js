@@ -144,8 +144,8 @@ CreateWebSocket('signal', function(ws, req) {
     ws.username = params.username;
 
     ws.on('message', (offer) => {
-        const offer = JSON.parse(offer);
-        const offerTo = offer.username;
+        const currentOffer = JSON.parse(offer);
+        const offerTo = currentOffer.username;
 
         if(ws.username !== offerTo) return;
 
