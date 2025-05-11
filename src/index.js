@@ -150,25 +150,22 @@ CreateWebSocket('signal', function(ws) {
 })
 
 
-CreateWebSocket('match', function(ws, req){
+CreateWebSocket('match', async (ws, req) => {
     console.log('Front-end and back-end are connected, two players have connnected to a match');
-    const params = url.parse(req.url, true).query;
-    ws.matchId = params;
+    const _id = url.parse(req.url, true).query;
+    ws.matchId = _id;
+    
+    const changeStream = Queue.watch([                                  
+        { $match: { 'fullDocument._id': new ObjectId(_id)} }
+    ], { fullDocument: 'updateLookup' });   
+
+    changeStream.on('change', (change) => {
+        const fullDocument = change.fullDocument;
+        ws.send(JSON.stringify(fullDocument));
+    })
 
     ws.on('close', async () => {
         console.log('Front-end has disconnected from match websocket')
-        try{
-            let matchId = ws.matchId;
-            matchId = new ObjectId(matchId);
-            const result = await Match.deleteOne({_id: matchId})
-            console.log(result.deletedCount === 1 ? 
-                `Match has been deleted`: 
-                `Match could not be found`)
-        }
-        catch(error){
-            const message = error.message;
-            console.error('Error has occurred in match websocket close event: ', message)
-        }
     })
 
 })
