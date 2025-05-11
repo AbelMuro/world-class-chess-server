@@ -112,7 +112,7 @@ CreateWebSocket('queue', async ws => {
     
     ws.on('message', (message) => {
         console.log('message received: ', message);
-        username = JSON.parse(message);
+        username = message;
     })
                                 
     ws.on('close', async () => {                                        
