@@ -4,6 +4,7 @@ const cors = require('cors');
 const url = require('url');
 const WebSocket = require('ws');
 const Queue = require('./Config/MongoDB/Models/Queue.js');
+const Match = require('./Config/MongoDB/Models/Match.js');
 const Login = require('./Routes/POST/Login.js');     
 const Register = require('./Routes/POST/Register.js');   
 const ForgotPassword = require('./Routes/POST/ForgotPassword.js');
@@ -22,6 +23,9 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const connectDB = require('./Config/MongoDB/DB.js');     
+const mongoose = require('mongoose');
+
+const ObjectId = mongoose.Types.ObjectId;
 
 connectDB();
 const app = express();   
@@ -80,7 +84,7 @@ const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) 
 });    
 
 httpsServer.on('upgrade', (request, socket, head) => {
-    const { pathname } = new URL(request.url, `http://${request.headers.host}`);
+    const pathname = url.parse(request.url, true).query;
     const wss = global.webSocketHandlers[pathname];    
     
     if (wss) {
@@ -118,7 +122,7 @@ CreateWebSocket('queue', async (ws, req) => {
     
                                 
     ws.on('close', async () => {                                        
-        console.log('Front-end has disconnected from websocket');
+        console.log('Front-end has disconnected from queue websocket');
         try{
             const username = ws.username;
             const result = await Queue.deleteOne({player: username});
@@ -148,6 +152,23 @@ CreateWebSocket('signal', function(ws) {
 
 CreateWebSocket('match', function(ws){
     console.log('Front-end and back-end are connected, two players have connnected to a match');
+    const params = url.parse(req.url, true).query;
+    ws.matchId = params;
 
+    ws.on('close', async () => {
+        console.log('Front-end has disconnected from match websocket')
+        try{
+            let matchId = ws.matchId;
+            matchId = new ObjectId(matchId);
+            const result = await Match.deleteOne({_id: matchId})
+            console.log(result.deletedCount === 1 ? 
+                `Match has been deleted`: 
+                `Match could not be found`)
+        }
+        catch(error){
+            const message = error.message;
+            console.error('Error has occurred in match websocket close event: ', message)
+        }
+    })
 
 })
