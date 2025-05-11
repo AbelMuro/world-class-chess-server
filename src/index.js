@@ -92,6 +92,7 @@ httpsServer.on('upgrade', (request, socket, head) => {
 
 global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
 
+
 CreateWebSocket('queue', async ws => {                                 
     console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
     let username = '';
@@ -112,21 +113,23 @@ CreateWebSocket('queue', async ws => {
     
     ws.on('message', (message) => {
         console.log('message received: ', message);
-        username = message;
     })
                                 
     ws.on('close', async () => {                                        
         console.log('Front-end has disconnected from websocket');
-        try{
-            const result = await Queue.deleteOne({player: username});
-            console.log(result.deletedCount === 1 ? 
-                `${username} has been removed from the queue`: 
-                `${username} was not in the queue`)
-        }
-        catch(error){
-            const message = error.message;
-            console.error('Error occurred in queue websocket in close event ', message)
-        }
+        /* 
+            try{
+                const result = await Queue.deleteOne({player: username});
+                console.log(result.deletedCount === 1 ? 
+                    `${username} has been removed from the queue`: 
+                    `${username} was not in the queue`)
+            }
+            catch(error){
+                const message = error.message;
+                console.error('Error occurred in queue websocket in close event ', message)
+            }        
+        */
+
     })
 });
 
