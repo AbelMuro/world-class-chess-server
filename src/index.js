@@ -80,7 +80,8 @@ const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) 
 });    
 
 httpsServer.on('upgrade', (request, socket, head) => {
-    const wss = global.webSocketHandlers[request.url];    
+    const { pathname } = new URL(request.url, `http://${request.headers.host}`);
+    const wss = global.webSocketHandlers[pathname];    
     
     if (wss) {
         wss.handleUpgrade(request, socket, head, (ws) => {
