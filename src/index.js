@@ -138,10 +138,17 @@ CreateWebSocket('queue', async (ws, req) => {
 });
 
 
-CreateWebSocket('signal', function(ws) {
+CreateWebSocket('signal', function(ws, req) {
     console.log('Front-end and back-end are connected, waiting to initiate signal to clients');
+    const params = url.parse(req.url, true).query;
+    ws.username = params.username;
 
     ws.on('message', (message) => {
+        const mess = JSON.parse(message);
+        const to = mess.message.to;
+
+        if(ws.username !== to) return;
+
         this.clients.forEach(client => {
             if(client !== ws && client.readyState === WebSocket.OPEN)
                 client.send(message);   
