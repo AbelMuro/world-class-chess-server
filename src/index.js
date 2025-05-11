@@ -150,7 +150,7 @@ CreateWebSocket('signal', function(ws) {
 })
 
 
-CreateWebSocket('match', function(ws){
+CreateWebSocket('match', function(ws, req){
     console.log('Front-end and back-end are connected, two players have connnected to a match');
     const params = url.parse(req.url, true).query;
     ws.matchId = params;
