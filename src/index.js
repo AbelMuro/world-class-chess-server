@@ -155,7 +155,7 @@ CreateWebSocket('match', async (ws, req) => {
     const params = url.parse(req.url, true).query;
     ws.matchId = params.matchId;
     
-    const changeStream = Queue.watch([                                  
+    const changeStream = Match.watch([                                  
         { $match: { 'fullDocument._id': new ObjectId(ws.matchId)} }
     ], { fullDocument: 'updateLookup' });   
 
