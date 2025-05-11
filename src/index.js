@@ -1,6 +1,7 @@
 const express = require('express');     
 const cookieParser = require('cookie-parser');       
 const cors = require('cors');    
+const url = require('url');
 const WebSocket = require('ws');
 const Queue = require('./Config/MongoDB/Models/Queue.js');
 const Login = require('./Routes/POST/Login.js');     
@@ -93,9 +94,12 @@ httpsServer.on('upgrade', (request, socket, head) => {
 global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
 
 
-CreateWebSocket('queue', async ws => {                                 
+CreateWebSocket('queue', async (ws, req) => {                                 
     console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
-    let username = '';
+
+    const params = url.parse(req.url, true).query;
+    ws.username = params.username;
+
     const allDocuments = await Queue.find();
     ws.send(JSON.stringify(allDocuments));
 
@@ -111,25 +115,20 @@ CreateWebSocket('queue', async ws => {
         console.log(`mongoDB change stream error: ${error}`);
     })    
     
-    ws.on('message', (message) => {
-        console.log('message received: ', message);
-    })
                                 
     ws.on('close', async () => {                                        
         console.log('Front-end has disconnected from websocket');
-        /* 
-            try{
-                const result = await Queue.deleteOne({player: username});
-                console.log(result.deletedCount === 1 ? 
-                    `${username} has been removed from the queue`: 
-                    `${username} was not in the queue`)
-            }
-            catch(error){
-                const message = error.message;
-                console.error('Error occurred in queue websocket in close event ', message)
-            }        
-        */
-
+        try{
+            const username = ws.username;
+            const result = await Queue.deleteOne({player: username});
+            console.log(result.deletedCount === 1 ? 
+                `${username} has been removed from the queue`: 
+                `${username} was not in the queue`)
+        }
+        catch(error){
+            const message = error.message;
+            console.error('Error occurred in queue websocket in close event ', message)
+        }        
     })
 });
 
