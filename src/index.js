@@ -160,6 +160,7 @@ CreateWebSocket('match', async (ws, req) => {
     ], { fullDocument: 'updateLookup' });   
 
     changeStream.on('change', (change) => {
+        console.log('change has been detected');
         const fullDocument = change.fullDocument;
         ws.send(JSON.stringify(fullDocument));
     })
