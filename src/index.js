@@ -147,6 +147,8 @@ CreateWebSocket('signal', function(ws, req) {
         const currentOffer = JSON.parse(offer);
         const offerTo = currentOffer.username;
 
+        console.log(offerTo, ws.username);
+
         if(ws.username !== offerTo) return;
 
         this.clients.forEach(client => {
