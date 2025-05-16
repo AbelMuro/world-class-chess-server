@@ -159,7 +159,8 @@ CreateWebSocket('match', async function(ws, req) {
     console.log('Front-end and back-end are connected, two players have connnected to a match');
     const params = url.parse(req.url, true).query;
     ws.matchId = params.matchId;
-    ws.from
+    ws.currentPlayerUsername = params.player;
+    ws.currentPlayerColor = params.color;
 
     const changeStream = Match.watch([                                  
         { $match: { 'fullDocument._id': new ObjectId(ws.matchId)} }
@@ -168,7 +169,10 @@ CreateWebSocket('match', async function(ws, req) {
     changeStream.on('change', (change) => {
         console.log('change has been detected');
         const fullDocument = change.fullDocument;
-        ws.send(JSON.stringify(fullDocument));
+        const currentTurn = fullDocument.current_turn;
+
+        if(currentTurn === ws.currentPlayerColor)
+            ws.send(JSON.stringify(fullDocument));
     })
 
     ws.on('close', async () => {
