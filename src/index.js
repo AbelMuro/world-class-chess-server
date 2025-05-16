@@ -159,7 +159,8 @@ CreateWebSocket('match', async function(ws, req) {
     console.log('Front-end and back-end are connected, two players have connnected to a match');
     const params = url.parse(req.url, true).query;
     ws.matchId = params.matchId;
-    
+    ws.from
+
     const changeStream = Match.watch([                                  
         { $match: { 'fullDocument._id': new ObjectId(ws.matchId)} }
     ], { fullDocument: 'updateLookup' });   

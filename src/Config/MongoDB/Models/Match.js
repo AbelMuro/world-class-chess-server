@@ -48,8 +48,6 @@ const matchSchema = new Schema({
         has_rooks_been_moved: [false, false]}
     },    
     game_settings: {type: Object, default: {
-        user_color: '',
-        opponent_color: '',
         player_one: {username: '', color: ''},
         player_two: {username: '', color: ''},
     }},
