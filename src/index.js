@@ -119,7 +119,6 @@ CreateWebSocket('queue', async (ws, req) => {
     changeStream.on('error', (error) => {
         console.log(`mongoDB change stream error: ${error}`);
     })    
-    
                                 
     ws.on('close', async () => {                                        
         console.log('Front-end has disconnected from queue websocket');
