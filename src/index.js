@@ -159,7 +159,6 @@ CreateWebSocket('match', async function(ws, req) {
     console.log('Front-end and back-end are connected, two players have connnected to a match');
     const params = url.parse(req.url, true).query;
     ws.matchId = params.matchId;
-    ws.currentPlayerUsername = params.player;
     ws.currentPlayerColor = params.color;
 
     const changeStream = Match.watch([                                  
@@ -167,7 +166,6 @@ CreateWebSocket('match', async function(ws, req) {
     ], { fullDocument: 'updateLookup' });   
 
     changeStream.on('change', (change) => {
-        console.log('change has been detected');
         const fullDocument = change.fullDocument;
         const currentTurn = fullDocument.current_turn;
 
