@@ -159,7 +159,7 @@ CreateWebSocket('match', async function(ws, req) {
     const params = url.parse(req.url, true).query;
     console.log(params, 'params');
     ws.matchId = params.matchId;
-    ws.currentPlayerColor = params.color;
+    ws.playerColor = params.color;
 
     const changeStream = Match.watch([                                  
         { $match: { 'fullDocument._id': new ObjectId(ws.matchId)} }
@@ -169,7 +169,7 @@ CreateWebSocket('match', async function(ws, req) {
         const fullDocument = change.fullDocument;
         const currentTurn = fullDocument.current_turn;
 
-        if(currentTurn === ws.currentPlayerColor)
+        if(currentTurn === ws.playerColor)
             ws.send(JSON.stringify(fullDocument));
     })
 
