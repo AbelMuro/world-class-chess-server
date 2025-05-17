@@ -157,6 +157,7 @@ CreateWebSocket('signal', function(ws, req) {
 CreateWebSocket('match', async function(ws, req) {
     console.log('Front-end and back-end are connected, two players have connnected to a match');
     const params = url.parse(req.url, true).query;
+    console.log(params, 'params');
     ws.matchId = params.matchId;
     ws.currentPlayerColor = params.color;
 
@@ -167,8 +168,6 @@ CreateWebSocket('match', async function(ws, req) {
     changeStream.on('change', (change) => {
         const fullDocument = change.fullDocument;
         const currentTurn = fullDocument.current_turn;
-
-        console.log(currentTurn, ws.currentPlayerColor, 'inside the change event')
 
         if(currentTurn === ws.currentPlayerColor)
             ws.send(JSON.stringify(fullDocument));
