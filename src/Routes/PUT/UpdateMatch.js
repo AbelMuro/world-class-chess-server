@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 router.put('/update_match', async (req, res) => {
+    const {chess, matchId} = req.body;
     const {
         board, 
         legal_squares,
@@ -18,8 +19,8 @@ router.put('/update_match', async (req, res) => {
         difficulty,
         pieceToBeMoved,
         current_turn,
-        matchId
-    } = req.body;
+        out_of_time,
+    } = chess;
 
 
     try{
@@ -42,6 +43,7 @@ router.put('/update_match', async (req, res) => {
         match.difficulty = difficulty;
         match.pieceToBeMoved = pieceToBeMoved;
         match.current_turn = current_turn;
+        match.out_of_time = out_of_time,
 
         await match.save();
 

@@ -51,6 +51,10 @@ const matchSchema = new Schema({
         player_one: {username: '', color: ''},
         player_two: {username: '', color: ''},
     }},
+    out_of_time: {type: Object, default: {
+        player: '',
+        color: '',
+    }},
     current_turn: {type: String, default: 'white'},
     en_passant: {type: Object, default: null},
     resigns: {type: Boolean, default: false},

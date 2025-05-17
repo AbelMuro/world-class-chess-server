@@ -157,7 +157,6 @@ CreateWebSocket('signal', function(ws, req) {
 CreateWebSocket('match', async function(ws, req) {
     console.log('Front-end and back-end are connected, two players have connnected to a match');
     const params = url.parse(req.url, true).query;
-    console.log(params, 'params');
     ws.matchId = params.matchId;
     ws.playerColor = params.color;
 

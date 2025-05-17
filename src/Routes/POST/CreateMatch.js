@@ -17,7 +17,8 @@ router.post('/create_match', async (req, res) => {
         pinned_pieces,
         difficulty,
         pieceToBeMoved,
-        current_turn
+        current_turn,
+        out_of_time,
     } = chess;
 
     try{
@@ -42,7 +43,8 @@ router.post('/create_match', async (req, res) => {
             current_turn,
             pinned_pieces,
             difficulty,
-            pieceToBeMoved
+            pieceToBeMoved,
+            out_of_time
         });
 
         const newMatch = await match.save();
