@@ -168,6 +168,8 @@ CreateWebSocket('match', async function(ws, req) {
         const fullDocument = change.fullDocument;
         const currentTurn = fullDocument.current_turn;
 
+        console.log(currentTurn, ws.currentPlayerColor, 'inside the change event')
+
         if(currentTurn === ws.currentPlayerColor)
             ws.send(JSON.stringify(fullDocument));
     })
