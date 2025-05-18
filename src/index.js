@@ -158,6 +158,7 @@ CreateWebSocket('match', async function(ws, req) {
     console.log('Front-end and back-end are connected, two players have connnected to a match');
     const params = url.parse(req.url, true).query;
     ws.matchId = params.matchId;
+    ws.username = params.username;
     ws.playerColor = params.color;
 
     const changeStream = Match.watch([                                  
@@ -167,18 +168,20 @@ CreateWebSocket('match', async function(ws, req) {
     changeStream.on('change', (change) => {
         const fullDocument = change.fullDocument;
         const currentTurn = fullDocument.current_turn;
+        const playerOne = fullDocument.game_settings.player_one;
+        const playerTwo = fullDocument.game_settings.player_two;
         const checkmate = fullDocument.checkmate;
         const stalemate = fullDocument.stalemate;
         const outOfTime = fullDocument.out_of_time;
 
-        if(checkmate.game_over || stalemate.game_over || outOfTime.player){      // we send to both players
-            console.log('data was sent to both players')
+        if(ws.username !== playerOne.username && ws.username !== playerTwo.username) return;
+
+        else if(checkmate.game_over || stalemate.game_over || outOfTime.player)      // we send to both players
             ws.send(JSON.stringify(fullDocument));
-        }
-        else if(currentTurn === ws.playerColor){                                  // we send to only one player
-            console.log('data was sent to one player')
+        
+        else if(currentTurn === ws.playerColor)                                  // we send to only one player
             ws.send(JSON.stringify(fullDocument));
-        }
+        
     })
 
     ws.on('close', async () => {
