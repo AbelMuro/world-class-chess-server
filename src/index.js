@@ -174,6 +174,8 @@ CreateWebSocket('match', async function(ws, req) {
         const stalemate = fullDocument.stalemate;
         const outOfTime = fullDocument.out_of_time;
 
+        console.log(fullDocument.game_settings);
+
         if(ws.username !== playerOne.username && ws.username !== playerTwo.username) return;
 
         else if(checkmate.game_over || stalemate.game_over || outOfTime.player)      // we send to both players
