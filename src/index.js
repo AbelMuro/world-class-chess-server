@@ -169,12 +169,12 @@ CreateWebSocket('match', async function(ws, req) {
         const currentTurn = fullDocument.current_turn;
         const checkmate = fullDocument.checkmate;
         const stalemate = fullDocument.stalemate;
-        const outOfTime = fullDocument.out_ot_time;
+        const outOfTime = fullDocument.out_of_time;
 
         if(checkmate.game_over || stalemate.game_over || outOfTime.player)      // we send to both players
             ws.send(JSON.stringify(fullDocument));
 
-       else if(currentTurn === ws.playerColor)                                  // we send to only one player
+        else if(currentTurn === ws.playerColor)                                  // we send to only one player
             ws.send(JSON.stringify(fullDocument));
     })
 
