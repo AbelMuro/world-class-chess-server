@@ -172,12 +172,13 @@ CreateWebSocket('match', async function(ws, req) {
         const outOfTime = fullDocument.out_of_time;
 
         if(checkmate.game_over || stalemate.game_over || outOfTime.player){      // we send to both players
-            console.log('data was sent')
+            console.log('data was sent to both players')
             ws.send(JSON.stringify(fullDocument));
         }
-
-        else if(currentTurn === ws.playerColor)                                  // we send to only one player
+        else if(currentTurn === ws.playerColor){                                  // we send to only one player
+            console.log('data was sent to one player')
             ws.send(JSON.stringify(fullDocument));
+        }
     })
 
     ws.on('close', async () => {
