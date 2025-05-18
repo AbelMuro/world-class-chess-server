@@ -31,13 +31,17 @@ const matchSchema = new Schema({
     stalemate: {type: Object, default: {
         movesAvailableForWhite: ['white pawn a', 'white pawn b', 'white pawn c', 'white pawn d', 'white pawn e', 'white pawn f', 'white pawn g', 'white pawn h', 'white knight b', 'white knight g'],
         movesAvailableForBlack: ['black pawn a', 'black pawn b', 'black pawn c', 'black pawn d', 'black pawn e', 'black pawn f', 'black pawn g', 'black pawn h', 'black knight b', 'black knight g'],
-        game_over: false}
-    },
+        game_over: false
+    }},
     checkmate: {type: Object, default: {
       king_in_check: false,
       squares_between_king_and_attacker: [],
-      game_over: false}
-    },        
+      game_over: false
+    }}, 
+    out_of_time: {type: Object, default: {
+        player: '',
+        color: '',
+    }},    
     time_traveling: {type: Object, default: {
         past: [],
         future: [],
@@ -50,10 +54,6 @@ const matchSchema = new Schema({
     game_settings: {type: Object, default: {
         player_one: {username: '', color: ''},
         player_two: {username: '', color: ''},
-    }},
-    out_of_time: {type: Object, default: {
-        player: '',
-        color: '',
     }},
     current_turn: {type: String, default: 'white'},
     en_passant: {type: Object, default: null},

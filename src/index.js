@@ -167,8 +167,14 @@ CreateWebSocket('match', async function(ws, req) {
     changeStream.on('change', (change) => {
         const fullDocument = change.fullDocument;
         const currentTurn = fullDocument.current_turn;
+        const checkmate = fullDocument.checkmate;
+        const stalemate = fullDocument.stalemate;
+        const outOfTime = fullDocument.out_ot_time;
 
-        if(currentTurn === ws.playerColor)
+        if(checkmate.game_over || stalemate.game_over || outOfTime.player)      // we send to both players
+            ws.send(JSON.stringify(fullDocument));
+
+       else if(currentTurn === ws.playerColor)                                  // we send to only one player
             ws.send(JSON.stringify(fullDocument));
     })
 
