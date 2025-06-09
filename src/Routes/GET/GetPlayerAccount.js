@@ -31,7 +31,7 @@ router.get('/get_player_account/:username',initializeGridFs ,async (req, res) =>
                 res.status(200).json({
                     username,
                     contentType: file.contentType,
-                    image: fileBuffer.toString('base64')
+                    imageBase64: fileBuffer.toString('base64')
                 })
             })
 
@@ -40,7 +40,7 @@ router.get('/get_player_account/:username',initializeGridFs ,async (req, res) =>
                 res.status(200).json({
                     username,
                     contentType: '',
-                    image: ''
+                    imageBase64: ''
                 })
             })
         }
@@ -48,7 +48,7 @@ router.get('/get_player_account/:username',initializeGridFs ,async (req, res) =>
             res.status(200).json({
                 username,
                 contentType: '',
-                image: ''
+                imageBase64: ''
             })
         }
 
