@@ -16,6 +16,7 @@ const GetMatch = require('./Routes/GET/GetMatch.js');
 const AIMove = require('./Routes/POST/AI_Move.js')
 const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
+const getPlayerAccount = require('./Routes/GET/GetPlayerAccount.js')
 const createMatch = require('./Routes/POST/CreateMatch.js');
 const deleteMatch = require('./Routes/DELETE/DeleteMatch.js');
 const CreateWebSocket = require('./Config/Websockets/CreateWebSocket.js');
@@ -52,6 +53,7 @@ app.use(ResetPassword);
 app.use(LogOut);
 app.use(GuestLogin);
 app.use(getAccount);
+app.use(getPlayerAccount);
 app.use(AIMove);
 app.use(UpdateMatch);
 app.use(GetMatch);
@@ -112,7 +114,7 @@ CreateWebSocket('queue', async (ws, req) => {
 
     changeStream.on('change', async () => {
         const queue = await Queue.find();
-        const documents = JSON.stringify(queue);
+        const documents = JSON.stringify(queue);        //get profile data, including image in base 64, from here and send it
         ws.send(documents);  
     })
 
