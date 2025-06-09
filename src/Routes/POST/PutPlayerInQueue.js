@@ -18,7 +18,7 @@ router.post('/put_player_in_queue', async (req, res) => {
     try{
         const decoded = jwt.verify(token, JWT_SECRET);
         const username = decoded.username;
-        const newQueue = new Queue({username});
+        const newQueue = new Queue({player: username});
         await newQueue.save();
     }
     catch(error){
