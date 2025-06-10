@@ -28,8 +28,7 @@ router.get('/get_account', initializeGridFs, async (req, res) => {
         if(imageId){
             const _id = new mongoose.Types.ObjectId(imageId);
             const cursor = gfs.find({_id});
-            const files = await cursor.toArray();
-            const file = files?.[0];
+            const file = await cursor.next();
             const chunks = [];
             const readstream = gfs.openDownloadStream(_id);
 
