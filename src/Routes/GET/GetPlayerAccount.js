@@ -6,13 +6,11 @@ const router = express.Router();
 
 
 router.get('/get_player_account/:username', initializeGridFs, async (req, res) => {
-    const player_username = req.params.username;
+    const username = req.params.username;
     const gfs = req.gfs;
 
     try{
-        const account = await User.find({username: player_username});
-        const username = account.username;
-        console.log('username', username, account);  
+        const account = await User.find({username});
         const profileImageId = account.profileImageId;
 
         if(profileImageId){
@@ -29,7 +27,7 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
             readstream.on('end', () => {
                 const fileBuffer = Buffer.concat(chunks);
                 res.status(200).json({
-                    username: username,
+                    username,
                     contentType: file.contentType,
                     imageBase64: fileBuffer.toString('base64')
                 })
@@ -38,7 +36,7 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
             readstream.on('error', (err) => {
                 console.log('Error reading file from MongoDB', err);
                 res.status(200).json({
-                    username: username,
+                    username,
                     contentType: '',
                     imageBase64: ''
                 })
@@ -46,7 +44,7 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
         }
         else
             res.status(200).json({
-                username: username,
+                username,
                 contentType: '',
                 imageBase64: ''
             })
