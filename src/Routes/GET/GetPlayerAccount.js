@@ -5,12 +5,13 @@ const User = require('../../Config/MongoDB/Models/User.js');
 const router = express.Router();
 
 
-router.get('/get_player_account/:username',initializeGridFs ,async (req, res) => {
+router.get('/get_player_account/:username', initializeGridFs, async (req, res) => {
     const player_username = req.params.username;
     const gfs = req.gfs;
 
     try{
         const account = await User.find({username: player_username});
+        console.log('/get_player_account endpoint', account)
         const username = account.username;
         const profileImageId = account.profileImageId;
 
