@@ -10,8 +10,9 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
     const gfs = req.gfs;
 
     try{
-        const account = await User.find({username: player_username});
+         const account = await User.find({username: player_username});
         const username = account.username;
+        console.log('username', username);  
         const profileImageId = account.profileImageId;
 
         if(profileImageId){
@@ -27,7 +28,6 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
 
             readstream.on('end', () => {
                 const fileBuffer = Buffer.concat(chunks);
-                console.log('username', username);
                 res.status(200).json({
                     username: username,
                     contentType: file.contentType,
@@ -50,7 +50,6 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
                 contentType: '',
                 imageBase64: ''
             })
-        console.log('username', username);
 
     }
     catch(error){
