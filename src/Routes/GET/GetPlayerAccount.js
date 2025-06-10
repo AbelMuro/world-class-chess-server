@@ -27,6 +27,7 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
 
             readstream.on('end', () => {
                 const fileBuffer = Buffer.concat(chunks);
+                console.log('username', username);
                 res.status(200).json({
                     username: username,
                     contentType: file.contentType,
@@ -49,7 +50,7 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
                 contentType: '',
                 imageBase64: ''
             })
-        
+        console.log('username', username);
 
     }
     catch(error){
