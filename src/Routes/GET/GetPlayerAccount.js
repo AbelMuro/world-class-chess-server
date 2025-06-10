@@ -10,7 +10,8 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
     const gfs = req.gfs;
 
     try{
-        const account = await User.find({username});
+        const account = await User.findOne({username});
+        console.log(account.username);
         const profileImageId = account.profileImageId;
 
         if(profileImageId){
