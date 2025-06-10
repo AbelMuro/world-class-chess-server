@@ -11,7 +11,6 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
 
     try{
         const account = await User.find({username: player_username});
-        console.log('/get_player_account endpoint', account)
         const username = account.username;
         const profileImageId = account.profileImageId;
 
@@ -29,7 +28,7 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
             readstream.on('end', () => {
                 const fileBuffer = Buffer.concat(chunks);
                 res.status(200).json({
-                    username,
+                    username: username,
                     contentType: file.contentType,
                     imageBase64: fileBuffer.toString('base64')
                 })
@@ -38,19 +37,19 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
             readstream.on('error', (err) => {
                 console.log('Error reading file from MongoDB', err);
                 res.status(200).json({
-                    username,
+                    username: username,
                     contentType: '',
                     imageBase64: ''
                 })
             })
         }
-        else{
+        else
             res.status(200).json({
-                username,
+                username: username,
                 contentType: '',
                 imageBase64: ''
             })
-        }
+        
 
     }
     catch(error){
