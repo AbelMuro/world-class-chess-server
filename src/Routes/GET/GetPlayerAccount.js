@@ -6,11 +6,11 @@ const router = express.Router();
 
 
 router.get('/get_player_account/:username',initializeGridFs ,async (req, res) => {
-    const username = req.params.username;
+    const player_username = req.params.username;
     const gfs = req.gfs;
 
     try{
-        const account = await User.find({username});
+        const account = await User.find({username: player_username});
         const username = account.username;
         const profileImageId = account.profileImageId;
 
