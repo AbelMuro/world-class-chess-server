@@ -99,7 +99,7 @@ httpsServer.on('upgrade', (request, socket, head) => {
 });
 
 global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
-
+global.currentTimeOut = null;
 
 CreateWebSocket('queue', async (ws, req) => {                                 
     console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
@@ -156,7 +156,6 @@ CreateWebSocket('signal', function(ws, req) {
 })
 
 
-//i need to find a way to use a setTimeout() to delete a document in the database
 CreateWebSocket('match', async function(ws, req) {
     console.log('Front-end and back-end are connected, two players have connnected to a match');
     const params = url.parse(req.url, true).query;
@@ -170,6 +169,12 @@ CreateWebSocket('match', async function(ws, req) {
 
     changeStream.on('change', (change) => {
         const fullDocument = change.fullDocument;
+        const operationType = change.operationType;
+        if(operationType === 'delete'){
+            ws.send({
+                matchDeleted: true
+            })
+        }
         const currentTurn = fullDocument.current_turn;
         const playerOne = fullDocument.game_settings.player_one;
         const playerTwo = fullDocument.game_settings.player_two;
@@ -182,13 +187,27 @@ CreateWebSocket('match', async function(ws, req) {
         else if(checkmate.game_over || stalemate.game_over || outOfTime.player)      // we send to both players
             ws.send(JSON.stringify(fullDocument));
         
-        else if(currentTurn === ws.playerColor)                                  // we send to only one player
+        else if(currentTurn === ws.playerColor)                                      // we send to only one player
             ws.send(JSON.stringify(fullDocument));
-        
     })
 
     ws.on('close', async () => {
-        console.log('Front-end has disconnected from match websocket')
+        try{
+           console.log('Front-end has disconnected from match websocket'); 
+           const result = await Match.deleteOne({_id: new ObjectId(ws.matchId)})
+
+           if(!result.deletedCount){
+                console.log('Match was not deleted, or was not found');
+                return;
+           }
+           else
+                console.log('Match was deleted');
+        }
+        catch(error){
+            const message = error.message;
+            console.error(message)
+        }
+
     })
 
 })
