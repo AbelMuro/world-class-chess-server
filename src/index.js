@@ -156,6 +156,7 @@ CreateWebSocket('signal', function(ws, req) {
 })
 
 
+//i need to find a way to use a setTimeout() to delete a document in the database
 CreateWebSocket('match', async function(ws, req) {
     console.log('Front-end and back-end are connected, two players have connnected to a match');
     const params = url.parse(req.url, true).query;
@@ -169,13 +170,6 @@ CreateWebSocket('match', async function(ws, req) {
 
     changeStream.on('change', (change) => {
         const fullDocument = change.fullDocument;
-        const operationType = change.operationType;
-        if(operationType === 'delete') {
-            ws.send(JSON.stringify({
-                matchDeleted: true
-            }));
-            return;
-        }
         const currentTurn = fullDocument.current_turn;
         const playerOne = fullDocument.game_settings.player_one;
         const playerTwo = fullDocument.game_settings.player_two;
