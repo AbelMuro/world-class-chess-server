@@ -41,7 +41,7 @@ app.use(cookieParser());
 app.use(cors({
     origin: ['https://world-class-chess.netlify.app', 'http://localhost:3000'],						//Access-Control-Allow-Origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],			                                    //Access-Control-Allow-Headers
+    allowedHeaders: ['Content-Type', 'Authorization', ''],			                                    //Access-Control-Allow-Headers
     credentials: true,
     maxAge: 3600,
     optionsSuccessStatus: 200
@@ -169,14 +169,19 @@ CreateWebSocket('match', async function(ws, req) {
 
     changeStream.on('change', (change) => {
         const fullDocument = change.fullDocument;
+        const operationType = change.operationType;
+        if(operationType === 'delete') {
+            ws.send(JSON.stringify({
+                matchDeleted: true
+            }));
+            return;
+        }
         const currentTurn = fullDocument.current_turn;
         const playerOne = fullDocument.game_settings.player_one;
         const playerTwo = fullDocument.game_settings.player_two;
         const checkmate = fullDocument.checkmate;
         const stalemate = fullDocument.stalemate;
         const outOfTime = fullDocument.out_of_time;
-
-        console.log(fullDocument.game_settings);
 
         if(ws.username !== playerOne.username && ws.username !== playerTwo.username) return;
 

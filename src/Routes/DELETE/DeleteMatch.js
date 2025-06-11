@@ -15,7 +15,6 @@ router.delete('/delete_match/:matchId', async (req, res) => {
         }
 
         res.status(200).send('Match successfully deleted');
-
     }
     catch(error){
         const message = error.message;
