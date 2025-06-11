@@ -170,6 +170,7 @@ CreateWebSocket('match', async function(ws, req) {
     changeStream.on('change', (change) => {
         const fullDocument = change.fullDocument;
         const operationType = change.operationType;
+        console.log('operation type', operationType);
         if(operationType === 'delete'){
             ws.send({
                 matchDeleted: true
