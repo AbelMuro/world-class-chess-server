@@ -114,7 +114,7 @@ CreateWebSocket('queue', async (ws, req) => {
 
     changeStream.on('change', async () => {
         const queue = await Queue.find();
-        const documents = JSON.stringify(queue);        //get profile data, including image in base 64, from here and send it
+        const documents = JSON.stringify(queue);    
         ws.send(documents);  
     })
 
