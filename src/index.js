@@ -163,19 +163,26 @@ CreateWebSocket('match', async function(ws, req) {
     ws.username = params.username;
     ws.playerColor = params.color;
 
-    const changeStream = Match.watch([                                  
-        { $match: { 'fullDocument._id': new ObjectId(ws.matchId)} }
+    const updateStream = Match.watch([                                  
+        { 
+            $match: {
+                'fullDocument._id': new ObjectId(ws.matchId),
+                operationType: { $in: ['insert', 'update', 'replace'] }
+            } 
+        }
     ], { fullDocument: 'updateLookup' });   
 
-    changeStream.on('change', (change) => {
-        const fullDocument = change.fullDocument;
-        const operationType = change.operationType;
-        console.log('operation type', operationType);
-        if(operationType === 'delete'){
-            ws.send({
-                matchDeleted: true
-            })
+    const deleteStream = Match.watch([
+        { 
+            $match: {
+                'documentKey._id': new ObjectId(ws.matchId),
+                 operationType: { $in: ['delete'] } 
+            }
         }
+    ])
+
+    updateStream.on('change', (change) => {
+        const fullDocument = change.fullDocument;
         const currentTurn = fullDocument.current_turn;
         const playerOne = fullDocument.game_settings.player_one;
         const playerTwo = fullDocument.game_settings.player_two;
@@ -190,6 +197,13 @@ CreateWebSocket('match', async function(ws, req) {
         
         else if(currentTurn === ws.playerColor)                                      // we send to only one player
             ws.send(JSON.stringify(fullDocument));
+    });
+
+    deleteStream.on('change', () => {
+        console.log('match document was deleted');
+        ws.send({
+            matchDeleted: true
+        })
     })
 
     ws.on('close', async () => {
