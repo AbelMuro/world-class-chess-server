@@ -201,9 +201,7 @@ CreateWebSocket('match', async function(ws, req) {
 
     deleteStream.on('change', () => {
         console.log('match document was deleted');
-        ws.send({
-            matchDeleted: true
-        })
+        ws.send(JSON.stringify({ matchDeleted: true}))
     })
 
     ws.on('close', async () => {
