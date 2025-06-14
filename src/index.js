@@ -187,6 +187,7 @@ CreateWebSocket('match', async function(ws, req) {
         const playerTwo = fullDocument.game_settings.player_two;
         const checkmate = fullDocument.checkmate;
         const resigns = fullDocument.resigns;
+        console.log('resigns', resigns);
         const stalemate = fullDocument.stalemate;
         const outOfTime = fullDocument.out_of_time;
 
