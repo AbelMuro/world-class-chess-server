@@ -186,6 +186,7 @@ CreateWebSocket('match', async function(ws, req) {
         const playerOne = fullDocument.game_settings.player_one;
         const playerTwo = fullDocument.game_settings.player_two;
         const checkmate = fullDocument.checkmate;
+        const resigns = fullDocument.resigns;
         const stalemate = fullDocument.stalemate;
         const outOfTime = fullDocument.out_of_time;
 
@@ -193,6 +194,9 @@ CreateWebSocket('match', async function(ws, req) {
 
         else if(checkmate.game_over || stalemate.game_over || outOfTime.player)      // we send to both players
             ws.send(JSON.stringify(fullDocument));
+        
+        else if(resigns && resigns !== ws.playerColor)                               // if a player resigns, then their opponent will be notified
+            ws.send(JSON.stringify(fullDocument))
         
         else if(currentTurn === ws.playerColor)                                      // we send to only one player
             ws.send(JSON.stringify(fullDocument));
