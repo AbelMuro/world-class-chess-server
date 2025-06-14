@@ -192,11 +192,8 @@ CreateWebSocket('match', async function(ws, req) {
 
         if(ws.username !== playerOne.username && ws.username !== playerTwo.username) return;
 
-        else if(checkmate.game_over || stalemate.game_over || outOfTime.player)      // we send to both players
+        else if(checkmate.game_over || stalemate.game_over || outOfTime.player || resigns)      // we send to both players
             ws.send(JSON.stringify(fullDocument));
-        
-        else if(resigns && resigns !== ws.playerColor)                               // if a player resigns, then their opponent will be notified
-            ws.send(JSON.stringify(fullDocument))
         
         else if(currentTurn === ws.playerColor)                                      // we send to only one player
             ws.send(JSON.stringify(fullDocument));
