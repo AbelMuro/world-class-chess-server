@@ -57,7 +57,7 @@ const matchSchema = new Schema({
     }},
     current_turn: {type: String, default: 'white'},
     en_passant: {type: Object, default: null},
-    resigns: {type: Boolean, default: false},
+    resigns: {type: String, default: ''},
     forfeit: {type: Boolean, default: false},
     pinned_pieces: {type: Array, default: []},
     difficulty: {type: String, default: ''},
