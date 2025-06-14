@@ -196,9 +196,9 @@ CreateWebSocket('match', async function(ws, req) {
         else if(checkmate.game_over || stalemate.game_over || outOfTime.player || resigns)      // we send to both players
             ws.send(JSON.stringify(fullDocument));
         
-        else if(currentTurn === ws.playerColor)                                      // we send to only one player
+        else if(currentTurn === ws.playerColor)                                                  // we send to only one player
             ws.send(JSON.stringify(fullDocument));
-    });
+    })
 
     deleteStream.on('change', () => {
         console.log('match document was deleted');

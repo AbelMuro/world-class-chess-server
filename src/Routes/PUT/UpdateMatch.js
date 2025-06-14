@@ -20,6 +20,7 @@ router.put('/update_match', async (req, res) => {
         pieceToBeMoved,
         current_turn,
         out_of_time,
+        resigns
     } = chess;
 
 
@@ -44,6 +45,7 @@ router.put('/update_match', async (req, res) => {
         match.pieceToBeMoved = pieceToBeMoved;
         match.current_turn = current_turn;
         match.out_of_time = out_of_time,
+        match.resigns = resigns;
 
         await match.save();
 
