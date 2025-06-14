@@ -156,11 +156,11 @@ CreateWebSocket('signal', function(ws, req) {
 
 
 CreateWebSocket('match', async function(ws, req) {
-    console.log('Front-end and back-end are connected, two players have connnected to a match');
     const params = url.parse(req.url, true).query;
     ws.matchId = params.matchId;
     ws.username = params.username;
     ws.playerColor = params.color;
+    console.log(`${ws.matchId} has connected to the match websocket`);
 
     const updateStream = Match.watch([                                  
         { 
@@ -205,7 +205,7 @@ CreateWebSocket('match', async function(ws, req) {
 
     ws.on('close', async () => {
         try{
-           console.log('Front-end has disconnected from match websocket'); 
+           console.log(`${ws.matchId} was disconnected from the match websocket`); 
            const result = await Match.deleteOne({_id: new ObjectId(ws.matchId)})
 
            if(!result.deletedCount){
@@ -217,9 +217,7 @@ CreateWebSocket('match', async function(ws, req) {
         }
         catch(error){
             const message = error.message;
-            console.error(message)
+            console.error(message);
         }
-
     })
-
 })
