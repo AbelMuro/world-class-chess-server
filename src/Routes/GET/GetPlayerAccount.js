@@ -11,6 +11,9 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
 
     try{
         const account = await User.findOne({username});
+        if(!account)                                            //user is logged in as guest
+            return res.status(404).send({username, profileImageId: ''})
+
         const profileImageId = account.profileImageId;
 
         if(profileImageId){
