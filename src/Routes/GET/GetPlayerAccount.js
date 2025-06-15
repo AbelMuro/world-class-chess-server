@@ -15,6 +15,7 @@ router.get('/get_player_account/:username', initializeGridFs, async (req, res) =
             return res.status(202).send({username, contentType: '', imageBase64: ''})
 
         const profileImageId = account.profileImageId;
+        keyword;
 
         if(profileImageId){
             const _id = new mongoose.Types.ObjectId(profileImageId);
