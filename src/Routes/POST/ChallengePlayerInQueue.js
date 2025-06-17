@@ -6,7 +6,7 @@ router.post('/challenge_player_in_queue', async (req, res) => {
     const {username} = req.body;
 
     try{
-        const player = await Queue.findOne({username});
+        const player = await Queue.findOne({player: username});
         if(!player){
             res.status(404).send('player is no longer in the queue');
             return;
