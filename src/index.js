@@ -18,6 +18,8 @@ const putPlayerInQueue = require('./Routes/POST/PutPlayerInQueue.js');
 const getAccount = require('./Routes/GET/GetAccount.js');
 const getPlayerAccount = require('./Routes/GET/GetPlayerAccount.js')
 const createMatch = require('./Routes/POST/CreateMatch.js');
+const challengePlayerInQueue = require('./Routes/POST/ChallengePlayerInQueue.js');
+const cancelChallenge = require('./Routes/PUT/CancelChallenge.js');
 const deleteMatch = require('./Routes/DELETE/DeleteMatch.js');
 const CreateWebSocket = require('./Config/Websockets/CreateWebSocket.js');
 const fs = require('fs');
@@ -60,6 +62,8 @@ app.use(GetMatch);
 app.use(putPlayerInQueue);
 app.use(createMatch);
 app.use(deleteMatch);
+app.use(challengePlayerInQueue);
+app.use(cancelChallenge);
 app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
