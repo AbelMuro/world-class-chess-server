@@ -18,7 +18,7 @@ router.post('/challenge_player_in_queue', async (req, res) => {
 
         player.currentlyChallenged = true;
         await player.save();
-        res.status(200).send(200).send('player can be challenged');
+        res.status(200).send('player can be challenged');
     }
     catch(error){
         const message = error.message;
