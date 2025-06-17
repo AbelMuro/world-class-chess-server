@@ -3,7 +3,7 @@ const {Schema} = require('mongoose');
 
 const queueSchema = new Schema({
     player: {type: String, required: true, unique: true},
-    currentlyChallenged: {type: Boolean}
+    currentlyChallenged: {type: Boolean, required: true}
 })
 
 const Queue = mongoose.model('player', queueSchema, 'queue')
