@@ -8,6 +8,11 @@ router.put('/cancel_challenge', async (req, res) => {
 
     try{
         const player = await Queue.findOne({player: username});
+        if(!player){
+            res.status(404).send('Player not found');
+            return;
+        }
+
         player.currentlyChallenged = false;
         await player.save();
         res.status(200).send('Player is no longer currently challenged');
