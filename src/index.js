@@ -64,9 +64,7 @@ app.use(createMatch);
 app.use(deleteMatch);
 app.use(challengePlayerInQueue);
 app.use(cancelChallenge);
-app.get('/', (req, res) => {
-    res.sendFile(indexFilePath);
-})
+
 
 app.listen(HTTP_PORT, (error) => {
     if(error){
@@ -78,6 +76,10 @@ app.listen(HTTP_PORT, (error) => {
 
 
 /* 
+
+    app.get('/', (req, res) => {
+        res.sendFile(indexFilePath);
+    })
 
     const options = {
         key: fs.readFileSync(privateKeyFilePath),
