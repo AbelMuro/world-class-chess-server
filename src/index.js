@@ -228,4 +228,4 @@ CreateWebSocket('match', async function(ws, req) {
     })
 });
 
-module.exports = httpServer;
+module.exports = app;
