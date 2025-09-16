@@ -68,7 +68,7 @@ app.get('/', (req, res) => {
     res.sendFile(indexFilePath);
 })
 
-const httpServer = app.listen(HTTP_PORT, (error) => {
+app.listen(HTTP_PORT, (error) => {
     if(error){
         console.log('HTTP error occurred: ', error);
         return;
@@ -77,155 +77,161 @@ const httpServer = app.listen(HTTP_PORT, (error) => {
 });  
 
 
-const options = {
-    key: fs.readFileSync(privateKeyFilePath),
-    cert: fs.readFileSync(certificateFilePath),
-}
+/* 
 
-const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) => {
-    if(error)
-        console.log('HTTPS error occurred: ', error);
-    else
-        console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
-});    
-
-httpsServer.on('upgrade', (request, socket, head) => {
-    const pathname = url.parse(request.url, true).pathname;
-    const wss = global.webSocketHandlers[pathname];    
-    
-    if (wss) {
-        wss.handleUpgrade(request, socket, head, (ws) => {
-            wss.emit('connection', ws, request);
-        });
-    } else {
-        socket.destroy();                                   // Gracefully close invalid connections
+    const options = {
+        key: fs.readFileSync(privateKeyFilePath),
+        cert: fs.readFileSync(certificateFilePath),
     }
-});
 
-global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
+    const httpsServer = https.createServer(options, app).listen(HTTPS_PORT, (error) => {
+        if(error)
+            console.log('HTTPS error occurred: ', error);
+        else
+            console.log(`HTTPS server is running on port ${HTTPS_PORT}`);
+    });    
 
-CreateWebSocket('queue', async (ws, req) => {                                 
-    console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
-
-    const params = url.parse(req.url, true).query;
-    ws.username = params.username;
-
-    const allDocuments = await Queue.find();
-    ws.send(JSON.stringify(allDocuments));
-
-    const changeStream = Queue.watch();
-
-    changeStream.on('change', async () => {
-        const queue = await Queue.find();
-        const documents = JSON.stringify(queue);    
-        ws.send(documents);  
-    })
-
-    changeStream.on('error', (error) => {
-        console.log(`mongoDB change stream error: ${error}`);
-    })    
-                                
-    ws.on('close', async () => {                                        
-        console.log('Front-end has disconnected from queue websocket');
-        try{
-            const username = ws.username;
-            const result = await Queue.deleteOne({player: username});
-            console.log(result.deletedCount === 1 ? 
-                `${username} has been removed from the queue`: 
-                `${username} was not in the queue`)
-        }
-        catch(error){
-            const message = error.message;
-            console.error('Error occurred in queue websocket in close event ', message)
-        }        
-    })
-});
-
-
-CreateWebSocket('signal', function(ws, req) {
-    console.log('Front-end and back-end are connected, waiting to initiate signal to clients');
-    const params = url.parse(req.url, true).query;
-    ws.username = params.username;
-
-    ws.on('message', (offer) => {
-        const currentOffer = JSON.parse(offer);
-        const offerTo = currentOffer.to;
-
-        this.clients.forEach(client => {                        //this will traverse through ALL the clients that are connected to the websocket
-            if(client !== ws && client.readyState === WebSocket.OPEN && client.username === offerTo)
-                client.send(offer);   
-        })            
-    })
-})
-
-
-CreateWebSocket('match', async function(ws, req) {
-    const params = url.parse(req.url, true).query;
-    ws.matchId = params.matchId;
-    ws.username = params.username;
-    ws.playerColor = params.color;
-    console.log(`${ws.matchId} has connected to the match websocket`);
-
-    const updateStream = Match.watch([                                  
-        { 
-            $match: {
-                'fullDocument._id': new ObjectId(ws.matchId),
-                operationType: { $in: ['insert', 'update', 'replace'] }
-            } 
-        }
-    ], { fullDocument: 'updateLookup' });   
-
-    const deleteStream = Match.watch([
-        { 
-            $match: {
-                'documentKey._id': new ObjectId(ws.matchId),
-                 operationType: { $in: ['delete'] } 
-            }
-        }
-    ])
-
-    updateStream.on('change', (change) => {
-        const fullDocument = change.fullDocument;
-        const currentTurn = fullDocument.current_turn;
-        const playerOne = fullDocument.game_settings.player_one;
-        const playerTwo = fullDocument.game_settings.player_two;
-        const checkmate = fullDocument.checkmate;
-        const resigns = fullDocument.resigns;
-        console.log('resigns', resigns);
-        const stalemate = fullDocument.stalemate;
-        const outOfTime = fullDocument.out_of_time;
-
-        if(ws.username !== playerOne.username && ws.username !== playerTwo.username) return;
-
-        else if(checkmate.game_over || stalemate.game_over || outOfTime.player || resigns)      // we send to both players
-            ws.send(JSON.stringify(fullDocument));
+    httpsServer.on('upgrade', (request, socket, head) => {
+        const pathname = url.parse(request.url, true).pathname;
+        const wss = global.webSocketHandlers[pathname];    
         
-        else if(currentTurn === ws.playerColor)                                                  // we send to only one player
-            ws.send(JSON.stringify(fullDocument));
-    })
-
-    deleteStream.on('change', () => {
-        console.log('match document was deleted');
-        ws.send(JSON.stringify({ matchDeleted: true}))
-    })
-
-    ws.on('close', async () => {
-        try{
-           console.log(`${ws.matchId} was disconnected from the match websocket`); 
-           const result = await Match.deleteOne({_id: new ObjectId(ws.matchId)})
-
-           if(!result.deletedCount){
-                console.log('Match was not deleted, or was not found');
-                return;
-           }
-           else
-                console.log('Match was deleted');
+        if (wss) {
+            wss.handleUpgrade(request, socket, head, (ws) => {
+                wss.emit('connection', ws, request);
+            });
+        } else {
+            socket.destroy();                                   // Gracefully close invalid connections
         }
-        catch(error){
-            const message = error.message;
-            console.error(message);
-        }
+    });
+
+    global.webSocketHandlers = {};                              // this global variable is being used ONLY in ./Config/Websockets/CreateWebSocket.js
+
+    CreateWebSocket('queue', async (ws, req) => {                                 
+        console.log('Front-end and back-end are connected, waiting for updates on queue collection in database');
+
+        const params = url.parse(req.url, true).query;
+        ws.username = params.username;
+
+        const allDocuments = await Queue.find();
+        ws.send(JSON.stringify(allDocuments));
+
+        const changeStream = Queue.watch();
+
+        changeStream.on('change', async () => {
+            const queue = await Queue.find();
+            const documents = JSON.stringify(queue);    
+            ws.send(documents);  
+        })
+
+        changeStream.on('error', (error) => {
+            console.log(`mongoDB change stream error: ${error}`);
+        })    
+                                    
+        ws.on('close', async () => {                                        
+            console.log('Front-end has disconnected from queue websocket');
+            try{
+                const username = ws.username;
+                const result = await Queue.deleteOne({player: username});
+                console.log(result.deletedCount === 1 ? 
+                    `${username} has been removed from the queue`: 
+                    `${username} was not in the queue`)
+            }
+            catch(error){
+                const message = error.message;
+                console.error('Error occurred in queue websocket in close event ', message)
+            }        
+        })
+    });
+
+
+    CreateWebSocket('signal', function(ws, req) {
+        console.log('Front-end and back-end are connected, waiting to initiate signal to clients');
+        const params = url.parse(req.url, true).query;
+        ws.username = params.username;
+
+        ws.on('message', (offer) => {
+            const currentOffer = JSON.parse(offer);
+            const offerTo = currentOffer.to;
+
+            this.clients.forEach(client => {                        //this will traverse through ALL the clients that are connected to the websocket
+                if(client !== ws && client.readyState === WebSocket.OPEN && client.username === offerTo)
+                    client.send(offer);   
+            })            
+        })
     })
-});
+
+
+    CreateWebSocket('match', async function(ws, req) {
+        const params = url.parse(req.url, true).query;
+        ws.matchId = params.matchId;
+        ws.username = params.username;
+        ws.playerColor = params.color;
+        console.log(`${ws.matchId} has connected to the match websocket`);
+
+        const updateStream = Match.watch([                                  
+            { 
+                $match: {
+                    'fullDocument._id': new ObjectId(ws.matchId),
+                    operationType: { $in: ['insert', 'update', 'replace'] }
+                } 
+            }
+        ], { fullDocument: 'updateLookup' });   
+
+        const deleteStream = Match.watch([
+            { 
+                $match: {
+                    'documentKey._id': new ObjectId(ws.matchId),
+                    operationType: { $in: ['delete'] } 
+                }
+            }
+        ])
+
+        updateStream.on('change', (change) => {
+            const fullDocument = change.fullDocument;
+            const currentTurn = fullDocument.current_turn;
+            const playerOne = fullDocument.game_settings.player_one;
+            const playerTwo = fullDocument.game_settings.player_two;
+            const checkmate = fullDocument.checkmate;
+            const resigns = fullDocument.resigns;
+            console.log('resigns', resigns);
+            const stalemate = fullDocument.stalemate;
+            const outOfTime = fullDocument.out_of_time;
+
+            if(ws.username !== playerOne.username && ws.username !== playerTwo.username) return;
+
+            else if(checkmate.game_over || stalemate.game_over || outOfTime.player || resigns)      // we send to both players
+                ws.send(JSON.stringify(fullDocument));
+            
+            else if(currentTurn === ws.playerColor)                                                  // we send to only one player
+                ws.send(JSON.stringify(fullDocument));
+        })
+
+        deleteStream.on('change', () => {
+            console.log('match document was deleted');
+            ws.send(JSON.stringify({ matchDeleted: true}))
+        })
+
+        ws.on('close', async () => {
+            try{
+            console.log(`${ws.matchId} was disconnected from the match websocket`); 
+            const result = await Match.deleteOne({_id: new ObjectId(ws.matchId)})
+
+            if(!result.deletedCount){
+                    console.log('Match was not deleted, or was not found');
+                    return;
+            }
+            else
+                    console.log('Match was deleted');
+            }
+            catch(error){
+                const message = error.message;
+                console.error(message);
+            }
+        })
+    });
+
+
+*/
+
 
 module.exports = app;
