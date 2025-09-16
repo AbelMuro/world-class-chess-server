@@ -36,7 +36,7 @@ const indexFilePath = path.join(__dirname, 'index.html');
 const privateKeyFilePath = path.join(__dirname, '../SSL/private.key');
 const certificateFilePath = path.join(__dirname, '../SSL/certificate.cer'); 
 const HTTP_PORT = process.env.PORT || 8080;
-const HTTPS_PORT = 443
+const HTTPS_PORT = 443;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -226,4 +226,6 @@ CreateWebSocket('match', async function(ws, req) {
             console.error(message);
         }
     })
-})
+});
+
+module.exports = httpServer;
