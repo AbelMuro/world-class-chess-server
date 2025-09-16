@@ -66,6 +66,11 @@ app.use(challengePlayerInQueue);
 app.use(cancelChallenge);
 
 
+app.use('/', (req, res) => {
+    res.send('Hello world');
+})
+
+
 app.listen(HTTP_PORT, (error) => {
     if(error){
         console.log('HTTP error occurred: ', error);
@@ -77,9 +82,6 @@ app.listen(HTTP_PORT, (error) => {
 
 /* 
 
-    app.get('/', (req, res) => {
-        res.sendFile(indexFilePath);
-    })
 
     const options = {
         key: fs.readFileSync(privateKeyFilePath),
