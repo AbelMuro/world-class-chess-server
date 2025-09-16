@@ -7,7 +7,7 @@ const url = `mongodb+srv://${process.env.accountname}:${process.env.password}@cl
 async function connectDB() {
     try{
       await mongoose.connect(url);
-      console.log('You have connected to the database')
+      console.log('You have connected to the database');
     }
     catch(error){
       console.log('MongoDB Error: ', error.message);
