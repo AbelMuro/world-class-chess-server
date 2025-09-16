@@ -6,3 +6,6 @@
     to = "/.netlify/functions/app/:splat" 
     status = 200 
     force = true
+
+[functions]													
+    included_files = ["src/Config/Stockfish/linux/stockfish"]
